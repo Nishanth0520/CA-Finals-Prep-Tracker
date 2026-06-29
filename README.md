@@ -307,48 +307,39 @@ Export and import backup JSON for offline safety
 ---
 ⚙️ Settings
 Font size adjustment
+
 Subject colour customisation
+
 Auto-save interval
+
 Nav tab order customiser (drag to reorder which tabs appear in your nav)
+
 User Profile: change name and target attempt anytime using the scroll picker
+
 Reset Profile: re-shows the onboarding screen (useful when sharing the file to a new user)
 
 ---
 Multi-User / Sharing
 This tracker is designed to be shared.
+
 First launch: every user enters their own name and target attempt via the onboarding screen
+
 Data is local: each person's data is stored in their own browser's localStorage — completely isolated
+
 No overwriting: sharing the HTML file with a friend gives them a clean slate
+
 Different attempts: the Study Plan adapts based on the attempt selected (May 2027 gets the pre-built plan; all other attempts get the custom plan builder)
+
 Reset: Settings → Reset Profile re-triggers onboarding on the same device (useful for switching users on a shared computer)
 
 ---
-Technical Details
-Property	Value
-Stack	React 18 (via Babel CDN)
-Styling	Inline JSX styles + CSS variables
-Storage	Browser localStorage
-Cloud sync	GitHub Gist API (optional)
-PWA	Manifest included (installable)
-Dependencies	None (CDN-loaded React only)
-File size	~430 KB (single HTML)
-Internet required	Only for GitHub Gist sync; all other features fully offline
-
----
-Syllabus Applicability — May 2027
-Paper	Applicable Law / Standard
-FR	Ind AS (as per MCA notification) — stable
-AFM	SEBI / RBI / FEMA as amended — stable
-AAA	SAs, Companies Act 2013 — stable
-DT	Income Tax Act, 2025 (effective Apr 1, 2026) — ICAI SM awaited
-IDT	GST + Customs — Finance Act 2025 amendments applicable
-IBS	Case study — no standalone syllabus concern
-> DT chapters will need remapping once ICAI releases the updated 2026 study material based on the new Income Tax Act, 2025.
----
 Known Limitations
 Data is stored in browser localStorage — clearing browser data will erase progress (use Gist sync or JSON backup to prevent this)
+
 DT chapters are based on old scheme structure pending new IT Act 2025 SM from ICAI
+
 The pre-built study plan is calibrated for Nishanth's May 2027 attempt (articleship ending Aug 2026, Advanced ITT/GMCS in Sep–Oct 2026) — other May 2027 users should adjust phase dates in the plan manually
+
 No mobile app — works in mobile browser but optimised for desktop
 
 ---
