@@ -1,24 +1,20 @@
 CA Finals Study Tracker
 A comprehensive, offline-first study tracker built for CA Finals (ICAI 2023 Scheme).  
-Single HTML file. No installation. No account. No cost. Just open and study.
 > Built by Nishanth, for CA Finals students.  
 > Designed for rank-level preparation — every feature exists because a student needed it.
 ---
 Quick Start
+
 Download the index.html file.
+
 Open it in any browser (Chrome / Edge recommended)
+
 Enter your name and target attempt on first launch
+
 Everything is saved locally on your device — no internet needed after opening
+
 > **To share with a friend:** just send them the HTML file. They'll get their own onboarding screen and their own data — completely separate from yours.
 ---
-Papers Covered
-Paper	Subject	Group
-Paper 1	Financial Reporting (FR)	Group 1
-Paper 2	Advanced Financial Management (AFM)	Group 1
-Paper 3	Advanced Auditing & Assurance (AAA)	Group 1
-Paper 4	Direct Tax Laws & International Taxation (DT)	Group 2
-Paper 5	Indirect Tax Laws (IDT)	Group 2
-Paper 6	Integrated Business Solutions (IBS)	Group 2
 > **DT Note:** The Income Tax Act, 2025 (effective April 1, 2026) applies from May 2027 onwards. DT chapters in this tracker are placeholders pending ICAI's updated 2026 study material. Do not deep-dive DT until the official SM is released.
 ---
 Features
