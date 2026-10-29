@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-<title>CA Finals 2027 — Nishanth</title>
+<title>Nishanth</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.2/babel.min.js"></script>
@@ -12,7 +12,7 @@
 <meta name="theme-color" content="#0a0b14"/>
 <meta name="apple-mobile-web-app-capable" content="yes"/>
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
-<meta name="apple-mobile-web-app-title" content="CA Finals"/>
+<meta name="apple-mobile-web-app-title" content="Nishanth"/>
 <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%230a0b14'/><text y='.9em' font-size='80'>📚</text></svg>"/>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet"/>
 <style>
@@ -1338,7 +1338,7 @@ function LecturesWorld({lectures,setLectures,frLec,setFrLec}){
           const isInProg=e.status==="In Progress";
           return <div key={gi} style={{display:"grid",gridTemplateColumns:"1fr 88px 56px 130px 44px",padding:"9px 16px",borderBottom:"1px solid var(--border)",alignItems:"center",background:isDone?"rgba(52,211,153,0.03)":isInProg?"rgba(251,191,36,0.03)":"transparent",transition:"background 0.1s"}}>
             <div>
-              <div style={{color:isDone?"var(--text3)":"var(--text)",fontSize:12,fontWeight:500,textDecoration:isDone?"line-through":"none",lineHeight:1.3}}>{ch.n}</div>
+              <div style={{display:"flex",alignItems:"flex-start",gap:7,color:isDone?"var(--text3)":"var(--text)",fontSize:12,fontWeight:500,textDecoration:isDone?"line-through":"none",lineHeight:1.3}}><input aria-label={`Mark lecture chapter ${ch.n} completed`} title={isDone?"Unmark chapter completed":"Mark chapter completed"} type="checkbox" checked={isDone} onChange={ev=>patchLec(activeSub,gi,{status:ev.target.checked?"Completed":"Not Started",progress:ev.target.checked?100:0})} style={{accentColor:"#34d399",width:15,height:15,marginTop:1,flexShrink:0,cursor:"pointer"}}/><span>{ch.n}</span></div>
               <span style={{background:wColors[ch.w]+"20",color:wColors[ch.w],borderRadius:20,padding:"1px 7px",fontSize:9,fontWeight:700,marginTop:3,display:"inline-block"}}>{ch.w}</span>
             </div>
             <div style={{textAlign:"center"}}>
@@ -1591,7 +1591,7 @@ function RevisionWorld({revData,setRevData,lectures,frRev,setFrRev}){
           const revSoon=ds!==null&&ds>7&&!overdue;
           return <div key={gi} style={{display:"grid",gridTemplateColumns:"1fr 96px 80px 120px 52px 44px",padding:"9px 16px",borderBottom:"1px solid var(--border)",alignItems:"center",background:isStuck?"rgba(248,113,113,0.04)":overdue?"rgba(251,191,36,0.03)":isDone?"rgba(52,211,153,0.03)":"transparent"}}>
             <div>
-              <div style={{color:isDone?"var(--text3)":"var(--text)",fontSize:12,fontWeight:500,lineHeight:1.3}}>{ch.n}</div>
+              <div style={{display:"flex",alignItems:"flex-start",gap:7,color:isDone?"var(--text3)":"var(--text)",fontSize:12,fontWeight:500,lineHeight:1.3}}><input aria-label={`Mark revision chapter ${ch.n} completed`} title={isDone?"Unmark chapter completed":"Mark chapter completed"} type="checkbox" checked={isDone} onChange={ev=>patchRev(activeSub,gi,{status:ev.target.checked?"Completed":"Not Started"})} style={{accentColor:"#34d399",width:15,height:15,marginTop:1,flexShrink:0,cursor:"pointer"}}/><span style={{textDecoration:isDone?"line-through":"none"}}>{ch.n}</span></div>
               <div style={{display:"flex",gap:4,marginTop:3,flexWrap:"wrap"}}>
                 <span style={{background:wColors[ch.w]+"20",color:wColors[ch.w],borderRadius:20,padding:"1px 7px",fontSize:9,fontWeight:700}}>{ch.w}</span>
                 {overdue&&<span style={{background:"rgba(251,191,36,0.15)",color:"#fbbf24",borderRadius:20,padding:"1px 7px",fontSize:9,fontWeight:700}}>Overdue {ds}d</span>}
@@ -3808,7 +3808,7 @@ function OnboardingModal({onSave}){
         <div style={{fontSize:48,marginBottom:10}}>📊</div>
         <div style={{color:"#818cf8",fontSize:11,fontWeight:700,textTransform:"uppercase",letterSpacing:3,marginBottom:6}}>CA Finals Tracker</div>
         <div style={{color:"#fff",fontSize:24,fontWeight:900,lineHeight:1.2,marginBottom:6}}>Welcome, Future CA 🎯</div>
-        <div style={{color:"rgba(255,255,255,0.4)",fontSize:12}}>Your personalised study command centre · ICAI 2023 Scheme</div>
+        <div style={{color:"rgba(255,255,255,0.4)",fontSize:12}}>Your personalised study command centre · ICAI 2023 Scheme</div><div style={{color:"rgba(255,255,255,0.65)",fontSize:11,marginTop:8}}>Developed by <strong style={{color:"#a5b4fc"}}>Nishanth</strong></div>
       </div>
 
       <div style={{background:"rgba(255,255,255,0.04)",border:"1px solid rgba(255,255,255,0.1)",borderRadius:20,padding:24,backdropFilter:"blur(20px)"}}>
@@ -5561,6 +5561,7 @@ function StudyPlan({userProfile}){
 ═══════════════════════════════════════ */
 function App(){
   const saved=loadStore();
+  useEffect(()=>{document.title=(userProfile?.name||"Nishanth").trim()||"Nishanth";},[userProfile?.name]);
   const [revData,setRevData]=useState(()=>({...initRevData(),...(saved?.revData||{})}));
   const [studyLog,setStudyLog]=useState(()=>saved?.studyLog||{});
   const [tests,setTests]=useState(()=>saved?.tests||[]);
