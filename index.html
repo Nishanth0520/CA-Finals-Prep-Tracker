@@ -774,7 +774,7 @@ function loadStore(){
     const data=JSON.parse(s);
     // DT/IDT chapter indices changed for the May 2027 ICAI syllabus.
     // Drop only legacy chapter-status keys so old chapter progress is not assigned to new chapters.
-    if(data.revData)for(const k of Object.keys(data.revData))if(/^(dt|idt)_\\d+_rev$/.test(k))delete data.revData[k];
+    if(data.revData)for(const k of Object.keys(data.revData))if(/^(dt|idt)_\d+_rev$/.test(k))delete data.revData[k];
     return data;
   }catch{return null;}
 }
@@ -784,7 +784,7 @@ function loadLec(){
     const s=localStorage.getItem(profileStorageKey(LSTORE_KEY));
     const data=s?JSON.parse(s):{};
     // Keep lecture progress for other papers; rebuild DT/IDT against the revised chapter list.
-    for(const k of Object.keys(data))if(/^(dt|idt)_\\d+_lec$/.test(k))delete data[k];
+    for(const k of Object.keys(data))if(/^(dt|idt)_\d+_lec$/.test(k))delete data[k];
     return data;
   }catch{return {};}
 }
