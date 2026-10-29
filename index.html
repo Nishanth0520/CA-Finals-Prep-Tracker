@@ -1316,7 +1316,7 @@ function LecturesWorld({lectures,setLectures,frLec,setFrLec}){
           return <div key={l.id} style={{display:"grid",gridTemplateColumns:"38px 58px 1fr 48px 106px 106px 44px 42px",padding:"7px 12px",borderBottom:"1px solid var(--border)",alignItems:"center",background:done?"rgba(52,211,153,0.03)":imp?"rgba(248,113,113,0.03)":"transparent"}}>
             <div style={{color:"var(--text3)",fontSize:10,fontFamily:"'JetBrains Mono',monospace"}}>D{l.day}</div>
             <div style={{color:"#818cf8",fontSize:10,fontWeight:700}}>{l.id}</div>
-            <div style={{color:done?"var(--text3)":"var(--text)",fontSize:11,lineHeight:1.3,textDecoration:done?"line-through":"none",paddingRight:6}}>{l.concepts}</div>
+            <div style={{display:"flex",alignItems:"flex-start",gap:6,color:done?"var(--text3)":"var(--text)",fontSize:11,lineHeight:1.3,textDecoration:done?"line-through":"none",paddingRight:6}}><input type="checkbox" aria-label={`Mark FR lecture ${l.concepts} completed`} checked={done} onChange={ev=>patchFrL(l.id,{status:ev.target.checked?"✅ Done":"⏳ Pending",dateWatched:ev.target.checked?today():""})} style={{accentColor:"#34d399",width:14,height:14,marginTop:1,flexShrink:0,cursor:"pointer"}}/><span>{l.concepts}</span></div>
             <div style={{color:"var(--text3)",fontSize:10,fontFamily:"'JetBrains Mono',monospace"}}>{l.dur}</div>
             <select value={e.status} onChange={ev=>patchFrL(l.id,{status:ev.target.value})} style={{background:"transparent",border:`1px solid ${frSC[e.status]||"var(--border)"}55`,borderRadius:6,color:frSC[e.status]||"var(--text2)",padding:"3px 4px",fontSize:10,fontWeight:700,cursor:"pointer",width:"100%"}}>
               {FR_STATUSES.map(s=><option key={s} value={s}>{s}</option>)}
@@ -1549,7 +1549,7 @@ function RevisionWorld({revData,setRevData,lectures,frRev,setFrRev}){
         const iqDone=e.importantQs?.filter(q=>q.done).length||0;
         return <div key={i} style={{display:"grid",gridTemplateColumns:"1fr 100px 90px 110px 48px 52px",padding:"10px 16px",borderBottom:"1px solid var(--border)",alignItems:"center",background:isStuck?"rgba(248,113,113,0.04)":overdue?"rgba(251,191,36,0.02)":isDone?"rgba(52,211,153,0.02)":"transparent"}}>
           <div>
-            <div style={{color:isDone?"var(--text3)":"var(--text)",fontSize:12,fontWeight:600,lineHeight:1.3}}>{chapter}</div>
+            <div style={{display:"flex",alignItems:"flex-start",gap:7,color:isDone?"var(--text3)":"var(--text)",fontSize:12,fontWeight:600,lineHeight:1.3}}><input type="checkbox" aria-label={`Mark FR revision chapter ${chapter} completed`} checked={isDone} onChange={ev=>patchFrR(i,{status:ev.target.checked?"Completed":"Not Started"})} style={{accentColor:"#34d399",width:15,height:15,marginTop:1,flexShrink:0,cursor:"pointer"}}/><span>{chapter}</span></div>
             <div style={{display:"flex",gap:4,marginTop:3,flexWrap:"wrap"}}>
               <span style={{background:"rgba(129,140,248,0.15)",color:"#818cf8",borderRadius:20,padding:"1px 7px",fontSize:9,fontWeight:700}}>{std}</span>
               {overdue&&<span style={{background:"rgba(251,191,36,0.15)",color:"#fbbf24",borderRadius:20,padding:"1px 7px",fontSize:9,fontWeight:700}}>Overdue {ds}d</span>}
