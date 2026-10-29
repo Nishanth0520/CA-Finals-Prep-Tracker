@@ -5663,7 +5663,7 @@ function App(){
   useEffect(()=>{try{localStorage.setItem(profileStorageKey("ca_fr_lec"),JSON.stringify(frLec));}catch{}},[frLec]);
   useEffect(()=>{try{localStorage.setItem(profileStorageKey("ca_fr_rev"),JSON.stringify(frRev));}catch{}},[frRev]);
   const [userProfile,setUserProfile]=useState(()=>{try{const s=localStorage.getItem("ca_user_profile");const p=s?JSON.parse(s):null;return p&&p.name?p:null;}catch{return null;}});
-  useEffect(()=>{document.title=(userProfile?.name||"Nishanth").trim()||"Nishanth";},[userProfile?.name]);
+  useEffect(()=>{const displayName=(userProfile?.name||"Nishanth").trim()||"Nishanth";document.title=displayName;document.querySelector('meta[name="apple-mobile-web-app-title"]')?.setAttribute("content",displayName);},[userProfile?.name]);
   const saveProfile=(p)=>{
     let previous=null;try{previous=JSON.parse(localStorage.getItem("ca_user_profile")||"null");}catch{}
     const profile={...p,storageId:p.storageId||("p_"+Date.now()+"_"+Math.random().toString(36).slice(2,10))};
@@ -5909,7 +5909,9 @@ ReactDOM.createRoot(document.getElementById("root")).render(React.createElement(
 </script>
 <script>
 // PWA Manifest (inline)
-const manifest={name:"CA Finals 2027 — Nishanth",short_name:"CA Finals",description:"CA Finals May 2027 Study Tracker",start_url:"./",display:"standalone",background_color:"#0a0b14",theme_color:"#0a0b14",orientation:"portrait-primary",icons:[{src:"data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%230a0b14'/><text y='.9em' font-size='80'>📚</text></svg>",sizes:"any",type:"image/svg+xml"}]};
+const manifestProfile=(()=>{try{return JSON.parse(localStorage.getItem("ca_user_profile")||"null");}catch{return null;}})();
+const manifestName=(manifestProfile?.name||"Nishanth").trim()||"Nishanth";
+const manifest={name:manifestName,short_name:manifestName,description:"CA Finals May 2027 Study Tracker",start_url:"./",display:"standalone",background_color:"#0a0b14",theme_color:"#0a0b14",orientation:"portrait-primary",icons:[{src:"data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%230a0b14'/><text y='.9em' font-size='80'>📚</text></svg>",sizes:"any",type:"image/svg+xml"}]};
 const blob=new Blob([JSON.stringify(manifest)],{type:"application/json"});
 document.getElementById("pwa-manifest").href=URL.createObjectURL(blob);
 // Register service worker for offline support
