@@ -1088,14 +1088,21 @@ const LSTORE_KEY="ca_lec_v3";
 const defLec=()=>({status:"Not Started",progress:0,source:"",notes:"",updated:""});
 const defRev=()=>({status:"Not Started",confidence:0,notes:"",revDates:[],updated:""});
 
+function profileStorageKey(base){
+  try{
+    const p=JSON.parse(localStorage.getItem("ca_user_profile")||"null");
+    const identity=p&&p.name?(p.name+"_"+(p.attempt||"")).toLowerCase().replace(/[^a-z0-9]+/g,"_").replace(/^_+|_+$/g,""):"new_user";
+    return base+"__"+(identity||"new_user");
+  }catch{return base+"__new_user";}
+}
 function loadStore(){
-  try{const s=localStorage.getItem(STORE_KEY);return s?JSON.parse(s):null;}catch{return null;}
+  try{const s=localStorage.getItem(profileStorageKey(STORE_KEY));return s?JSON.parse(s):null;}catch{return null;}
 }
-function saveStore(v){try{localStorage.setItem(STORE_KEY,JSON.stringify(v));}catch{}}
+function saveStore(v){try{localStorage.setItem(profileStorageKey(STORE_KEY),JSON.stringify(v));}catch{}}
 function loadLec(){
-  try{const s=localStorage.getItem(LSTORE_KEY);return s?JSON.parse(s):{};}catch{return {};}
+  try{const s=localStorage.getItem(profileStorageKey(LSTORE_KEY));return s?JSON.parse(s):{};}catch{return {};}
 }
-function saveLec(v){try{localStorage.setItem(LSTORE_KEY,JSON.stringify(v));}catch{}}
+function saveLec(v){try{localStorage.setItem(profileStorageKey(LSTORE_KEY),JSON.stringify(v));}catch{}}
 
 function initRevData(){
   const d={};
@@ -4077,8 +4084,8 @@ const PS_SOURCES=["ICAI PM","PY Papers","RTP","MTP","Question Bank","ICAI SM","O
 const REV_TYPES=["Conceptual Revision","Problem Solving"];
 
 // Session store key (separate from main store for performance)
-function loadSessions(){try{const s=localStorage.getItem("ca_sessions");return s?JSON.parse(s):[];}catch{return[];}}
-function saveSessions(v){try{localStorage.setItem("ca_sessions",JSON.stringify(v.slice(0,200)));}catch{}}
+function loadSessions(){try{const s=localStorage.getItem(profileStorageKey("ca_sessions"));return s?JSON.parse(s):[];}catch{return[];}}
+function saveSessions(v){try{localStorage.setItem(profileStorageKey("ca_sessions"),JSON.stringify(v.slice(0,200)));}catch{}}
 
 function SessionTimer({studyLog,setStudyLog,energyLog,setEnergyLog,lectures,setLectures,revData,setRevData}){
   // Setup state
@@ -4898,7 +4905,7 @@ function BackupModal({onClose,revData,studyLog,tests,weeklyTarget,lectures,amend
    STUDY PLAN
 ═══════════════════════════════════════ */
 function CustomStudyPlan({userProfile}){
-  const STORE_KEY="ca_custom_plan_"+((userProfile?.attempt||"custom").replace(/\s+/g,"_"));
+  const STORE_KEY=profileStorageKey("ca_custom_plan_"+((userProfile?.attempt||"custom").replace(/\s+/g,"_")));
   const [plan,setPlan]=useState(()=>{try{const s=localStorage.getItem(STORE_KEY);return s?JSON.parse(s):null;}catch{return null;}});
   const [setup,setSetup]=useState(!plan);
   // Setup form state
@@ -5585,10 +5592,10 @@ function App(){
     catch{return["dashboard","session","lectures","revision","tests","analytics","planner","amendments","search","formulabank","doubts","plan","settings"];}
   });
   useEffect(()=>{localStorage.setItem("ca_nav_order",JSON.stringify(navOrder));},[navOrder]);
-  const [frLec,setFrLec]=useState(()=>{try{const s=localStorage.getItem("ca_fr_lec");return s?JSON.parse(s):{}}catch{return {};}});
-  const [frRev,setFrRev]=useState(()=>{try{const s=localStorage.getItem("ca_fr_rev");return s?JSON.parse(s):{}}catch{return {};}});
-  useEffect(()=>{try{localStorage.setItem("ca_fr_lec",JSON.stringify(frLec));}catch{}},[frLec]);
-  useEffect(()=>{try{localStorage.setItem("ca_fr_rev",JSON.stringify(frRev));}catch{}},[frRev]);
+  const [frLec,setFrLec]=useState(()=>{try{const s=localStorage.getItem(profileStorageKey("ca_fr_lec"));return s?JSON.parse(s):{}}catch{return {};}});
+  const [frRev,setFrRev]=useState(()=>{try{const s=localStorage.getItem(profileStorageKey("ca_fr_rev"));return s?JSON.parse(s):{}}catch{return {};}});
+  useEffect(()=>{try{localStorage.setItem(profileStorageKey("ca_fr_lec"),JSON.stringify(frLec));}catch{}},[frLec]);
+  useEffect(()=>{try{localStorage.setItem(profileStorageKey("ca_fr_rev"),JSON.stringify(frRev));}catch{}},[frRev]);
   const [userProfile,setUserProfile]=useState(()=>{try{const s=localStorage.getItem("ca_user_profile");const p=s?JSON.parse(s):null;return p&&p.name?p:null;}catch{return null;}});
   const saveProfile=(p)=>{setUserProfile(p);localStorage.setItem("ca_user_profile",JSON.stringify(p));};
   const resetProfile=()=>{setUserProfile(null);localStorage.removeItem("ca_user_profile");};
@@ -5811,6 +5818,9 @@ function App(){
       {world==="icailinks"&&<ICAILinks customLinks={customLinks} setCustomLinks={setCustomLinks}/>}
       {world==="settings"&&<SettingsPage fontSize={fontSize} setFontSize={setFontSize} subColors={subColors} setSubColors={setSubColors} autoSaveInterval={autoSaveInterval} setAutoSaveInterval={setAutoSaveInterval} onOpenCloudSync={()=>setShowCloudSync(true)} onOpenBackup={()=>setShowBackup(true)} lastSaved={lastSaved} userProfile={userProfile} saveProfile={saveProfile} resetProfile={resetProfile}/>}
     </div>
+    <footer style={{textAlign:"center",padding:"18px 12px 26px",color:"var(--text3)",fontSize:11,borderTop:"1px solid var(--border)",marginTop:18}}>
+      CA Finals Study Tracker <span style={{opacity:.55}}>·</span> Developed by <strong style={{color:"var(--text2)"}}>Nishanth</strong>
+    </footer>
   </div>;
 }
 
