@@ -5733,7 +5733,7 @@ function App(){
         </div>
       </div>
 
-      <button aria-label="Scroll navigation left" title="Scroll tabs left" onClick={()=>document.getElementById("ca-main-nav-tabs")?.scrollBy({left:-320,behavior:"smooth"})} style={{flexShrink:0,width:30,border:"none",borderRight:"1px solid var(--border)",background:"rgba(255,255,255,0.025)",color:"var(--text2)",cursor:"pointer",fontSize:19,fontWeight:800}} aria-label="Scroll tabs left">‹</button>
+      <button aria-label="Scroll navigation left" title="Scroll tabs left" onClick={()=>document.getElementById("ca-main-nav-tabs")?.scrollBy({left:-320,behavior:"smooth"})} style={{flexShrink:0,width:30,border:"none",borderRight:"1px solid var(--border)",background:"rgba(255,255,255,0.025)",color:"var(--text2)",cursor:"pointer",fontSize:19,fontWeight:800}}>‹</button>
       <div id="ca-main-nav-tabs" style={{display:"flex",alignItems:"stretch",flex:1,minWidth:0,overflowX:"auto",scrollbarWidth:"thin",scrollBehavior:"smooth"}}>
         {tabs.map(t=>{
           const active=world===t.id;
