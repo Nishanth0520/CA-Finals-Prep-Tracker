@@ -4813,7 +4813,7 @@ function QuickLogFAB({studyLog,setStudyLog,revData,setRevData}){
 /* ═══════════════════════════════════════
    BACKUP MODAL
 ═══════════════════════════════════════ */
-function BackupModal({onClose,revData,studyLog,tests,weeklyTarget,lectures,amendments,tasks,onImport}){
+function BackupModal({onClose,revData,studyLog,tests,weeklyTarget,lectures,amendments,tasks,doubts,formulas,weeklyReviewDone,answerLog,chapterNotes,energyLog,preExamChecklist,patterns,rtpLog,journal,customLinks,onImport}){
   const fileRef=useRef(null);
   const exportExcel=async()=>{
     if(!window.ExcelJS){alert("Excel export is still loading. Please try again in a moment.");return;}
@@ -4854,6 +4854,17 @@ function BackupModal({onClose,revData,studyLog,tests,weeklyTarget,lectures,amend
     addSheet("Lectures",lectures);
     addSheet("Amendments",amendments);
     addSheet("Tasks",tasks);
+    addSheet("Doubts",doubts);
+    addSheet("Formula Bank",formulas);
+    addSheet("Weekly Reviews",weeklyReviewDone);
+    addSheet("Answer Writing",answerLog);
+    addSheet("Chapter Notes",chapterNotes);
+    addSheet("Energy Log",energyLog);
+    addSheet("Pre-Exam Checklist",preExamChecklist);
+    addSheet("Exam Patterns",patterns);
+    addSheet("RTP MTP Log",rtpLog);
+    addSheet("Study Journal",journal);
+    addSheet("Custom Links",customLinks);
     const buffer=await wb.xlsx.writeBuffer();
     const blob=new Blob([buffer],{type:"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"});
     const url=URL.createObjectURL(blob);const a=document.createElement("a");a.href=url;
@@ -5718,7 +5729,7 @@ function App(){
   return <div style={{minHeight:"100vh"}}>
     
     {showCloudSync&&<CloudSync onClose={()=>setShowCloudSync(false)} revData={revData} studyLog={studyLog} tests={tests} weeklyTarget={weeklyTarget} lectures={lectures} amendments={amendments} tasks={tasks} doubts={doubts} formulas={formulas} weeklyReviewDone={weeklyReviewDone} answerLog={answerLog} chapterNotes={chapterNotes} energyLog={energyLog} preExamChecklist={preExamChecklist} patterns={patterns} rtpLog={rtpLog} journal={journal} onImport={handleImport}/>}
-    {showBackup&&<BackupModal onClose={()=>setShowBackup(false)} revData={revData} studyLog={studyLog} tests={tests} weeklyTarget={weeklyTarget} lectures={lectures} amendments={amendments} tasks={tasks} doubts={doubts} formulas={formulas} onImport={handleImport}/>}
+    {showBackup&&<BackupModal onClose={()=>setShowBackup(false)} revData={revData} studyLog={studyLog} tests={tests} weeklyTarget={weeklyTarget} lectures={lectures} amendments={amendments} tasks={tasks} doubts={doubts} formulas={formulas} weeklyReviewDone={weeklyReviewDone} answerLog={answerLog} chapterNotes={chapterNotes} energyLog={energyLog} preExamChecklist={preExamChecklist} patterns={patterns} rtpLog={rtpLog} journal={journal} customLinks={customLinks} onImport={handleImport}/>}
     {focusMode&&<FocusMode activeSub={world==="lectures"?SUBJECTS[0].id:SUBJECTS[0].id} lectures={lectures} revData={revData} setLectures={setLectures} setRevData={setRevData} onExit={()=>setFocusMode(false)}/>}
     {showNavCustomiser&&<NavCustomiser allTabs={ALL_TABS} navOrder={navOrder} setNavOrder={setNavOrder} onClose={()=>setShowNavCustomiser(false)}/>}
     {showWeeklyReview&&<WeeklyReview studyLog={studyLog} revData={revData} tests={tests} weeklyTarget={weeklyTarget} onClose={()=>setShowWeeklyReview(false)} weeklyReviewDone={weeklyReviewDone} setWeeklyReviewDone={setWeeklyReviewDone}/>}
@@ -5733,18 +5744,18 @@ function App(){
         </div>
       </div>
 
-      <button aria-label="Scroll navigation left" title="Scroll tabs left" onClick={()=>document.getElementById("ca-main-nav-tabs")?.scrollBy({left:-320,behavior:"smooth"})} style={{flexShrink:0,width:30,border:"none",borderRight:"1px solid var(--border)",background:"rgba(255,255,255,0.025)",color:"var(--text2)",cursor:"pointer",fontSize:19,fontWeight:800}}>‹</button>
-      <div id="ca-main-nav-tabs" style={{display:"flex",alignItems:"stretch",flex:1,minWidth:0,overflowX:"auto",scrollbarWidth:"thin",scrollBehavior:"smooth"}}>
+      <button aria-label="Scroll navigation left" title="Scroll tabs left" onClick={()=>{const el=document.getElementById("ca-main-nav-tabs");if(el)el.scrollBy({left:-Math.max(240,el.clientWidth*0.8),behavior:"smooth"});}} style={{flexShrink:0,width:30,border:"none",borderRight:"1px solid var(--border)",background:"rgba(255,255,255,0.025)",color:"var(--text2)",cursor:"pointer",fontSize:19,fontWeight:800}}>‹</button>
+      <div id="ca-main-nav-tabs" style={{display:"flex",alignItems:"stretch",flex:"1 1 0",minWidth:0,maxWidth:"100%",overflowX:"auto",overflowY:"hidden",overscrollBehaviorX:"contain",WebkitOverflowScrolling:"touch",touchAction:"pan-x",scrollbarWidth:"thin",scrollBehavior:"smooth"}}>
         {tabs.map(t=>{
           const active=world===t.id;
-          return <button key={t.id} onClick={()=>setWorld(t.id)} style={{background:active?`${t.color}18`:"transparent",border:"none",cursor:"pointer",padding:"0 12px",fontSize:11,fontWeight:active?800:500,color:active?t.color:"rgba(203,213,225,0.75)",borderBottom:`2.5px solid ${active?t.color:"transparent"}`,whiteSpace:"nowrap",minHeight:52,display:"flex",alignItems:"center",gap:5,transition:"all 0.15s"}}>
+          return <button id={`ca-nav-tab-${t.id}`} key={t.id} onClick={()=>{setWorld(t.id);document.getElementById(`ca-nav-tab-${t.id}`)?.scrollIntoView({behavior:"smooth",block:"nearest",inline:"center"});}} style={{flexShrink:0,background:active?`${t.color}18`:"transparent",border:"none",cursor:"pointer",padding:"0 12px",fontSize:11,fontWeight:active?800:500,color:active?t.color:"rgba(203,213,225,0.75)",borderBottom:`2.5px solid ${active?t.color:"transparent"}`,whiteSpace:"nowrap",minHeight:52,display:"flex",alignItems:"center",gap:5,transition:"all 0.15s"}}>
             <span style={{fontSize:13}}>{t.emoji}</span>
             <span>{t.label}</span>
             {t.pct!=null&&<span style={{background:active?t.color:"var(--surface2)",color:active?"#fff":"var(--text3)",borderRadius:20,padding:"1px 6px",fontSize:9,fontWeight:900}}>{t.pct}%</span>}
           </button>;
         })}
       </div>
-      <button aria-label="Scroll navigation right" title="Scroll tabs right" onClick={()=>document.getElementById("ca-main-nav-tabs")?.scrollBy({left:320,behavior:"smooth"})} style={{flexShrink:0,width:30,border:"none",borderLeft:"1px solid var(--border)",background:"rgba(255,255,255,0.025)",color:"var(--text2)",cursor:"pointer",fontSize:19,fontWeight:800}}>›</button>
+      <button aria-label="Scroll navigation right" title="Scroll tabs right" onClick={()=>{const el=document.getElementById("ca-main-nav-tabs");if(el)el.scrollBy({left:Math.max(240,el.clientWidth*0.8),behavior:"smooth"});}} style={{flexShrink:0,width:30,border:"none",borderLeft:"1px solid var(--border)",background:"rgba(255,255,255,0.025)",color:"var(--text2)",cursor:"pointer",fontSize:19,fontWeight:800}}>›</button>
 
       <div style={{display:"flex",alignItems:"center",gap:5,padding:"0 10px",borderLeft:"1px solid var(--border)",flexShrink:0}}>
         {streak>0&&<div style={{display:"flex",alignItems:"center",gap:3,background:"rgba(251,146,60,0.1)",border:"1px solid rgba(251,146,60,0.25)",borderRadius:20,padding:"3px 9px"}}>
