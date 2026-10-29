@@ -7,6 +7,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.2/babel.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/exceljs@4.4.0/dist/exceljs.min.js"></script>
 <link rel="manifest" id="pwa-manifest"/>
 <meta name="theme-color" content="#0a0b14"/>
 <meta name="apple-mobile-web-app-capable" content="yes"/>
@@ -4814,6 +4815,50 @@ function QuickLogFAB({studyLog,setStudyLog,revData,setRevData}){
 ═══════════════════════════════════════ */
 function BackupModal({onClose,revData,studyLog,tests,weeklyTarget,lectures,amendments,tasks,onImport}){
   const fileRef=useRef(null);
+  const exportExcel=async()=>{
+    if(!window.ExcelJS){alert("Excel export is still loading. Please try again in a moment.");return;}
+    const wb=new window.ExcelJS.Workbook();
+    wb.creator="CA Finals Prep Tracker";
+    wb.subject="CA Final preparation progress and study log";
+    wb.title="CA Finals Prep Tracker Export";
+    wb.created=new Date();
+    const addSheet=(name,data)=>{
+      const ws=wb.addWorksheet(name,{views:[{state:"frozen",ySplit:1}]});
+      let rows=[];
+      if(Array.isArray(data)){
+        const objects=data.filter(x=>x&&typeof x==="object"&&!Array.isArray(x));
+        const cols=[...new Set(objects.flatMap(x=>Object.keys(x)))];
+        if(cols.length) { ws.addRow(cols); objects.forEach(x=>ws.addRow(cols.map(k=>excelCell(x[k])))); }
+        else { ws.addRow(["Item"]); data.forEach(x=>ws.addRow([excelCell(x)])); }
+      } else if(data&&typeof data==="object"){
+        const entries=Object.entries(data);
+        const objects=entries.map(([key,value])=>({Key:key,...(value&&typeof value==="object"&&!Array.isArray(value)?value:{Value:value})}));
+        const cols=[...new Set(objects.flatMap(x=>Object.keys(x)))];
+        ws.addRow(cols.length?cols:["Key","Value"]);
+        objects.forEach(x=>ws.addRow((cols.length?cols:["Key","Value"]).map(k=>excelCell(x[k]))));
+      } else { ws.addRow(["Item","Value"]);ws.addRow(["Value",excelCell(data)]); }
+      if(ws.rowCount===0)ws.addRow(["No data"]);
+      const header=ws.getRow(1);
+      header.height=26;
+      header.eachCell(cell=>{cell.font={bold:true,color:{argb:"FFFFFFFF"},size:11};cell.fill={type:"pattern",pattern:"solid",fgColor:{argb:"FF24324A"}};cell.alignment={vertical:"middle",wrapText:true};});
+      ws.eachRow((row,rowNumber)=>{row.eachCell(cell=>{cell.alignment={vertical:"top",wrapText:true};if(rowNumber>1&&rowNumber%2===0)cell.fill={type:"pattern",pattern:"solid",fgColor:{argb:"FFF1F5F9"}};});});
+      ws.columns.forEach((col,i)=>{let max=12;col.eachCell({includeEmpty:true},cell=>{const v=cell.value;const text=typeof v==="object"&&v!==null?(v.text||JSON.stringify(v)):String(v??"");max=Math.max(max,Math.min(42,text.length+2));});col.width=Math.min(42,max);});
+      if(ws.rowCount>1)ws.autoFilter={from:{row:1,column:1},to:{row:1,column:Math.max(1,ws.columnCount)}};
+      return ws;
+    };
+    const excelCell=v=>v==null?"":typeof v==="object"?JSON.stringify(v):v;
+    addSheet("Summary",{ExportedAt:new Date().toLocaleString(),WeeklyStudyTargetHours:weeklyTarget,Note:"Export of the currently selected profile's tracker data"});
+    addSheet("Revision Progress",revData);
+    addSheet("Study Sessions",studyLog);
+    addSheet("Tests",tests);
+    addSheet("Lectures",lectures);
+    addSheet("Amendments",amendments);
+    addSheet("Tasks",tasks);
+    const buffer=await wb.xlsx.writeBuffer();
+    const blob=new Blob([buffer],{type:"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"});
+    const url=URL.createObjectURL(blob);const a=document.createElement("a");a.href=url;
+    a.download="ca_finals_tracker_"+today()+".xlsx";a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);
+  };
   const exportAll=()=>{
     const data={revData,studyLog,tests,weeklyTarget,lectures,amendments,tasks,exportedAt:new Date().toISOString(),version:3};
     const blob=new Blob([JSON.stringify(data,null,2)],{type:"application/json"});
@@ -4833,9 +4878,13 @@ function BackupModal({onClose,revData,studyLog,tests,weeklyTarget,lectures,amend
         <button onClick={onClose} style={{background:"var(--surface2)",border:"none",borderRadius:8,width:30,height:30,cursor:"pointer",color:"var(--text2)",fontSize:16}}>×</button>
       </div>
       <div style={{display:"flex",flexDirection:"column",gap:10}}>
-        <button onClick={exportAll} style={{display:"flex",alignItems:"center",gap:12,background:"rgba(52,211,153,0.08)",border:"1px solid rgba(52,211,153,0.3)",borderRadius:12,padding:"13px 15px",cursor:"pointer",textAlign:"left"}}>
-          <span style={{fontSize:22}}>⬇️</span>
-          <div><div style={{color:"#34d399",fontSize:13,fontWeight:700}}>Export Full Backup</div><div style={{color:"var(--text3)",fontSize:11,marginTop:2}}>Downloads all data as a JSON file</div></div>
+        <button onClick={exportExcel} style={{display:"flex",alignItems:"center",gap:12,background:"rgba(52,211,153,0.08)",border:"1px solid rgba(52,211,153,0.3)",borderRadius:12,padding:"13px 15px",cursor:"pointer",textAlign:"left"}}>
+          <span style={{fontSize:22}}>📊</span>
+          <div><div style={{color:"#34d399",fontSize:13,fontWeight:700}}>Export to Excel (.xlsx)</div><div style={{color:"var(--text3)",fontSize:11,marginTop:2}}>Formatted workbook with separate sheets, filters and readable columns</div></div>
+        </button>
+        <button onClick={exportAll} style={{display:"flex",alignItems:"center",gap:12,background:"rgba(148,163,184,0.06)",border:"1px solid var(--border)",borderRadius:12,padding:"11px 15px",cursor:"pointer",textAlign:"left"}}>
+          <span style={{fontSize:20}}>🗂️</span>
+          <div><div style={{color:"var(--text2)",fontSize:12,fontWeight:700}}>Export JSON Backup</div><div style={{color:"var(--text3)",fontSize:11,marginTop:2}}>For restoring data using Import Backup</div></div>
         </button>
         <button onClick={()=>fileRef.current?.click()} style={{display:"flex",alignItems:"center",gap:12,background:"rgba(129,140,248,0.08)",border:"1px solid rgba(129,140,248,0.3)",borderRadius:12,padding:"13px 15px",cursor:"pointer",textAlign:"left"}}>
           <span style={{fontSize:22}}>📥</span>
@@ -5684,7 +5733,8 @@ function App(){
         </div>
       </div>
 
-      <div style={{display:"flex",alignItems:"stretch",flex:1,overflowX:"auto"}}>
+      <button aria-label="Scroll navigation left" title="Scroll tabs left" onClick={()=>document.getElementById("ca-main-nav-tabs")?.scrollBy({left:-320,behavior:"smooth"})} style={{flexShrink:0,width:30,border:"none",borderRight:"1px solid var(--border)",background:"rgba(255,255,255,0.025)",color:"var(--text2)",cursor:"pointer",fontSize:19,fontWeight:800}} aria-label="Scroll tabs left">‹</button>
+      <div id="ca-main-nav-tabs" style={{display:"flex",alignItems:"stretch",flex:1,minWidth:0,overflowX:"auto",scrollbarWidth:"thin",scrollBehavior:"smooth"}}>
         {tabs.map(t=>{
           const active=world===t.id;
           return <button key={t.id} onClick={()=>setWorld(t.id)} style={{background:active?`${t.color}18`:"transparent",border:"none",cursor:"pointer",padding:"0 12px",fontSize:11,fontWeight:active?800:500,color:active?t.color:"rgba(203,213,225,0.75)",borderBottom:`2.5px solid ${active?t.color:"transparent"}`,whiteSpace:"nowrap",minHeight:52,display:"flex",alignItems:"center",gap:5,transition:"all 0.15s"}}>
@@ -5694,6 +5744,7 @@ function App(){
           </button>;
         })}
       </div>
+      <button aria-label="Scroll navigation right" title="Scroll tabs right" onClick={()=>document.getElementById("ca-main-nav-tabs")?.scrollBy({left:320,behavior:"smooth"})} style={{flexShrink:0,width:30,border:"none",borderLeft:"1px solid var(--border)",background:"rgba(255,255,255,0.025)",color:"var(--text2)",cursor:"pointer",fontSize:19,fontWeight:800}}>›</button>
 
       <div style={{display:"flex",alignItems:"center",gap:5,padding:"0 10px",borderLeft:"1px solid var(--border)",flexShrink:0}}>
         {streak>0&&<div style={{display:"flex",alignItems:"center",gap:3,background:"rgba(251,146,60,0.1)",border:"1px solid rgba(251,146,60,0.25)",borderRadius:20,padding:"3px 9px"}}>
