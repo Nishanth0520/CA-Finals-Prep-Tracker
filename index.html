@@ -4849,7 +4849,8 @@ function BackupModal({onClose,revData,studyLog,tests,weeklyTarget,lectures,amend
     const excelCell=v=>v==null?"":typeof v==="object"?JSON.stringify(v):v;
     addSheet("Summary",{ExportedAt:new Date().toLocaleString(),WeeklyStudyTargetHours:weeklyTarget,Note:"Export of the currently selected profile's tracker data"});
     addSheet("Revision Progress",revData);
-    addSheet("Study Sessions",studyLog);
+    addSheet("Daily Study Hours",studyLog);
+    addSheet("Session History",loadSessions());
     addSheet("Tests",tests);
     addSheet("Lectures",lectures);
     addSheet("Amendments",amendments);
@@ -4870,12 +4871,6 @@ function BackupModal({onClose,revData,studyLog,tests,weeklyTarget,lectures,amend
     const url=URL.createObjectURL(blob);const a=document.createElement("a");a.href=url;
     a.download="ca_finals_tracker_"+today()+".xlsx";a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);
   };
-  const exportAll=()=>{
-    const data={revData,studyLog,tests,weeklyTarget,lectures,amendments,tasks,exportedAt:new Date().toISOString(),version:3};
-    const blob=new Blob([JSON.stringify(data,null,2)],{type:"application/json"});
-    const a=document.createElement("a");a.href=URL.createObjectURL(blob);
-    a.download="ca_tracker_backup_"+today()+".json";a.click();
-  };
   const handleImport=e=>{
     const f=e.target.files?.[0];if(!f)return;
     const reader=new FileReader();
@@ -4893,13 +4888,9 @@ function BackupModal({onClose,revData,studyLog,tests,weeklyTarget,lectures,amend
           <span style={{fontSize:22}}>📊</span>
           <div><div style={{color:"#34d399",fontSize:13,fontWeight:700}}>Export to Excel (.xlsx)</div><div style={{color:"var(--text3)",fontSize:11,marginTop:2}}>Formatted workbook with separate sheets, filters and readable columns</div></div>
         </button>
-        <button onClick={exportAll} style={{display:"flex",alignItems:"center",gap:12,background:"rgba(148,163,184,0.06)",border:"1px solid var(--border)",borderRadius:12,padding:"11px 15px",cursor:"pointer",textAlign:"left"}}>
-          <span style={{fontSize:20}}>🗂️</span>
-          <div><div style={{color:"var(--text2)",fontSize:12,fontWeight:700}}>Export JSON Backup</div><div style={{color:"var(--text3)",fontSize:11,marginTop:2}}>For restoring data using Import Backup</div></div>
-        </button>
         <button onClick={()=>fileRef.current?.click()} style={{display:"flex",alignItems:"center",gap:12,background:"rgba(129,140,248,0.08)",border:"1px solid rgba(129,140,248,0.3)",borderRadius:12,padding:"13px 15px",cursor:"pointer",textAlign:"left"}}>
           <span style={{fontSize:22}}>📥</span>
-          <div><div style={{color:"#818cf8",fontSize:13,fontWeight:700}}>Import Backup</div><div style={{color:"var(--text3)",fontSize:11,marginTop:2}}>Restore from a previously exported file</div></div>
+          <div><div style={{color:"#818cf8",fontSize:13,fontWeight:700}}>Import Older JSON Backup</div><div style={{color:"var(--text3)",fontSize:11,marginTop:2}}>Restore a legacy JSON backup file</div></div>
         </button>
         <input ref={fileRef} type="file" accept=".json" style={{display:"none"}} onChange={handleImport}/>
         <div style={{background:"rgba(248,113,113,0.06)",border:"1px solid rgba(248,113,113,0.15)",borderRadius:10,padding:"10px 13px"}}>
