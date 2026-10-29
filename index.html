@@ -1784,7 +1784,31 @@ function Dashboard({lectures,revData,studyLog,setStudyLog,tests,streak,weeklyTar
 /* ═══════════════════════════════════════
    TESTS TRACKER
 ═══════════════════════════════════════ */
-function Tests({tests,setTests}){
+function QuestionPractice({questionPractice,setQuestionPractice}){
+ const [form,setForm]=useState({date:today(),subject:SUBJECTS[0].id,chapter:"",source:"Self Practice",attempted:"10",correct:"",notes:""}),[adding,setAdding]=useState(false);
+ const sub=SUBJECTS.find(x=>x.id===form.subject)||SUBJECTS[0],chs=allChapters(sub),attempted=questionPractice.reduce((a,x)=>a+(+x.attempted||0),0),correct=questionPractice.reduce((a,x)=>a+(+x.correct||0),0),accuracy=attempted?Math.round(correct/attempted*100):0;
+ const save=()=>{const a=Math.max(0,parseInt(form.attempted,10)||0),c=Math.max(0,Math.min(a,parseInt(form.correct,10)||0));if(!a){alert("Enter questions attempted.");return;}setQuestionPractice(p=>[{id:Date.now(),...form,chapter:form.chapter||chs[0]?.n||"General practice",attempted:a,correct:c,accuracy:Math.round(c/a*100)},...p]);setForm(f=>({...f,date:today(),chapter:"",attempted:"10",correct:"",notes:""}));setAdding(false)};
+ const bySub=SUBJECTS.map(x=>{const rows=questionPractice.filter(q=>q.subject===x.id),a=rows.reduce((n,q)=>n+(+q.attempted||0),0),c=rows.reduce((n,q)=>n+(+q.correct||0),0);return{x,rows,a,c,p:a?Math.round(c/a*100):null}}).filter(x=>x.rows.length);
+ return <div style={{animation:"slideUp .2s ease"}}>
+ <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(145px,1fr))",gap:10,marginBottom:16}}>{[["Practice logs",questionPractice.length],["Questions attempted",attempted],["Correct answers",correct],["Accuracy",attempted?accuracy+"%":"—"]].map(([l,v],i)=><div className="card" key={l} style={{padding:15}}><div style={{fontSize:10,color:"var(--text3)",marginBottom:6}}>{l}</div><div style={{fontSize:24,fontWeight:900,color:["#818cf8","#38bdf8","#34d399",accuracy>=60?"#34d399":"#fbbf24"][i]}}>{v}</div></div>)}</div>
+ <div style={{display:"flex",alignItems:"center",marginBottom:12}}><strong>Question practice log</strong><button onClick={()=>setAdding(v=>!v)} style={{marginLeft:"auto",padding:"8px 12px",borderRadius:8,border:"1px solid var(--border)",background:"var(--surface2)",color:"var(--text)",cursor:"pointer"}}>{adding?"Cancel":"+ Log practice"}</button></div>
+ {adding&&<div className="card" style={{padding:15,marginBottom:14,display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(170px,1fr))",gap:10}}>
+ <label>Date<input type="date" value={form.date} onChange={e=>setForm(f=>({...f,date:e.target.value}))} style={{display:"block",width:"100%",padding:8,marginTop:4}}/></label>
+ <label>Paper<select value={form.subject} onChange={e=>setForm(f=>({...f,subject:e.target.value,chapter:""}))} style={{display:"block",width:"100%",padding:8,marginTop:4}}>{SUBJECTS.map(x=><option key={x.id} value={x.id}>{x.short} — {x.name}</option>)}</select></label>
+ <label>Chapter<select value={form.chapter} onChange={e=>setForm(f=>({...f,chapter:e.target.value}))} style={{display:"block",width:"100%",padding:8,marginTop:4}}><option value="">Choose chapter</option>{chs.map((x,i)=><option key={i} value={x.n}>{x.n}</option>)}</select></label>
+ <label>Source<input value={form.source} onChange={e=>setForm(f=>({...f,source:e.target.value}))} placeholder="RTP / MTP / module" style={{display:"block",width:"100%",padding:8,marginTop:4}}/></label>
+ <label>Questions attempted<input type="number" min="1" value={form.attempted} onChange={e=>setForm(f=>({...f,attempted:e.target.value}))} style={{display:"block",width:"100%",padding:8,marginTop:4}}/></label>
+ <label>Correct answers<input type="number" min="0" value={form.correct} onChange={e=>setForm(f=>({...f,correct:e.target.value}))} style={{display:"block",width:"100%",padding:8,marginTop:4}}/></label>
+ <label style={{gridColumn:"1/-1"}}>Mistakes / takeaway<textarea value={form.notes} onChange={e=>setForm(f=>({...f,notes:e.target.value}))} rows="2" style={{display:"block",width:"100%",padding:8,marginTop:4}}/></label><button onClick={save} style={{background:"#6366f1",color:"#fff",border:0,borderRadius:8,padding:9,cursor:"pointer"}}>Save practice log</button></div>}
+ {bySub.length>0&&<div className="card" style={{padding:15,marginBottom:14}}><strong>Paper-wise accuracy</strong><div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(180px,1fr))",gap:10,marginTop:10}}>{bySub.map(z=><div key={z.x.id} style={{background:"var(--surface2)",padding:12,borderRadius:9}}><b>{z.x.short}</b><div style={{fontSize:11,color:"var(--text3)",marginTop:4}}>{z.a} attempted · {z.c} correct</div><div style={{height:5,background:"var(--surface3)",marginTop:8,borderRadius:9}}><div style={{height:5,width:z.p+"%",background:z.x.color,borderRadius:9}}/></div><div style={{fontSize:11,marginTop:4}}>{z.p}% accuracy</div></div>)}</div></div>}
+ {questionPractice.length===0?<div className="card" style={{padding:24,textAlign:"center",color:"var(--text3)"}}>No practice logs yet. Start logging questions to track accuracy by paper and chapter.</div>:questionPractice.map(q=><div key={q.id} className="card" style={{padding:13,marginBottom:8,display:"flex",gap:12,flexWrap:"wrap"}}><div style={{flex:1,minWidth:200}}><b>{SUBJECTS.find(x=>x.id===q.subject)?.short||q.subject} · {q.chapter}</b><div style={{fontSize:10,color:"var(--text3)",marginTop:4}}>{q.date} · {q.source}</div>{q.notes&&<div style={{fontSize:11,marginTop:6,whiteSpace:"pre-wrap"}}>{q.notes}</div>}</div><div style={{textAlign:"right"}}><b style={{color:q.accuracy>=60?"#34d399":"#fbbf24"}}>{q.accuracy}%</b><div style={{fontSize:10,color:"var(--text3)"}}>{q.correct}/{q.attempted} correct</div><button onClick={()=>setQuestionPractice(p=>p.filter(x=>x.id!==q.id))} style={{marginTop:5}}>Delete</button></div></div>)}
+ </div>;
+}
+
+/* ═══════════════════════════════════════
+   TESTS TRACKER
+═══════════════════════════════════════ */
+function Tests({tests,setTests})
   const [adding,setAdding]=useState(false);
   const [form,setForm]=useState({date:today(),subject:SUBJECTS[0].id,type:"RTP",name:"",marks:"",outOf:"100",notes:""});
   const TYPES=["RTP","MTP","Mock Test","Past Paper","Practice Set"];
@@ -1807,6 +1831,7 @@ function Tests({tests,setTests}){
         </div>
       ))}
     </div>
+    <div className="card" style={{padding:16,marginBottom:14}}><div style={{fontSize:13,fontWeight:800,marginBottom:10}}>Paper-wise mock / RTP / MTP analysis</div><div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(180px,1fr))",gap:10}}>{SUBJECTS.map(sub=>{const rows=scored.filter(t=>t.subject===sub.id),mean=rows.length?Math.round(rows.reduce((a,t)=>a+t.score,0)/rows.length):null,best=rows.length?Math.max(...rows.map(t=>t.score)):null;return <div key={sub.id} style={{background:"var(--surface2)",borderRadius:10,padding:12}}><div style={{fontSize:12,fontWeight:800}}>{sub.emoji} {sub.short}</div><div style={{fontSize:10,color:"var(--text3)",marginTop:5}}>{rows.length} scored tests · Avg {mean==null?"—":mean+"%"}</div><div style={{fontSize:10,color:best==null?"var(--text3)":sc(best),marginTop:3}}>Best score: {best==null?"—":best+"%"}</div><div style={{height:5,background:"var(--surface3)",borderRadius:9,marginTop:8,overflow:"hidden"}}><div style={{height:"100%",width:(mean||0)+"%",background:sub.color}}/></div></div>})}</div></div>
     <div style={{marginBottom:14}}><Btn onClick={()=>setAdding(p=>!p)} color="#6366f1">{adding?"✕ Cancel":"+ Add Test / RTP / MTP"}</Btn></div>
     {adding&&<div className="card" style={{padding:"20px",marginBottom:14,border:"1px solid rgba(99,102,241,0.3)"}}>
       <div style={{display:"flex",gap:8,flexWrap:"wrap"}}>
@@ -4815,7 +4840,7 @@ function QuickLogFAB({studyLog,setStudyLog,revData,setRevData}){
 ═══════════════════════════════════════ */
 function BackupModal({onClose,revData,studyLog,tests,weeklyTarget,lectures,amendments,tasks,doubts,formulas,weeklyReviewDone,answerLog,chapterNotes,energyLog,preExamChecklist,patterns,rtpLog,journal,customLinks,frLec,frRev,userProfile,onImport}){
   const fileRef=useRef(null);
-  const backupData={revData,studyLog,tests,weeklyTarget,lectures,amendments,tasks,doubts,formulas,weeklyReviewDone,answerLog,chapterNotes,energyLog,preExamChecklist,patterns,rtpLog,journal,customLinks,frLec,frRev};
+  const backupData={revData,studyLog,tests,questionPractice,weeklyTarget,lectures,amendments,tasks,doubts,formulas,weeklyReviewDone,answerLog,chapterNotes,energyLog,preExamChecklist,patterns,rtpLog,journal,customLinks,frLec,frRev};
   const downloadJsonBackup=(data=backupData,suffix="backup")=>{
     const payload={backupType:"ca-finals-tracker-backup",schemaVersion:2,exportedAt:new Date().toISOString(),profile:{name:userProfile?.name||"",attempt:userProfile?.attempt||""},data};
     const blob=new Blob([JSON.stringify(payload,null,2)],{type:"application/json"});
@@ -4860,6 +4885,7 @@ function BackupModal({onClose,revData,studyLog,tests,weeklyTarget,lectures,amend
     addSheet("Daily Study Hours",studyLog);
     addSheet("Session History",loadSessions());
     addSheet("Tests",tests);
+    addSheet("Question Practice",questionPractice);
     addSheet("Lectures",lectures);
     addSheet("Amendments",amendments);
     addSheet("Tasks",tasks);
@@ -4887,7 +4913,7 @@ function BackupModal({onClose,revData,studyLog,tests,weeklyTarget,lectures,amend
         const parsed=JSON.parse(ev.target.result);
         const wrapped=parsed&&parsed.backupType==="ca-finals-tracker-backup"&&parsed.schemaVersion>=1;
         const data=wrapped?parsed.data:parsed;
-        const allowed=["revData","studyLog","tests","weeklyTarget","lectures","amendments","tasks","doubts","formulas","weeklyReviewDone","answerLog","chapterNotes","energyLog","preExamChecklist","patterns","rtpLog","journal","customLinks","frLec","frRev"];
+        const allowed=["revData","studyLog","tests","questionPractice","weeklyTarget","lectures","amendments","tasks","doubts","formulas","weeklyReviewDone","answerLog","chapterNotes","energyLog","preExamChecklist","patterns","rtpLog","journal","customLinks","frLec","frRev"];
         if(!data||typeof data!=="object"||Array.isArray(data)||!allowed.some(k=>Object.prototype.hasOwnProperty.call(data,k)))throw new Error("unsupported");
         const description=wrapped?("Backup from "+(parsed.profile?.name||"unknown profile")+" · "+(parsed.profile?.attempt||"attempt not recorded")+" · "+(parsed.exportedAt||"date unknown")):"Legacy JSON backup";
         if(!window.confirm(description+"\n\nBefore restoring, a safety backup of your current data will download. Continue?")){e.target.value="";return;}
@@ -5590,6 +5616,7 @@ function App(){
   const [revData,setRevData]=useState(()=>({...initRevData(),...(saved?.revData||{})}));
   const [studyLog,setStudyLog]=useState(()=>saved?.studyLog||{});
   const [tests,setTests]=useState(()=>saved?.tests||[]);
+  const [questionPractice,setQuestionPractice]=useState(()=>saved?.questionPractice||[]);
   const [weeklyTarget,setWeeklyTarget]=useState(()=>saved?.weeklyTarget||70);
   const [lectures,setLectures]=useState(()=>({...initLecData(),...loadLec()}));
   const [amendments,setAmendments]=useState(()=>saved?.amendments||{});
@@ -5649,14 +5676,14 @@ function App(){
     localStorage.setItem("ca_autosave",autoSaveInterval);
     if(autoSaveInterval===0)return;
     const iv=setInterval(()=>{
-      saveStore({revData,studyLog,tests,weeklyTarget,amendments,tasks,doubts,formulas,weeklyReviewDone,answerLog,chapterNotes,energyLog,preExamChecklist,patterns,rtpLog,journal,customLinks});
+      saveStore({revData,studyLog,tests,questionPractice,weeklyTarget,amendments,tasks,doubts,formulas,weeklyReviewDone,answerLog,chapterNotes,energyLog,preExamChecklist,patterns,rtpLog,journal,customLinks});
       saveLec(lectures);
       const t=new Date().toLocaleTimeString("en-IN",{hour:"2-digit",minute:"2-digit"});
       setLastSaved(t);
     },autoSaveInterval*60*1000);
     return()=>clearInterval(iv);
   },[autoSaveInterval,revData,studyLog,tests,amendments,tasks,doubts,formulas,weeklyReviewDone,answerLog,chapterNotes,energyLog,preExamChecklist,patterns,rtpLog,journal,customLinks,lectures]);
-  useEffect(()=>{saveStore({revData,studyLog,tests,weeklyTarget,amendments,tasks,doubts,formulas,weeklyReviewDone,answerLog,chapterNotes,energyLog,preExamChecklist,patterns,rtpLog,journal,customLinks});},[revData,studyLog,tests,weeklyTarget,amendments,tasks,doubts,formulas,weeklyReviewDone,answerLog,chapterNotes,energyLog,preExamChecklist,patterns,rtpLog,journal,customLinks]);
+  useEffect(()=>{saveStore({revData,studyLog,tests,questionPractice,weeklyTarget,amendments,tasks,doubts,formulas,weeklyReviewDone,answerLog,chapterNotes,energyLog,preExamChecklist,patterns,rtpLog,journal,customLinks});},[revData,studyLog,tests,weeklyTarget,amendments,tasks,doubts,formulas,weeklyReviewDone,answerLog,chapterNotes,energyLog,preExamChecklist,patterns,rtpLog,journal,customLinks]);
   useEffect(()=>{saveLec(lectures);},[lectures]);
 
   // keyboard shortcuts
@@ -5679,12 +5706,13 @@ function App(){
   },[studyLog]);
 
   const saveNow=()=>{
-    saveStore({revData,studyLog,tests,weeklyTarget,amendments,tasks,doubts,formulas,weeklyReviewDone,answerLog,chapterNotes,energyLog,preExamChecklist,patterns,rtpLog,journal,customLinks});
+    saveStore({revData,studyLog,tests,questionPractice,weeklyTarget,amendments,tasks,doubts,formulas,weeklyReviewDone,answerLog,chapterNotes,energyLog,preExamChecklist,patterns,rtpLog,journal,customLinks});
     saveLec(lectures);setSaveFlash(true);setTimeout(()=>setSaveFlash(false),2000);
     const t=new Date().toLocaleTimeString("en-IN",{hour:"2-digit",minute:"2-digit"});setLastSaved(t);
   };
 
   const handleImport=d=>{
+    if(d.questionPractice)setQuestionPractice(d.questionPractice);
     if(d.revData)setRevData(p=>({...p,...d.revData}));
     if(d.studyLog)setStudyLog(d.studyLog);
     if(d.tests)setTests(d.tests);
@@ -5720,6 +5748,7 @@ function App(){
     {id:"lectures",label:"Lectures",emoji:"🎬",color:"#f472b6",pct:lecPct},
     {id:"revision",label:"Revision",emoji:"📖",color:"#818cf8",pct:revPct},
     {id:"tests",label:"Tests",emoji:"📝",color:"#34d399"},
+    {id:"questionpractice",label:"Question Practice",emoji:"✍️",color:"#38bdf8"},
     {id:"analytics",label:"Analytics",emoji:"📈",color:"#38bdf8"},
     {id:"planner",label:"Planner",emoji:"📅",color:"#a78bfa"},
     {id:"amendments",label:"Amendments",emoji:"📋",color:"#fbbf24"},
@@ -5741,7 +5770,7 @@ function App(){
     {id:"icailinks",label:"ICAI Links",emoji:"🔗",color:"#818cf8"},
     {id:"settings",label:"Settings",emoji:"⚙️",color:"#94a3b8"},
   ];
-  const tabs=navOrder.map(id=>ALL_TABS.find(t=>t.id===id)).filter(Boolean);
+  const tabs=[...navOrder.map(id=>ALL_TABS.find(t=>t.id===id)).filter(Boolean),...ALL_TABS.filter(t=>!navOrder.includes(t.id))];
 
   if(!userProfile) return <OnboardingModal onSave={saveProfile}/>;
 
@@ -5827,6 +5856,7 @@ function App(){
       {world==="lectures"&&<LecturesWorld lectures={lectures} setLectures={setLectures} frLec={frLec} setFrLec={setFrLec}/>}
       {world==="revision"&&<RevisionWorld revData={revData} setRevData={setRevData} lectures={lectures} frRev={frRev} setFrRev={setFrRev}/>}
       {world==="tests"&&<Tests tests={tests} setTests={setTests}/>}
+      {world==="questionpractice"&&<QuestionPractice questionPractice={questionPractice} setQuestionPractice={setQuestionPractice}/>}
       {world==="analytics"&&<Analytics studyLog={studyLog} tests={tests} lectures={lectures} revData={revData}/>}
       {world==="planner"&&<DailyPlanner tasks={tasks} setTasks={setTasks}/>}
       {world==="amendments"&&<AmendmentTracker amendments={amendments} setAmendments={setAmendments}/>}
