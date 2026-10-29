@@ -4813,8 +4813,16 @@ function QuickLogFAB({studyLog,setStudyLog,revData,setRevData}){
 /* ═══════════════════════════════════════
    BACKUP MODAL
 ═══════════════════════════════════════ */
-function BackupModal({onClose,revData,studyLog,tests,weeklyTarget,lectures,amendments,tasks,doubts,formulas,weeklyReviewDone,answerLog,chapterNotes,energyLog,preExamChecklist,patterns,rtpLog,journal,customLinks,onImport}){
+function BackupModal({onClose,revData,studyLog,tests,weeklyTarget,lectures,amendments,tasks,doubts,formulas,weeklyReviewDone,answerLog,chapterNotes,energyLog,preExamChecklist,patterns,rtpLog,journal,customLinks,frLec,frRev,userProfile,onImport}){
   const fileRef=useRef(null);
+  const backupData={revData,studyLog,tests,weeklyTarget,lectures,amendments,tasks,doubts,formulas,weeklyReviewDone,answerLog,chapterNotes,energyLog,preExamChecklist,patterns,rtpLog,journal,customLinks,frLec,frRev};
+  const downloadJsonBackup=(data=backupData,suffix="backup")=>{
+    const payload={backupType:"ca-finals-tracker-backup",schemaVersion:2,exportedAt:new Date().toISOString(),profile:{name:userProfile?.name||"",attempt:userProfile?.attempt||""},data};
+    const blob=new Blob([JSON.stringify(payload,null,2)],{type:"application/json"});
+    const url=URL.createObjectURL(blob);const a=document.createElement("a");a.href=url;
+    a.download=`ca_finals_${suffix}_${today()}.json`;a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);
+  };
+  const exportJsonBackup=()=>downloadJsonBackup(backupData,"backup");
   const exportExcel=async()=>{
     if(!window.ExcelJS){alert("Excel export is still loading. Please try again in a moment.");return;}
     const wb=new window.ExcelJS.Workbook();
@@ -4874,7 +4882,20 @@ function BackupModal({onClose,revData,studyLog,tests,weeklyTarget,lectures,amend
   const handleImport=e=>{
     const f=e.target.files?.[0];if(!f)return;
     const reader=new FileReader();
-    reader.onload=ev=>{try{const d=JSON.parse(ev.target.result);onImport(d);onClose();}catch{alert("Invalid backup file — please use a previously exported JSON");}};
+    reader.onload=ev=>{
+      try{
+        const parsed=JSON.parse(ev.target.result);
+        const wrapped=parsed&&parsed.backupType==="ca-finals-tracker-backup"&&parsed.schemaVersion>=1;
+        const data=wrapped?parsed.data:parsed;
+        const allowed=["revData","studyLog","tests","weeklyTarget","lectures","amendments","tasks","doubts","formulas","weeklyReviewDone","answerLog","chapterNotes","energyLog","preExamChecklist","patterns","rtpLog","journal","customLinks","frLec","frRev"];
+        if(!data||typeof data!=="object"||Array.isArray(data)||!allowed.some(k=>Object.prototype.hasOwnProperty.call(data,k)))throw new Error("unsupported");
+        const description=wrapped?("Backup from "+(parsed.profile?.name||"unknown profile")+" · "+(parsed.profile?.attempt||"attempt not recorded")+" · "+(parsed.exportedAt||"date unknown")):"Legacy JSON backup";
+        if(!window.confirm(description+"\n\nBefore restoring, a safety backup of your current data will download. Continue?")){e.target.value="";return;}
+        downloadJsonBackup(backupData,"pre-restore");
+        onImport(data);onClose();
+      }catch{alert("This file is not a valid CA Finals Tracker JSON backup. Your current data has not been changed.");}
+      finally{e.target.value="";}
+    };
     reader.readAsText(f);
   };
   return <div onClick={onClose} style={{position:"fixed",inset:0,background:"rgba(0,0,0,0.72)",zIndex:3000,display:"flex",alignItems:"center",justifyContent:"center",backdropFilter:"blur(8px)"}}>
@@ -4887,6 +4908,10 @@ function BackupModal({onClose,revData,studyLog,tests,weeklyTarget,lectures,amend
         <button onClick={exportExcel} style={{display:"flex",alignItems:"center",gap:12,background:"rgba(52,211,153,0.08)",border:"1px solid rgba(52,211,153,0.3)",borderRadius:12,padding:"13px 15px",cursor:"pointer",textAlign:"left"}}>
           <span style={{fontSize:22}}>📊</span>
           <div><div style={{color:"#34d399",fontSize:13,fontWeight:700}}>Export to Excel (.xlsx)</div><div style={{color:"var(--text3)",fontSize:11,marginTop:2}}>Formatted workbook with separate sheets, filters and readable columns</div></div>
+        </button>
+        <button onClick={exportJsonBackup} style={{display:"flex",alignItems:"center",gap:12,background:"rgba(56,189,248,0.08)",border:"1px solid rgba(56,189,248,0.3)",borderRadius:12,padding:"13px 15px",cursor:"pointer",textAlign:"left"}}>
+          <span style={{fontSize:22}}>🛡️</span>
+          <div><div style={{color:"#38bdf8",fontSize:13,fontWeight:700}}>Download Full JSON Backup</div><div style={{color:"var(--text3)",fontSize:11,marginTop:2}}>Versioned backup including chapter progress, mock tests and profile attempt</div></div>
         </button>
         <button onClick={()=>fileRef.current?.click()} style={{display:"flex",alignItems:"center",gap:12,background:"rgba(129,140,248,0.08)",border:"1px solid rgba(129,140,248,0.3)",borderRadius:12,padding:"13px 15px",cursor:"pointer",textAlign:"left"}}>
           <span style={{fontSize:22}}>📥</span>
@@ -5678,6 +5703,8 @@ function App(){
     if(d.rtpLog)setRtpLog(d.rtpLog);
     if(d.journal)setJournal(d.journal);
     if(d.customLinks)setCustomLinks(d.customLinks);
+    if(d.frLec)setFrLec(p=>({...p,...d.frLec}));
+    if(d.frRev)setFrRev(p=>({...p,...d.frRev}));
   };
 
   const lecComp=SUBJECTS.reduce((a,s)=>a+allChapters(s).filter((_,i)=>lectures[chKey(s.id,i,"lec")]?.status==="Completed").length,0);
@@ -5721,7 +5748,7 @@ function App(){
   return <div style={{minHeight:"100vh"}}>
     
     {showCloudSync&&<CloudSync onClose={()=>setShowCloudSync(false)} revData={revData} studyLog={studyLog} tests={tests} weeklyTarget={weeklyTarget} lectures={lectures} amendments={amendments} tasks={tasks} doubts={doubts} formulas={formulas} weeklyReviewDone={weeklyReviewDone} answerLog={answerLog} chapterNotes={chapterNotes} energyLog={energyLog} preExamChecklist={preExamChecklist} patterns={patterns} rtpLog={rtpLog} journal={journal} onImport={handleImport}/>}
-    {showBackup&&<BackupModal onClose={()=>setShowBackup(false)} revData={revData} studyLog={studyLog} tests={tests} weeklyTarget={weeklyTarget} lectures={lectures} amendments={amendments} tasks={tasks} doubts={doubts} formulas={formulas} weeklyReviewDone={weeklyReviewDone} answerLog={answerLog} chapterNotes={chapterNotes} energyLog={energyLog} preExamChecklist={preExamChecklist} patterns={patterns} rtpLog={rtpLog} journal={journal} customLinks={customLinks} onImport={handleImport}/>}
+    {showBackup&&<BackupModal onClose={()=>setShowBackup(false)} revData={revData} studyLog={studyLog} tests={tests} weeklyTarget={weeklyTarget} lectures={lectures} amendments={amendments} tasks={tasks} doubts={doubts} formulas={formulas} weeklyReviewDone={weeklyReviewDone} answerLog={answerLog} chapterNotes={chapterNotes} energyLog={energyLog} preExamChecklist={preExamChecklist} patterns={patterns} rtpLog={rtpLog} journal={journal} customLinks={customLinks} frLec={frLec} frRev={frRev} userProfile={userProfile} onImport={handleImport}/>
     {focusMode&&<FocusMode activeSub={world==="lectures"?SUBJECTS[0].id:SUBJECTS[0].id} lectures={lectures} revData={revData} setLectures={setLectures} setRevData={setRevData} onExit={()=>setFocusMode(false)}/>}
     {showNavCustomiser&&<NavCustomiser allTabs={ALL_TABS} navOrder={navOrder} setNavOrder={setNavOrder} onClose={()=>setShowNavCustomiser(false)}/>}
     {showWeeklyReview&&<WeeklyReview studyLog={studyLog} revData={revData} tests={tests} weeklyTarget={weeklyTarget} onClose={()=>setShowWeeklyReview(false)} weeklyReviewDone={weeklyReviewDone} setWeeklyReviewDone={setWeeklyReviewDone}/>}
