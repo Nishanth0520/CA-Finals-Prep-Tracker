@@ -5975,6 +5975,14 @@ try {
 }
 </script>
 <script>
+// Explicitly trigger Babel processing for the inline JSX script. This also works
+// when browser timing prevents Babel standalone from auto-processing text/babel.
+if (window.Babel && typeof window.Babel.transformScriptTags === "function") {
+  try { window.Babel.transformScriptTags(); }
+  catch (e) { window.__caBootError = "Babel transformScriptTags failed: " + (e && (e.stack || e.message) || String(e)); }
+}
+</script>
+<script>
 // PWA Manifest (inline)
 const manifestProfile=(()=>{try{return JSON.parse(localStorage.getItem("ca_user_profile")||"null");}catch{return null;}})();
 const manifestName=(manifestProfile?.name||"Nishanth").trim()||"Nishanth";
