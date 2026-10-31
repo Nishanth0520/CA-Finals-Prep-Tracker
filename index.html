@@ -1820,7 +1820,7 @@ function QuestionPractice({questionPractice,setQuestionPractice}){
 /* ═══════════════════════════════════════
    TESTS TRACKER
 ═══════════════════════════════════════ */
-function Tests({tests,setTests})
+function Tests({tests,setTests}){
   const [adding,setAdding]=useState(false);
   const [form,setForm]=useState({date:today(),subject:SUBJECTS[0].id,type:"RTP",name:"",marks:"",outOf:"100",notes:""});
   const TYPES=["RTP","MTP","Mock Test","Past Paper","Practice Set"];
