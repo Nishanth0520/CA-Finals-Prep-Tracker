@@ -118,7 +118,7 @@ setTimeout(function(){
   }
 },7000);
 </script>
-<script type="text/babel" data-presets="react">
+<script type="text/plain" id="ca-tracker-jsx-source">
 const {useState,useEffect,useRef,useMemo,useCallback}=React;
 
 /* ═══════════════════════════════════════════════
@@ -5975,7 +5975,26 @@ try {
 }
 </script>
 <script>
-// Explicitly trigger Babel processing for the inline JSX script. This also works
+// Compile and execute the tracker JSX explicitly instead of relying on Babel's
+// automatic text/babel script discovery.
+(function(){
+  var source = document.getElementById("ca-tracker-jsx-source");
+  if (!source) { window.__caBootError = "Tracker source script was not found."; return; }
+  if (!window.Babel || typeof window.Babel.transform !== "function") {
+    window.__caBootError = "Babel transform API is unavailable.";
+    return;
+  }
+  try {
+    var compiled = window.Babel.transform(source.textContent, {presets:["react"]});
+    (new Function(compiled.code))();
+  } catch (error) {
+    window.__caBootError = "Tracker compile/startup failed: " + (error && (error.stack || error.message) || String(error));
+    console.error(window.__caBootError);
+  }
+})();
+</script>
+<script>
+// Legacy Babel auto-processing workaround replaced; JSX compilation is explicit. This also works
 // when browser timing prevents Babel standalone from auto-processing text/babel.
 if (window.Babel && typeof window.Babel.transformScriptTags === "function") {
   try { window.Babel.transformScriptTags(); }
