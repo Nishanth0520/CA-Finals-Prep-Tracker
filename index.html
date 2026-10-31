@@ -60,13 +60,35 @@ input:focus,select:focus,textarea:focus{outline:2px solid #818cf8;outline-offset
 <script>
 window.__caBootError = "";
 window.__caConsoleErrors = [];
+window.__caScriptLoads = [];
+window.__caAppStarted = false;
+function __caDescribeError(value){
+  try {
+    if(value && value.stack) return String(value.stack).slice(0,2400);
+    if(value && value.message) return String(value.message).slice(0,2400);
+    return String(value || "Unknown error").slice(0,2400);
+  } catch(_) { return "Could not read error details"; }
+}
 window.addEventListener("error", function(e){
-  if(e && e.message) window.__caBootError=e.message + (e.filename ? " ("+e.filename+":"+e.lineno+")" : "");
-});
+  if(e && e.target && (e.target.src || e.target.href)) {
+    window.__caScriptLoads.push("Resource failed: " + (e.target.src || e.target.href));
+    return;
+  }
+  if(e) {
+    var detail = __caDescribeError(e.error || e.message);
+    if(e.filename) detail += " | at " + e.filename + ":" + e.lineno + ":" + e.colno;
+    window.__caBootError = detail;
+  }
+}, true);
+window.onerror = function(message, source, lineno, colno, error){
+  window.__caBootError = __caDescribeError(error || message) +
+    (source ? " | at " + source + ":" + lineno + ":" + colno : "");
+  return false;
+};
 window.addEventListener("unhandledrejection", function(e){
-  if(e && e.reason) window.__caBootError = "Unhandled promise rejection: " + (e.reason.stack || e.reason.message || String(e.reason));
+  if(e && e.reason) window.__caBootError = "Unhandled promise rejection: " + __caDescribeError(e.reason);
 });
-// Babel reports JSX compilation errors to the console in some versions rather than dispatching a window error.
+// Capture all console errors, including Babel's own JSX compilation diagnostics.
 (function(){
   var originalError = console.error.bind(console);
   console.error = function(){
@@ -74,9 +96,7 @@ window.addEventListener("unhandledrejection", function(e){
       var message = Array.prototype.map.call(arguments, function(x){
         return x && (x.stack || x.message) ? (x.stack || x.message) : String(x);
       }).join(" ");
-      if(message && /babel|syntaxerror|unexpected token|transform|jsx|compil/i.test(message)) {
-        window.__caConsoleErrors.push(message.slice(0,1600));
-      }
+      if(message) window.__caConsoleErrors.push(message.slice(0,2400));
     } catch(_){}
     return originalError.apply(console, arguments);
   };
@@ -84,12 +104,16 @@ window.addEventListener("unhandledrejection", function(e){
 setTimeout(function(){
   var root=document.getElementById("root");
   if(root && root.querySelector("[data-ca-loading]")){
-    var problems=(window.__caScriptErrors||[]).slice();
+    var problems=(window.__caScriptErrors||[]).concat(window.__caScriptLoads||[]);
     if(!window.React) problems.push("React is unavailable");
     if(!window.ReactDOM) problems.push("ReactDOM is unavailable");
     if(!window.Babel) problems.push("Babel is unavailable");
+    var babelScripts=Array.prototype.slice.call(document.querySelectorAll('script[type="text/babel"],script[data-processed]'));
+    var babelState=babelScripts.map(function(s){return "type="+s.type+", processed="+s.getAttribute("data-processed")+", src="+(s.src||"inline")}).join(" | ");
     var detail=problems.length ? problems.join("; ") :
-      (window.__caBootError || window.__caConsoleErrors[0] || "The app script did not finish starting. Check the internet connection and browser console.");
+      (window.__caBootError || window.__caConsoleErrors[0] || "No exception details were exposed by the browser.");
+    detail += " | document=" + document.readyState + " | babelScripts=" + (babelState || "none") + " | appStarted=" + window.__caAppStarted;
+    if(window.__caConsoleErrors.length>1) detail += " | console errors: " + window.__caConsoleErrors.slice(0,3).join(" || ");
     root.innerHTML='<div style="min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px;background:#0a0b14;color:#f1f5f9;font:16px system-ui,sans-serif"><div style="max-width:700px;padding:24px;border:1px solid #343954;border-radius:16px;background:#13162a"><h2 style="margin:0 0 12px">The tracker could not start</h2><p style="color:#cbd5e1;line-height:1.6">The page loaded, but its app did not start. This diagnostic identifies whether a library failed to load or JavaScript failed during startup.</p><p style="margin-top:16px;color:#fca5a5;line-height:1.6;overflow-wrap:anywhere"><strong>Diagnostic:</strong> '+String(detail).replace(/[&<>"]/g,function(ch){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[ch]})+'</p><p style="margin-top:16px;color:#94a3b8;font-size:13px">Please send the exact Diagnostic text so the underlying cause can be fixed.</p></div></div>';
   }
 },7000);
@@ -5942,7 +5966,13 @@ function App(){
   </div>;
 }
 
-ReactDOM.createRoot(document.getElementById("root")).render(React.createElement(App));
+try {
+  ReactDOM.createRoot(document.getElementById("root")).render(React.createElement(App));
+  window.__caAppStarted = true;
+} catch (error) {
+  window.__caBootError = "App render failed: " + __caDescribeError(error);
+  throw error;
+}
 </script>
 <script>
 // PWA Manifest (inline)
