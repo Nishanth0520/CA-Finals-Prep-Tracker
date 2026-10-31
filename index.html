@@ -4,10 +4,10 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
 <title>Nishanth</title>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.2/babel.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/exceljs@4.4.0/dist/exceljs.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js" onerror="window.__caScriptErrors=(window.__caScriptErrors||[]);window.__caScriptErrors.push('React failed to load')"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js" onerror="window.__caScriptErrors=(window.__caScriptErrors||[]);window.__caScriptErrors.push('ReactDOM failed to load')"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.2/babel.min.js" onerror="window.__caScriptErrors=(window.__caScriptErrors||[]);window.__caScriptErrors.push('Babel failed to load')"></script>
+<script src="https://cdn.jsdelivr.net/npm/exceljs@4.4.0/dist/exceljs.min.js" onerror="window.__caScriptErrors=(window.__caScriptErrors||[]);window.__caScriptErrors.push('Excel export library failed to load')"></script>
 <link rel="manifest" id="pwa-manifest"/>
 <meta name="theme-color" content="#0a0b14"/>
 <meta name="apple-mobile-web-app-capable" content="yes"/>
@@ -56,7 +56,22 @@ input:focus,select:focus,textarea:focus{outline:2px solid #818cf8;outline-offset
 </style>
 </head>
 <body>
-<div id="root"></div>
+<div id="root"><div data-ca-loading style="min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px;background:#0a0b14;color:#f1f5f9;font:16px system-ui,sans-serif;text-align:center"><div><div style="font-size:30px;margin-bottom:12px">📚</div><strong>CA Finals Prep Tracker</strong><p style="margin-top:10px;color:#a8b8cc">Loading your tracker…</p></div></div></div>
+<script>
+window.__caBootError = "";
+window.addEventListener("error", function(e){ if(e && e.message) window.__caBootError=e.message; });
+setTimeout(function(){
+  var root=document.getElementById("root");
+  if(root && root.querySelector("[data-ca-loading]")){
+    var problems=(window.__caScriptErrors||[]).slice();
+    if(!window.React) problems.push("React is unavailable");
+    if(!window.ReactDOM) problems.push("ReactDOM is unavailable");
+    if(!window.Babel) problems.push("Babel is unavailable");
+    var detail=problems.length ? problems.join("; ") : (window.__caBootError || "The app script did not finish starting.");
+    root.innerHTML='<div style="min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px;background:#0a0b14;color:#f1f5f9;font:16px system-ui,sans-serif"><div style="max-width:620px;padding:24px;border:1px solid #343954;border-radius:16px;background:#13162a"><h2 style="margin:0 0 12px">The tracker could not start</h2><p style="color:#cbd5e1;line-height:1.6">This diagnostic screen replaces the blank page so we can identify the cause. Make sure the device is online and try opening the newest file in Chrome.</p><p style="margin-top:16px;color:#fca5a5;line-height:1.6;overflow-wrap:anywhere"><strong>Diagnostic:</strong> '+String(detail).replace(/[&<>"]/g,function(ch){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[ch]})+'</p><p style="margin-top:16px;color:#94a3b8;font-size:13px">If this message remains, send me the exact Diagnostic text.</p></div></div>';
+  }
+},7000);
+</script>
 <script type="text/babel">
 const {useState,useEffect,useRef,useMemo,useCallback}=React;
 
