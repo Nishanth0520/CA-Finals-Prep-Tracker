@@ -1,0 +1,16 @@
+{
+  "name": "ca-finals-prep-tracker",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "build:offline": "node scripts/build-offline.mjs"
+  },
+  "dependencies": {
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
+    "exceljs": "4.4.0"
+  },
+  "devDependencies": {
+    "esbuild": "0.24.2"
+  }
+}
