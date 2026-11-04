@@ -17,10 +17,21 @@ page.on("request", request => {
 try {
   const fileUrl = pathToFileURL(path.resolve("index.html")).href;
   await page.goto(fileUrl, { waitUntil: "load", timeout: 20000 });
-  await page.waitForFunction(() => {
-    const root = document.getElementById("root");
-    return !!root && !root.querySelector("[data-ca-loading]") && root.innerText.trim().length > 100;
-  }, { timeout: 20000 });
+  try {
+    await page.waitForFunction(() => {
+      const root = document.getElementById("root");
+      return !!root && !root.querySelector("[data-ca-loading]") && root.innerText.trim().length > 100;
+    }, null, { timeout: 20000 });
+  } catch (error) {
+    const diagnostic = await page.evaluate(() => ({
+      bootError: window.__caBootError || "",
+      consoleErrors: window.__caConsoleErrors || [],
+      appStarted: window.__caAppStarted,
+      rootHtml: (document.getElementById("root")?.innerHTML || "").slice(0, 2500),
+      bodyText: document.body.innerText.slice(0, 2500)
+    }));
+    throw new Error("Tracker did not render offline: " + error.message + " | " + JSON.stringify(diagnostic));
+  }
 
   const checks = await page.evaluate(() => ({
     appStarted: window.__caAppStarted === true,
