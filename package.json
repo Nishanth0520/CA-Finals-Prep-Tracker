@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "build:offline": "node scripts/build-offline.mjs"
+    "build:offline": "node scripts/build-offline.mjs",
+    "test:offline": "node scripts/smoke-offline.mjs"
   },
   "dependencies": {
     "react": "18.2.0",
