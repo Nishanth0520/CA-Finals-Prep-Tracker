@@ -112,7 +112,7 @@ setTimeout(function(){
     if(window.__caConsoleErrors.length>1) detail += " | console errors: " + window.__caConsoleErrors.slice(0,3).join(" || ");
     root.innerHTML='<div style="min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px;background:#0a0b14;color:#f1f5f9;font:16px system-ui,sans-serif"><div style="max-width:700px;padding:24px;border:1px solid #343954;border-radius:16px;background:#13162a"><h2 style="margin:0 0 12px">The tracker could not start</h2><p style="color:#cbd5e1;line-height:1.6">The page loaded, but its app did not start. This diagnostic identifies whether a library failed to load or JavaScript failed during startup.</p><p style="margin-top:16px;color:#fca5a5;line-height:1.6;overflow-wrap:anywhere"><strong>Diagnostic:</strong> '+String(detail).replace(/[&<>"]/g,function(ch){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[ch]})+'</p><p style="margin-top:16px;color:#94a3b8;font-size:13px">Please send the exact Diagnostic text so the underlying cause can be fixed.</p></div></div>';
   }
-},45000);
+},60000);
 </script>
 <script type="text/plain" id="ca-tracker-jsx-source">
 const {useState,useEffect,useRef,useMemo,useCallback}=React;
@@ -5986,7 +5986,7 @@ try {
       function attempt(){
         if(index>=urls.length){reject(new Error(label+" could not be loaded from the available CDNs"));return;}
         var script=document.createElement("script"), settled=false;
-        var timer=setTimeout(function(){finish(new Error("Timed out loading "+label));},10000);
+        var timer=setTimeout(function(){finish(new Error("Timed out loading "+label));},6000);
         function finish(err){
           if(settled)return;settled=true;clearTimeout(timer);
           script.onload=script.onerror=null;
@@ -6038,14 +6038,7 @@ try {
   })();
 })();
 </script>
-<script>
-// Legacy Babel auto-processing workaround replaced; JSX compilation is explicit. This also works
-// when browser timing prevents Babel standalone from auto-processing text/babel.
-if (window.Babel && typeof window.Babel.transformScriptTags === "function") {
-  try { window.Babel.transformScriptTags(); }
-  catch (e) { window.__caBootError = "Babel transformScriptTags failed: " + (e && (e.stack || e.message) || String(e)); }
-}
-</script>
+
 <script>
 // PWA Manifest (inline)
 const manifestProfile=(()=>{try{return JSON.parse(localStorage.getItem("ca_user_profile")||"null");}catch{return null;}})();
