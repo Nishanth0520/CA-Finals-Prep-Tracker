@@ -4,6 +4,14 @@ import { build } from "esbuild";
 const htmlPath = new URL("../index.html", import.meta.url);
 let html = await fs.readFile(htmlPath, "utf8");
 
+if (html.includes("Self-contained offline application bundle")) {
+  if (/<script[^>]+src=["]https?:\/\//i.test(html) || /<link[^>]+href=["]https?:\/\//i.test(html)) {
+    throw new Error("Offline build contains an external runtime script or stylesheet.");
+  }
+  console.log("Offline bundle already present; verified no external runtime scripts or stylesheets.");
+  process.exit(0);
+}
+
 const sourceMatch = html.match(/<script type="text\/plain" id="ca-tracker-jsx-source">([\s\S]*?)<\/script>/);
 if (!sourceMatch) throw new Error("Could not find the embedded tracker JSX source.");
 
