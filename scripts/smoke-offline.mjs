@@ -28,7 +28,7 @@ try {
       consoleErrors: window.__caConsoleErrors || [],
       appStarted: window.__caAppStarted,
       rootHtml: (document.getElementById("root")?.innerHTML || "").slice(0, 2500),
-      scriptDiagnostics: Array.from(document.scripts).map((script, index) => { let parseError = ""; try { new Function(script.textContent); } catch (error) { parseError = error.name + ": " + error.message + " | " + (error.stack || "").split("\\n").slice(0, 3).join(" | "); } return { index, type: script.type, length: script.textContent.length, parseError, tail: script.textContent.slice(-300) }; }),
+      scriptDiagnostics: Array.from(document.scripts).map((script, index) => { let parseError = ""; try { new Function(script.textContent); } catch (error) { parseError = error.name + ": " + error.message + " | " + (error.stack || "").split("\\n").slice(0, 3).join(" | "); } const lines = script.textContent.split("\n"); return { index, type: script.type, length: script.textContent.length, parseError, line17715: lines[17714]?.slice(0, 6000) || "", line17714: lines[17713]?.slice(-1000) || "", line17716: lines[17715]?.slice(0, 1000) || "", tail: script.textContent.slice(-300) }; }),
       bodyText: document.body.innerText.slice(0, 2500)
     }));
     throw new Error("Tracker did not render offline: " + error.message + " | " + JSON.stringify(diagnostic));
