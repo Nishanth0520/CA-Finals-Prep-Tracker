@@ -28,7 +28,7 @@ try {
       consoleErrors: window.__caConsoleErrors || [],
       appStarted: window.__caAppStarted,
       rootHtml: (document.getElementById("root")?.innerHTML || "").slice(0, 2500),
-      scriptDiagnostics: Array.from(document.scripts).map((script, index) => ({ index, type: script.type, length: script.textContent.length, errorLine: script.textContent.split("\\n")[17714]?.slice(2550, 3050) || "" })),
+      scriptDiagnostics: Array.from(document.scripts).map((script, index) => { let parseError = ""; try { new Function(script.textContent); } catch (error) { parseError = error.name + ": " + error.message + " | " + (error.stack || "").split("\\n").slice(0, 3).join(" | "); } return { index, type: script.type, length: script.textContent.length, parseError, tail: script.textContent.slice(-300) }; }),
       bodyText: document.body.innerText.slice(0, 2500)
     }));
     throw new Error("Tracker did not render offline: " + error.message + " | " + JSON.stringify(diagnostic));
