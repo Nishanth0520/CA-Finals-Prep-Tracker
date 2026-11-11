@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Nishanth</title>
+<link rel="manifest" id="pwa-manifest"/>
+<meta name="theme-color" content="#0a0b14"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+<meta name="apple-mobile-web-app-title" content="Nishanth"/>
+<link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%230a0b14'/><text y='.9em' font-size='80'>📚</text></svg>"/>
+
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0a0b14;--bg2:#0f1120;--bg3:#13162a;
+  --surface:#161929;--surface2:#1c2038;--surface3:#2a2f52;
+  --border:rgba(255,255,255,0.09);--border2:rgba(255,255,255,0.18);
+  --text:#f1f5f9;--text2:#e2e8f0;--text3:#a8b8cc;
+  --label:#7b9eb8;
+  --shadow:0 4px 24px rgba(0,0,0,0.4);--shadow-lg:0 12px 48px rgba(0,0,0,0.6);
+  --radius:14px;--radius-sm:9px;
+  --lec:#f472b6;--rev:#818cf8;
+}
+body.theme-light{
+  --bg:#eef1fa;--bg2:#e2e8f5;--bg3:#d4ddf0;
+  --surface:#ffffff;--surface2:#f0f4ff;--surface3:#e2e8f6;
+  --border:rgba(0,0,0,0.12);--border2:rgba(0,0,0,0.20);
+  --text:#0f172a;--text2:#1e293b;--text3:#374151;
+  --label:#1e3a5f;
+  --shadow:0 4px 24px rgba(0,0,0,0.10);--shadow-lg:0 12px 48px rgba(0,0,0,0.18);
+}
+/* Light theme explicit overrides */
+body.theme-light .card{background:#ffffff;border-color:rgba(0,0,0,0.12)}
+body.theme-light input:not([type=color]),body.theme-light select,body.theme-light textarea{background:#ffffff!important;color:#0f172a!important;border:1px solid rgba(0,0,0,0.18)!important}
+body.theme-light button{color:#1e293b}
+body{background:var(--bg);font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;color:var(--text);min-height:100vh;transition:background 0.3s,color 0.3s;font-size:var(--font-size,14px)}
+::-webkit-scrollbar{width:4px;height:4px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:rgba(128,128,128,0.2);border-radius:99px}
+input,select,button,textarea{font-family:inherit}
+input:not([type=color]),select,textarea{background:var(--surface2);color:var(--text)}
+body.theme-light input:not([type=color]),body.theme-light select,body.theme-light textarea{background:#fff;border-color:rgba(0,0,0,0.15)}
+input:focus,select:focus,textarea:focus{outline:2px solid #818cf8;outline-offset:1px}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow)}
+.section-label{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--label,#7b9eb8);margin-bottom:8px}
+.panel-heading{font-size:13px;font-weight:700;color:var(--text);margin-bottom:12px}
+@keyframes slideUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+@keyframes pulseOpacity{0%,100%{opacity:1}50%{opacity:0.4}}
+@keyframes streakFire{0%,100%{transform:scale(1)}50%{transform:scale(1.15)}}
+</style>
+</head>
+<body>
+<div id="root"><div data-ca-loading style="min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px;background:#0a0b14;color:#f1f5f9;font:16px system-ui,sans-serif;text-align:center"><div><div style="font-size:30px;margin-bottom:12px">📚</div><strong>CA Finals Prep Tracker</strong><p style="margin-top:10px;color:#a8b8cc">Loading your tracker…</p></div></div></div>
+<script>
+window.__caBootError = "";
+window.__caConsoleErrors = [];
+window.__caScriptLoads = [];
+window.__caAppStarted = false;
+function __caDescribeError(value){
+  try {
+    if(value && value.stack) return String(value.stack).slice(0,2400);
+    if(value && value.message) return String(value.message).slice(0,2400);
+    return String(value || "Unknown error").slice(0,2400);
+  } catch(_) { return "Could not read error details"; }
+}
+window.addEventListener("error", function(e){
+  if(e && e.target && (e.target.src || e.target.href)) {
+    window.__caScriptLoads.push("Resource failed: " + (e.target.src || e.target.href));
+    return;
+  }
+  if(e) {
+    var detail = __caDescribeError(e.error || e.message);
+    if(e.filename) detail += " | at " + e.filename + ":" + e.lineno + ":" + e.colno;
+    window.__caBootError = detail;
+  }
+}, true);
+window.onerror = function(message, source, lineno, colno, error){
+  window.__caBootError = __caDescribeError(error || message) +
+    (source ? " | at " + source + ":" + lineno + ":" + colno : "");
+  return false;
+};
+window.addEventListener("unhandledrejection", function(e){
+  if(e && e.reason) window.__caBootError = "Unhandled promise rejection: " + __caDescribeError(e.reason);
+});
+// Capture all console errors, including Babel's own JSX compilation diagnostics.
+(function(){
+  var originalError = console.error.bind(console);
+  console.error = function(){
+    try {
+      var message = Array.prototype.map.call(arguments, function(x){
+        return x && (x.stack || x.message) ? (x.stack || x.message) : String(x);
+      }).join(" ");
+      if(message) window.__caConsoleErrors.push(message.slice(0,2400));
+    } catch(_){}
+    return originalError.apply(console, arguments);
+  };
+})();
+setTimeout(function(){
+  var root=document.getElementById("root");
+  if(root && root.querySelector("[data-ca-loading]")){
+    var problems=(window.__caScriptErrors||[]).concat(window.__caScriptLoads||[]);
+    if(!window.React) problems.push("React is unavailable");
+    if(!window.ReactDOM) problems.push("ReactDOM is unavailable");
+    if(!window.Babel) problems.push("Babel is unavailable");
+    var babelScripts=Array.prototype.slice.call(document.querySelectorAll('script[type="text/babel"],script[data-processed]'));
+    var babelState=babelScripts.map(function(s){return "type="+s.type+", processed="+s.getAttribute("data-processed")+", src="+(s.src||"inline")}).join(" | ");
+    var detail=problems.length ? problems.join("; ") :
+      (window.__caBootError || window.__caConsoleErrors[0] || "No exception details were exposed by the browser.");
+    detail += " | document=" + document.readyState + " | babelScripts=" + (babelState || "none") + " | appStarted=" + window.__caAppStarted;
+    if(window.__caConsoleErrors.length>1) detail += " | console errors: " + window.__caConsoleErrors.slice(0,3).join(" || ");
+    root.innerHTML='<div style="min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px;background:#0a0b14;color:#f1f5f9;font:16px system-ui,sans-serif"><div style="max-width:700px;padding:24px;border:1px solid #343954;border-radius:16px;background:#13162a"><h2 style="margin:0 0 12px">The tracker could not start</h2><p style="color:#cbd5e1;line-height:1.6">The page loaded, but its app did not start. This diagnostic identifies whether a library failed to load or JavaScript failed during startup.</p><p style="margin-top:16px;color:#fca5a5;line-height:1.6;overflow-wrap:anywhere"><strong>Diagnostic:</strong> '+String(detail).replace(/[&<>"]/g,function(ch){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[ch]})+'</p><p style="margin-top:16px;color:#94a3b8;font-size:13px">Please send the exact Diagnostic text so the underlying cause can be fixed.</p></div></div>';
+  }
+},60000);
+</script>
+<!-- APP_BUNDLE -->
+<script>
+// Load core libraries sequentially with independent CDN fallbacks. The app itself
+// does not depend on Google Fonts or the Excel export library to start.
+(function(){
+  function loadOne(urls, label){
+    return new Promise(function(resolve,reject){
+      var index=0;
+      function attempt(){
+        if(index>=urls.length){reject(new Error(label+" could not be loaded from the available CDNs"));return;}
+        var script=document.createElement("script"), settled=false;
+        var timer=setTimeout(function(){finish(new Error("Timed out loading "+label));},6000);
+        function finish(err){
+          if(settled)return;settled=true;clearTimeout(timer);
+          script.onload=script.onerror=null;
+          if(err){script.remove();index++;attempt();}else resolve();
+        }
+        script.src=urls[index];
+        script.onload=function(){finish();};
+        script.onerror=function(){finish(new Error("Failed "+script.src));};
+        document.head.appendChild(script);
+      }
+      attempt();
+    });
+  }
+  function compileAndStart(){
+    var source=document.getElementById("ca-tracker-jsx-source");
+    if(!source)throw new Error("Tracker source script was not found.");
+    if(!window.React||!window.ReactDOM||!window.Babel)throw new Error("A required app library is unavailable.");
+    var compiled=window.Babel.transform(source.textContent,{presets:["react"]});
+    (new Function(compiled.code))();
+  }
+  (async function(){
+    try{
+      await loadOne([
+        "https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js",
+        "https://cdn.jsdelivr.net/npm/react@18.2.0/umd/react.production.min.js",
+        "https://unpkg.com/react@18.2.0/umd/react.production.min.js"
+      ],"React");
+      await loadOne([
+        "https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js",
+        "https://cdn.jsdelivr.net/npm/react-dom@18.2.0/umd/react-dom.production.min.js",
+        "https://unpkg.com/react-dom@18.2.0/umd/react-dom.production.min.js"
+      ],"ReactDOM");
+      await loadOne([
+        "https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.2/babel.min.js",
+        "https://cdn.jsdelivr.net/npm/@babel/standalone@7.23.2/babel.min.js",
+        "https://unpkg.com/@babel/standalone@7.23.2/babel.min.js"
+      ],"Babel");
+      // Excel export is optional; its failure must never prevent the tracker opening.
+      loadOne([
+        "https://cdn.jsdelivr.net/npm/exceljs@4.4.0/dist/exceljs.min.js",
+        "https://unpkg.com/exceljs@4.4.0/dist/exceljs.min.js"
+      ],"ExcelJS").catch(function(){window.__caExcelUnavailable=true;});
+      compileAndStart();
+    }catch(error){
+      window.__caBootError="Startup dependency error: "+(error&&error.message||String(error));
+      window.__caScriptErrors=[window.__caBootError];
+      console.error(window.__caBootError);
+    }
+  })();
+})();
+</script>
+
+<script>
+// PWA Manifest (inline)
+const manifestProfile=(()=>{try{return JSON.parse(localStorage.getItem("ca_user_profile")||"null");}catch{return null;}})();
+const manifestName=(manifestProfile?.name||"Nishanth").trim()||"Nishanth";
+const manifest={name:manifestName,short_name:manifestName,description:"CA Finals May 2027 Study Tracker",start_url:"./",display:"standalone",background_color:"#0a0b14",theme_color:"#0a0b14",orientation:"portrait-primary",icons:[{src:"data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%230a0b14'/><text y='.9em' font-size='80'>📚</text></svg>",sizes:"any",type:"image/svg+xml"}]};
+const blob=new Blob([JSON.stringify(manifest)],{type:"application/json"});
+document.getElementById("pwa-manifest").href=URL.createObjectURL(blob);
+// Register service worker for offline support
+if("serviceWorker" in navigator){
+  const sw=`const CACHE="ca-finals-v8";self.addEventListener("install",e=>e.waitUntil(caches.open(CACHE).then(c=>c.addAll(["./"]).catch(()=>{}))));self.addEventListener("fetch",e=>e.respondWith(caches.match(e.request).then(r=>r||fetch(e.request).catch(()=>caches.match("./")||new Response("Offline")))));`;
+  const swBlob=new Blob([sw],{type:"application/javascript"});
+  navigator.serviceWorker.register(URL.createObjectURL(swBlob)).catch(()=>{});
+}
+</script>
+</body>
+</html>
