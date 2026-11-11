@@ -1594,7 +1594,11 @@ function RevisionWorld({revData,setRevData,lectures,frRev,setFrRev}){
 /* ═══════════════════════════════════════
    DASHBOARD
 ═══════════════════════════════════════ */
-function Dashboard({lectures,revData,studyLog,setStudyLog,tests,streak,weeklyTarget,setWeeklyTarget}){
+function Dashboard({lectures,revData,studyLog,setStudyLog,tests,streak,weeklyTarget,setWeeklyTarget,userName}){
+  const [greetingHour,setGreetingHour]=useState(()=>new Date().getHours());
+  useEffect(()=>{const timer=setInterval(()=>setGreetingHour(new Date().getHours()),60000);return()=>clearInterval(timer);},[]);
+  const greeting=greetingHour<12?"Morning":greetingHour<17?"Afternoon":greetingHour<21?"Evening":"Night";
+  const displayName=(userName||"there").trim()||"there";
   const todayStr=today();
   const [hoursInput,setHoursInput]=useState(()=>String(studyLog[todayStr]||""));
   const saveHours=()=>{const h=parseFloat(hoursInput)||0;setStudyLog(p=>({...p,[todayStr]:h}));};
@@ -1898,7 +1902,7 @@ function TodayFocus({revData,lectures,tasks,studyLog,setWorld}){
 
       {/* Today's hours + greeting */}
       <div style={{background:"linear-gradient(135deg,var(--surface),var(--surface2))",border:"1px solid var(--border)",borderRadius:14,padding:"16px 18px"}}>
-        <div style={{color:"var(--text3)",fontSize:9,fontWeight:700,textTransform:"uppercase",letterSpacing:1.5,marginBottom:8}}>Good {new Date().getHours()<12?"Morning":"Afternoon"}, Nishanth 👋</div>
+        <div style={{color:"var(--text3)",fontSize:9,fontWeight:700,textTransform:"uppercase",letterSpacing:1.5,marginBottom:8}}>Good {greeting}, {displayName} 👋</div>
         <div style={{display:"flex",alignItems:"baseline",gap:6,marginBottom:4}}>
           <span style={{color:"#818cf8",fontSize:36,fontWeight:900,fontFamily:"'Inter',sans-serif",fontVariantNumeric:"tabular-nums"}}>{todayHrs.toFixed(1)}</span>
           <span style={{color:"var(--text)",fontSize:14,fontWeight:500}}>hours today</span>
@@ -5844,7 +5848,7 @@ function App(){
 
     {/* MAIN CONTENT */}
     <div style={{maxWidth:1400,margin:"0 auto",padding:"20px 20px 80px"}}>
-      {world==="dashboard"&&<><DailyQuote/><TodayFocus revData={revData} lectures={lectures} tasks={tasks} studyLog={studyLog} setWorld={setWorld}/><SmartInsights studyLog={studyLog} revData={revData} tests={tests} lectures={lectures}/><SubjectRotationAlert revData={revData} setWorld={setWorld}/><ExamCountdowns revData={revData}/><Dashboard lectures={lectures} revData={revData} studyLog={studyLog} setStudyLog={setStudyLog} tests={tests} streak={streak} weeklyTarget={weeklyTarget} setWeeklyTarget={setWeeklyTarget}/></>}
+      {world==="dashboard"&&<><DailyQuote/><TodayFocus revData={revData} lectures={lectures} tasks={tasks} studyLog={studyLog} setWorld={setWorld}/><SmartInsights studyLog={studyLog} revData={revData} tests={tests} lectures={lectures}/><SubjectRotationAlert revData={revData} setWorld={setWorld}/><ExamCountdowns revData={revData}/><Dashboard lectures={lectures} revData={revData} studyLog={studyLog} setStudyLog={setStudyLog} tests={tests} streak={streak} weeklyTarget={weeklyTarget} setWeeklyTarget={setWeeklyTarget} userName={userProfile?.name}/></>}
       {world==="lectures"&&<LecturesWorld lectures={lectures} setLectures={setLectures} frLec={frLec} setFrLec={setFrLec}/>}
       {world==="revision"&&<RevisionWorld revData={revData} setRevData={setRevData} lectures={lectures} frRev={frRev} setFrRev={setFrRev}/>}
       {world==="tests"&&<Tests tests={tests} setTests={setTests}/>}
