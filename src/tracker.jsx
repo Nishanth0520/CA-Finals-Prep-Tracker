@@ -1595,10 +1595,19 @@ function RevisionWorld({revData,setRevData,lectures,frRev,setFrRev}){
    DASHBOARD
 ═══════════════════════════════════════ */
 function Dashboard({lectures,revData,studyLog,setStudyLog,tests,streak,weeklyTarget,setWeeklyTarget,userName}){
-  const [greetingHour,setGreetingHour]=useState(()=>new Date().getHours());
-  useEffect(()=>{const timer=setInterval(()=>setGreetingHour(new Date().getHours()),60000);return()=>clearInterval(timer);},[]);
+  // Keep the greeting synced to the device's local clock, including when the
+  // tab is resumed after being in the background.
+  const [clock,setClock]=useState(()=>new Date());
+  useEffect(()=>{
+    const syncClock=()=>setClock(new Date());
+    const timer=setInterval(syncClock,15000);
+    window.addEventListener("focus",syncClock);
+    document.addEventListener("visibilitychange",syncClock);
+    return()=>{clearInterval(timer);window.removeEventListener("focus",syncClock);document.removeEventListener("visibilitychange",syncClock);};
+  },[]);
+  const greetingHour=clock.getHours();
   const greeting=greetingHour<12?"Morning":greetingHour<17?"Afternoon":greetingHour<21?"Evening":"Night";
-  const displayName=(userName||"there").trim()||"there";
+  const displayName=String(userName??"").trim()||"there";
   const todayStr=today();
   const [hoursInput,setHoursInput]=useState(()=>String(studyLog[todayStr]||""));
   const saveHours=()=>{const h=parseFloat(hoursInput)||0;setStudyLog(p=>({...p,[todayStr]:h}));};
