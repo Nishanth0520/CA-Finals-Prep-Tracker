@@ -32443,13 +32443,21 @@ setTimeout(function(){
     }))));
   }
   function Dashboard({ lectures, revData, studyLog, setStudyLog, tests, streak, weeklyTarget, setWeeklyTarget, userName }) {
-    const [greetingHour, setGreetingHour] = useState(() => (/* @__PURE__ */ new Date()).getHours());
+    const [clock, setClock] = useState(() => /* @__PURE__ */ new Date());
     useEffect(() => {
-      const timer = setInterval(() => setGreetingHour((/* @__PURE__ */ new Date()).getHours()), 6e4);
-      return () => clearInterval(timer);
+      const syncClock = () => setClock(/* @__PURE__ */ new Date());
+      const timer = setInterval(syncClock, 15e3);
+      window.addEventListener("focus", syncClock);
+      document.addEventListener("visibilitychange", syncClock);
+      return () => {
+        clearInterval(timer);
+        window.removeEventListener("focus", syncClock);
+        document.removeEventListener("visibilitychange", syncClock);
+      };
     }, []);
+    const greetingHour = clock.getHours();
     const greeting2 = greetingHour < 12 ? "Morning" : greetingHour < 17 ? "Afternoon" : greetingHour < 21 ? "Evening" : "Night";
-    const displayName2 = (userName || "there").trim() || "there";
+    const displayName2 = String(userName != null ? userName : "").trim() || "there";
     const todayStr = today();
     const [hoursInput, setHoursInput] = useState(() => String(studyLog[todayStr] || ""));
     const saveHours = () => {
