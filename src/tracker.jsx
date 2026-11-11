@@ -3611,36 +3611,22 @@ function CloudSync({onClose,revData,studyLog,tests,weeklyTarget,lectures,amendme
    ICAI QUICK LINKS
 ═══════════════════════════════════════ */
 const ICAI_LINKS=[
-  {cat:"Study Material",color:"#818cf8",links:[
-    {name:"ICAI eLibrary (SM, PM)",url:"https://elearning.icai.org/",desc:"Download SM, Practice Manual for all subjects"},
-    {name:"CA Final Study Material",url:"https://www.icai.org/post/ca-final-study-material",desc:"Official SM downloads"},
-    {name:"Revision Test Papers (RTP)",url:"https://www.icai.org/post/revision-test-papers",desc:"Latest RTPs for all attempts"},
-    {name:"Mock Test Papers (MTP)",url:"https://www.icai.org/post/mock-test-papers-for-ca-final",desc:"ICAI official MTPs"},
-    {name:"Suggested Answers",url:"https://www.icai.org/post/suggested-answers",desc:"ICAI suggested answers to past papers"},
-    {name:"Past Question Papers",url:"https://www.icai.org/post/question-papers",desc:"Previous years exam papers"},
+  {cat:"ICAI Study & Exam Resources",color:"#818cf8",links:[
+    {name:"ICAI BoS Knowledge Portal",url:"https://boslive.icai.org/",desc:"Official CA Final study material, lectures, RTPs, MTPs, suggested answers and past papers"},
+    {name:"BoS Portal Help & Access",url:"https://www.icai.org/students.shtml?mod=2",desc:"Official ICAI page linking to the BoS Knowledge Portal"},
+    {name:"ICAI Examination Announcements",url:"https://www.icai.org/post/exam",desc:"Exam notifications, schedules, forms and examination services"},
+    {name:"CA Exam Portal",url:"https://icaiexam.icai.org/",desc:"Official examination application and admit-card portal"},
+    {name:"ICAI Results",url:"https://caresults.icai.org/caresult/",desc:"Official examination results"},
+    {name:"ICAI Self Service Portal (SSP)",url:"https://eservices.icai.org/",desc:"Student profile, registration, articleship and other ICAI services"}
   ]},
-  {cat:"Amendments & Notifications",color:"#fbbf24",links:[
-    {name:"Finance Act Amendments",url:"https://www.icai.org/post/finance-act-amendment",desc:"Latest Finance Act amendment material"},
-    {name:"CBDT Circulars",url:"https://www.incometaxindia.gov.in/Pages/communications/circulars.aspx",desc:"Income Tax circulars and notifications"},
-    {name:"CBIC GST Notifications",url:"https://cbic-gst.gov.in/gst-goods-services-rates.html",desc:"Latest GST rate and procedure notifications"},
-    {name:"MCA Ind AS Updates",url:"https://www.mca.gov.in/content/mca/global/en/acts-rules/ebooks/rules.html",desc:"Ministry of Corporate Affairs — Ind AS rules"},
-    {name:"SEBI Circulars",url:"https://www.sebi.gov.in/sebiweb/home/HomeAction.do?doListing=yes&sid=2&ssid=3",desc:"SEBI circulars relevant to FR and Audit"},
-  ]},
-  {cat:"Student Portal",color:"#34d399",links:[
-    {name:"ICAI Student Portal",url:"https://www.icai.org/students.html",desc:"Your student dashboard and registration"},
-    {name:"Admit Card",url:"https://icaiexam.icai.org/",desc:"Download exam admit card"},
-    {name:"Results",url:"https://icaiexam.icai.org/",desc:"CA Final exam results"},
-    {name:"Virtual Library",url:"https://resource.cdn.icai.org/",desc:"ICAI resource centre and e-publications"},
-    {name:"CA Final Registration",url:"https://www.icai.org/post/registration",desc:"Exam registration and fees"},
-  ]},
-  {cat:"Reference Portals",color:"#f472b6",links:[
-    {name:"Income Tax India",url:"https://www.incometaxindia.gov.in",desc:"Full IT Act, rules, forms"},
-    {name:"GST Portal",url:"https://www.gst.gov.in",desc:"GST law, rules, notifications, portal"},
-    {name:"MCA Portal",url:"https://www.mca.gov.in",desc:"Companies Act, LLP, ROC"},
-    {name:"FEMA / RBI",url:"https://www.rbi.org.in/Scripts/BS_FemaNotifications.aspx",desc:"FEMA notifications relevant to Int. Tax"},
-    {name:"OECD BEPS",url:"https://www.oecd.org/tax/beps/",desc:"BEPS action plans and Pillar 1/2 updates"},
-    {name:"Bare Act — IT Act 1961",url:"https://egazette.gov.in",desc:"Income Tax Act bare act"},
-  ]},
+  {cat:"Tax & Regulatory References",color:"#fbbf24",links:[
+    {name:"Income Tax Department",url:"https://www.incometax.gov.in/iec/foportal/",desc:"Official income-tax portal, latest updates, forms and e-filing services"},
+    {name:"CBIC Tax Information Portal",url:"https://taxinformation.cbic.gov.in/",desc:"Official indirect-tax Acts, rules, notifications, circulars and GST updates"},
+    {name:"GST Common Portal",url:"https://www.gst.gov.in/",desc:"GST registration, returns, payments and taxpayer services"},
+    {name:"MCA — Ministry of Corporate Affairs",url:"https://www.mca.gov.in/",desc:"Companies Act, LLP Act, rules, e-Books and MCA notifications"},
+    {name:"SEBI Circulars",url:"https://www.sebi.gov.in/sebiweb/home/HomeAction.do?doListing=yes&sid=1&smid=0&ssid=7",desc:"Official SEBI circulars and regulatory updates"},
+    {name:"RBI — FEMA Notifications",url:"https://www.rbi.org.in/Scripts/BS_FemaNotifications.aspx",desc:"Official FEMA notifications and amendments"}
+  ]}
 ];
 function ICAILinks({customLinks,setCustomLinks}){
   const [adding,setAdding]=useState(false);
