@@ -55,7 +55,7 @@ try {
   for (const [key, value] of Object.entries(checks)) {
     if (key === "rootTextLength" ? value <= 100 : value !== true) failures.push(key + "=" + value);
   }
-  if (pageErrors.length) { const parse = await page.evaluate(() => Array.from(document.scripts).map((s,i) => { try { new Function(s.textContent); return null; } catch(e) { return "script["+i+"] "+e.message+" "+(e.stack||"").slice(0,500); } }).filter(Boolean)); failures.push("page errors: " + pageErrors.join(" | ") + " ; parse: " + parse.join(" || ")); }
+  if (pageErrors.length) { const parse = await page.evaluate(() => Array.from(document.scripts).map((s,i) => { try { new Function(s.textContent); return null; } catch(e) { const m=(e.stack||"").match(/<anonymous>:(\\d+):(\\d+)/); const line=m?Number(m[1]):0, col=m?Number(m[2]):0; const rows=s.textContent.split("\\n"); return "script["+i+"] "+e.message+" stack="+(e.stack||"").slice(0,900)+" source="+(line?rows.slice(Math.max(0,line-3),line+2).map((x,k)=>(Math.max(0,line-3)+k+1)+":"+x.slice(Math.max(0,col-120),col+180)).join(" || "):""); } }).filter(Boolean)); failures.push("page errors: " + pageErrors.join(" | ") + " ; parse: " + parse.join(" || ")); }
   if (networkRequests.length) failures.push("unexpected network requests: " + networkRequests.join(" | "));
   if (failures.length) throw new Error("Offline browser smoke test failed: " + failures.join("; "));
 
