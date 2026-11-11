@@ -6,6 +6,8 @@ on:
     paths:
       - "package.json"
       - "scripts/**"
+      - "src/**"
+      - "offline-shell.html"
       - ".github/workflows/build-offline.yml"
   workflow_dispatch:
 
