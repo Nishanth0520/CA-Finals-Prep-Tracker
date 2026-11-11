@@ -1,0 +1,5881 @@
+
+const {useState,useEffect,useRef,useMemo,useCallback}=React;
+
+/* ═══════════════════════════════════════════════
+   SYLLABUS DATA — CA Finals May 2027
+   ICAI 2023 Scheme
+═══════════════════════════════════════════════ */
+const ALL_SUBJECTS=[
+
+/* ════════════════════════════════════════════════════════
+   PAPER 1: FINANCIAL REPORTING
+   ICAI 2023 Scheme | Group 1
+   Past paper analysis: May/Nov 2019–2024 (Old scheme aligned)
+   Compulsory Q1 (40 marks) usually: CFS/Business Combinations/Ind AS 115/116
+   Optional Q2–Q6 (15 marks each, attempt 4)
+════════════════════════════════════════════════════════ */
+{id:"fr",short:"FR",emoji:"📊",group:1,paper:1,name:"Financial Reporting",color:"#818cf8",bg:"rgba(129,140,248,0.12)",
+ units:[
+  {title:"Unit 1: Conceptual Framework & Presentation",chapters:[
+    {n:"Conceptual Framework 2018 – Objective, Qualitative Characteristics, Elements, Recognition, Measurement",w:"High"},
+    {n:"Ind AS 1 – Presentation of Financial Statements: Components, OCI, Offsetting, Comparative Info",w:"High"},
+    {n:"Ind AS 8 – Accounting Policies: Selection, Changes, Estimates vs Errors, Retrospective/Prospective",w:"High"},
+    {n:"Ind AS 10 – Events After Reporting Period: Adjusting vs Non-adjusting, Dividends, Going Concern",w:"Medium"},
+    {n:"Ind AS 34 – Interim Financial Reporting: Minimum Components, Measurement, Seasonality",w:"Medium"},
+    {n:"Ind AS 24 – Related Party Disclosures: Definition, Key Management, Transactions, Exemptions",w:"Medium"},
+    {n:"Ind AS 33 – Earnings Per Share: Basic EPS, Diluted EPS, ESOP, Convertibles, Rights Issue",w:"High"},
+  ]},
+  {title:"Unit 2: PPE, Intangibles & Borrowing Costs",chapters:[
+    {n:"Ind AS 16 – PPE: Recognition, Cost Model, Revaluation Model, Component Accounting, Derecognition",w:"High"},
+    {n:"Ind AS 16 – PPE: Depreciation Methods, Change in Method, Useful Life Review, Major Inspection",w:"High"},
+    {n:"Ind AS 23 – Borrowing Costs: Qualifying Asset, Capitalisation Rate, Commencement/Cessation, Specific & General",w:"High"},
+    {n:"Ind AS 38 – Intangible Assets: Recognition Criteria, Research vs Development, Amortisation, Revaluation",w:"High"},
+    {n:"Ind AS 40 – Investment Property: Classification, Cost vs FV Model, Transfers, Disposals",w:"Medium"},
+    {n:"Ind AS 41 – Agriculture: Bearer Plants, Biological Assets, Fair Value Less CTS, Harvest",w:"Low"},
+    {n:"Ind AS 105 – Non-Current Assets Held for Sale: Criteria, Measurement, Discontinued Operations",w:"Medium"},
+  ]},
+  {title:"Unit 3: Impairment, Provisions & Inventories",chapters:[
+    {n:"Ind AS 36 – Impairment: Indicators, Recoverable Amount (VIU vs FVLCTS), Impairment Loss, Reversal",w:"High"},
+    {n:"Ind AS 36 – Cash Generating Units (CGU): Identification, Goodwill Allocation, Impairment Testing",w:"High"},
+    {n:"Ind AS 37 – Provisions: Recognition (present obligation, probable outflow, reliable estimate), Measurement",w:"High"},
+    {n:"Ind AS 37 – Contingent Liabilities & Assets, Onerous Contracts, Restructuring Provisions",w:"High"},
+    {n:"Ind AS 2 – Inventories: Cost Formulas (FIFO/WAC), NRV, Write-down, Reversal, Service Inventories",w:"High"},
+  ]},
+  {title:"Unit 4: Financial Instruments",chapters:[
+    {n:"Ind AS 32 – Classification: Financial Asset, Liability, Equity Instrument, Compound Instruments",w:"High"},
+    {n:"Ind AS 32 – Puttable Instruments, Treasury Shares, Interest/Dividends on Liabilities vs Equity",w:"High"},
+    {n:"Ind AS 109 – Recognition & Derecognition: When to Recognise, Derecognition Conditions",w:"High"},
+    {n:"Ind AS 109 – Classification: Amortised Cost (SPPI + Business Model), FVTOCI, FVTPL",w:"High"},
+    {n:"Ind AS 109 – Measurement: EIR Method, Transaction Costs, Fair Value Changes, Reclassification",w:"High"},
+    {n:"Ind AS 109 – Impairment: ECL Model, 3-stage approach, Simplified Approach (trade receivables)",w:"High"},
+    {n:"Ind AS 109 – Hedge Accounting: Fair Value Hedge, Cash Flow Hedge, Net Investment Hedge",w:"High"},
+    {n:"Ind AS 107 – Financial Instruments Disclosures: Significance, Nature & Extent of Risks, Sensitivity",w:"Medium"},
+  ]},
+  {title:"Unit 5: Revenue, Leases & Employee Benefits",chapters:[
+    {n:"Ind AS 115 – Five Step Model: Identify Contract, Performance Obligations, Transaction Price, Allocate, Recognise",w:"High"},
+    {n:"Ind AS 115 – Variable Consideration, Significant Financing, Principal vs Agent, Bill-and-Hold, Licences",w:"High"},
+    {n:"Ind AS 115 – Contract Costs, Contract Assets & Liabilities, Repurchase Agreements, Returns",w:"High"},
+    {n:"Ind AS 116 – Lessee Accounting: Right-of-Use Asset, Lease Liability, Initial & Subsequent Measurement",w:"High"},
+    {n:"Ind AS 116 – Lease Modifications, Short-term & Low-value Exemptions, Sale-and-Leaseback",w:"High"},
+    {n:"Ind AS 116 – Lessor Accounting: Finance vs Operating Lease, Manufacturer/Dealer Lessor",w:"High"},
+    {n:"Ind AS 19 – Short-term Benefits, Post-employment: DC vs DB Plans",w:"High"},
+    {n:"Ind AS 19 – DB Obligation: PBO, Current Service Cost, Past Service Cost, Net Interest, Remeasurements",w:"High"},
+    {n:"Ind AS 19 – Other Long-term Benefits, Termination Benefits",w:"Medium"},
+    {n:"Ind AS 102 – Share-based Payment: Equity-settled, Cash-settled, Market vs Non-market Conditions, ESOP",w:"High"},
+  ]},
+  {title:"Unit 6: Taxes, Government Grants & Foreign Exchange",chapters:[
+    {n:"Ind AS 12 – Current Tax: Computation, Underprovision/Overprovision",w:"High"},
+    {n:"Ind AS 12 – Deferred Tax: Temporary Differences, DTA/DTL Recognition, Recognition of DTA",w:"High"},
+    {n:"Ind AS 12 – Deferred Tax: Measurement, Presentation, Tax Rate Changes, Intragroup Transactions",w:"High"},
+    {n:"Ind AS 20 – Government Grants: Recognition Conditions, Asset-related vs Income-related, Repayment",w:"Medium"},
+    {n:"Ind AS 21 – Functional vs Presentation Currency, Spot Rate, Closing Rate Method",w:"High"},
+    {n:"Ind AS 21 – Foreign Operations Translation, Disposal, Monetary vs Non-monetary Items",w:"High"},
+    {n:"Ind AS 29 – Financial Reporting in Hyperinflationary Economies (overview)",w:"Low"},
+  ]},
+  {title:"Unit 7: Consolidation & Group Accounts",chapters:[
+    {n:"Ind AS 110 – Control: Power + Returns + Ability to Affect, Potential Voting Rights, De Facto Control",w:"High"},
+    {n:"Ind AS 110 – Consolidation Procedure: Uniform Policies, Intragroup Elimination, NCI Measurement",w:"High"},
+    {n:"Ind AS 110 – Step Acquisition, Loss of Control, Partial Disposal, Deemed Disposal",w:"High"},
+    {n:"Ind AS 103 – Business Combinations: Acquisition Method, Identifiable Assets/Liabilities, Goodwill",w:"High"},
+    {n:"Ind AS 103 – Contingent Consideration, Bargain Purchase, Acquisition Costs, Business Definition Test",w:"High"},
+    {n:"Ind AS 28 – Equity Method: Associate (20% Presumption), Significant Influence, Application of Equity Method",w:"High"},
+    {n:"Ind AS 28 – Impairment of Investment in Associate, Discontinuing Equity Method, Exemptions",w:"High"},
+    {n:"Ind AS 111 – Joint Operations vs Joint Ventures, Proportionate Share, JV Equity Method",w:"High"},
+    {n:"Ind AS 27 – Separate Financial Statements: Cost/FV/Equity Method, Investment in Subs/Associates/JVs",w:"Medium"},
+    {n:"Ind AS 112 – Disclosure of Interests in Other Entities: Subs, JA, Associates, Unconsolidated Entities",w:"Medium"},
+  ]},
+  {title:"Unit 8: Fair Value, Segments & First-time Adoption",chapters:[
+    {n:"Ind AS 113 – Fair Value: Definition, Exit Price, Principal Market, Valuation Techniques (Market/Income/Cost)",w:"High"},
+    {n:"Ind AS 113 – Fair Value Hierarchy (Level 1/2/3), NAV as Practical Expedient, Disclosures",w:"High"},
+    {n:"Ind AS 108 – Operating Segments: Identification, Aggregation Criteria, Quantitative Thresholds, Disclosures",w:"Medium"},
+    {n:"Ind AS 101 – First-time Adoption: Mandatory Exceptions, Optional Exemptions, Opening Balance Sheet",w:"Medium"},
+    {n:"Ind AS 7 – Cash Flow Statements: Direct vs Indirect Method, Classification of Interest/Dividends, Non-cash",w:"High"},
+    {n:"Ind AS 7 – Special Items in CFS: Acquisitions, Disposal of Subsidiaries, Foreign Currency CFS",w:"High"},
+  ]},
+]},
+
+/* ════════════════════════════════════════════════════════
+   PAPER 2: ADVANCED FINANCIAL MANAGEMENT
+   Past paper analysis: Derivatives + Forex appear every exam
+   Compulsory Q1 usually: Forex hedging / Derivatives / Valuation
+════════════════════════════════════════════════════════ */
+{id:"afm",short:"AFM",emoji:"💹",group:1,paper:2,name:"Advanced Financial Management",color:"#38bdf8",bg:"rgba(56,189,248,0.12)",
+ units:[
+  {title:"Unit 1: Financial Policy, Risk & Strategy",chapters:[
+    {n:"Corporate Financial Goals: Shareholder Wealth Maximisation vs Stakeholder Model",w:"Low"},
+    {n:"Financial Planning: Corporate Planning, Long-range Planning, Financial Modelling",w:"Low"},
+    {n:"Risk Types: Systematic vs Unsystematic, Business Risk, Financial Risk, Market Risk",w:"Medium"},
+    {n:"Value at Risk (VaR): Historical, Variance-Covariance, Monte Carlo; Limitations",w:"High"},
+    {n:"Risk Management Framework: Enterprise Risk, Risk Appetite, Hedging Policy",w:"Medium"},
+  ]},
+  {title:"Unit 2: Security Analysis",chapters:[
+    {n:"Fundamental Analysis: EIC Framework, Industry Life Cycle, Competitive Advantage",w:"Medium"},
+    {n:"Technical Analysis: Dow Theory, Charts (Bar, Candlestick), Patterns, Moving Averages",w:"Medium"},
+    {n:"Technical Analysis: RSI, MACD, Bollinger Bands, Efficient Market Hypothesis (Weak/Semi/Strong)",w:"Medium"},
+    {n:"Bond Valuation: YTM, Current Yield, Duration (Macaulay & Modified), Convexity, Price-Yield Relationship",w:"High"},
+    {n:"Bond Features: Zero Coupon, Deep Discount, Callable, Puttable, Floating Rate, Convertible",w:"High"},
+    {n:"Equity Valuation: DDM (Gordon Growth), P/E, P/BV, EV/EBITDA, Free Cash Flow to Equity",w:"High"},
+    {n:"Preference Share Valuation, Hybrid Securities",w:"Medium"},
+  ]},
+  {title:"Unit 3: Portfolio Management",chapters:[
+    {n:"Markowitz Portfolio Theory: Return, Risk, Covariance, Correlation, Minimum Variance Portfolio",w:"High"},
+    {n:"Efficient Frontier, Capital Market Line (CML), Market Portfolio",w:"High"},
+    {n:"Capital Asset Pricing Model (CAPM): Beta, SML, Characteristic Line, Limitations",w:"High"},
+    {n:"Arbitrage Pricing Theory (APT): Multi-factor model, vs CAPM",w:"Medium"},
+    {n:"Portfolio Performance Evaluation: Sharpe Ratio, Treynor Ratio, Jensen's Alpha, Information Ratio",w:"High"},
+    {n:"Portfolio Revision: Passive (Index) vs Active Management, Constant Mix, CPPI",w:"Medium"},
+    {n:"Mutual Funds: NAV, Types (Open/Closed), Expense Ratio, Fund Performance, SIP/SWP",w:"High"},
+  ]},
+  {title:"Unit 4: Derivatives – Futures",chapters:[
+    {n:"Futures Basics: Forward vs Futures, Marking to Market, Initial & Variation Margin, Open Interest",w:"High"},
+    {n:"Stock Index Futures: Pricing (Cost of Carry), Basis, Convergence",w:"High"},
+    {n:"Futures Hedging: Long Hedge, Short Hedge, Optimal Hedge Ratio (OHR), Beta Hedging",w:"High"},
+    {n:"Futures Speculation & Arbitrage: Cash & Carry, Reverse Cash & Carry",w:"High"},
+    {n:"Currency Futures: Pricing, Hedging Forex Risk using Currency Futures",w:"High"},
+    {n:"Interest Rate Futures: T-Bill Futures, T-Bond Futures, Duration-based Hedging",w:"High"},
+  ]},
+  {title:"Unit 5: Derivatives – Options",chapters:[
+    {n:"Options Basics: Call & Put, American vs European, ITM/ATM/OTM, Option Premium",w:"High"},
+    {n:"Option Payoff Diagrams: Long/Short Call, Long/Short Put, Breakeven Points",w:"High"},
+    {n:"Option Strategies: Bull Spread, Bear Spread, Straddle, Strangle, Butterfly, Strip, Strap",w:"High"},
+    {n:"Binomial Option Pricing Model: One-period, Two-period, Risk-neutral Probability",w:"High"},
+    {n:"Black-Scholes Option Pricing Model: Inputs (S, K, T, σ, r), d1, d2, N(d1), N(d2), Put-Call Parity",w:"High"},
+    {n:"Greeks: Delta, Gamma, Theta, Vega, Rho – Significance & Applications",w:"High"},
+    {n:"Options on Stock Index, Currency Options",w:"High"},
+    {n:"Real Options: Option to Delay, Expand, Abandon, Switch – Capital Budgeting Application",w:"Medium"},
+  ]},
+  {title:"Unit 6: Derivatives – Swaps",chapters:[
+    {n:"Interest Rate Swaps: Plain Vanilla, Fixed-to-Floating, Comparative Advantage, Settlement",w:"High"},
+    {n:"Currency Swaps: Structure, Cash Flows, Hedging Forex Exposure",w:"High"},
+    {n:"Credit Default Swap (CDS): Mechanics, Uses (overview)",w:"Medium"},
+    {n:"Swaptions, Swap Valuation",w:"Medium"},
+  ]},
+  {title:"Unit 7: Foreign Exchange Risk Management",chapters:[
+    {n:"Forex Markets: Spot Rate, Bid-Ask Spread, Cross Rates, Triangular Arbitrage",w:"High"},
+    {n:"Forward Contracts: Forward Rate, Premium/Discount, Outright vs Swap Points",w:"High"},
+    {n:"Interest Rate Parity (IRP): Covered IRP, Uncovered IRP, Arbitrage",w:"High"},
+    {n:"Purchasing Power Parity (PPP): Absolute & Relative, Fisher Effect, International Fisher Effect",w:"High"},
+    {n:"Forex Exposure Types: Transaction, Translation, Economic Exposure",w:"High"},
+    {n:"Forex Hedging: Forward Hedge, Money Market Hedge, Options Hedge – Comparison",w:"High"},
+    {n:"Leading & Lagging, Netting, Matching, Invoicing in Home Currency",w:"Medium"},
+    {n:"Currency of Invoicing, Cross-currency Hedge",w:"Medium"},
+  ]},
+  {title:"Unit 8: Interest Rate Risk Management",chapters:[
+    {n:"Interest Rate Risk: Sources, Gap Analysis, Duration Gap",w:"High"},
+    {n:"Forward Rate Agreements (FRA): Mechanics, Settlement, Pricing",w:"High"},
+    {n:"Interest Rate Caps, Floors, Collars",w:"High"},
+    {n:"Interest Rate Futures: Eurodollar Futures, T-Bill Futures",w:"High"},
+    {n:"Interest Rate Swaps for Hedging: Floating to Fixed, Fixed to Floating",w:"High"},
+  ]},
+  {title:"Unit 9: Corporate Valuation & M&A",chapters:[
+    {n:"Business Valuation: Asset-based, Earnings Capitalisation, DCF (FCFF & FCFE)",w:"High"},
+    {n:"EVA (Economic Value Added), MVA, CFROI",w:"High"},
+    {n:"Relative Valuation: PE, EV/EBITDA, Price/Sales, Price/Book",w:"High"},
+    {n:"M&A: Motives (Synergy, Diversification, EPS Accretion), Types (Horizontal/Vertical/Conglomerate)",w:"High"},
+    {n:"M&A Valuation: Cash Offer vs Share Exchange, Exchange Ratio, EPS Effect, Post-merger Value",w:"High"},
+    {n:"Leveraged Buyout (LBO): Structure, Financing, Returns",w:"Medium"},
+    {n:"Corporate Restructuring: Spin-off, Demerger, Buyback of Shares, Capital Reduction",w:"High"},
+    {n:"Takeover Defences: Poison Pill, White Knight, Pac-man, Crown Jewels",w:"Medium"},
+    {n:"Venture Capital & Private Equity: Stages, Valuation, Exit Routes",w:"Medium"},
+  ]},
+  {title:"Unit 10: International Finance & Capital Budgeting",chapters:[
+    {n:"International Capital Budgeting: APV Method, NPV with Forex Risk, Repatriation Restrictions",w:"High"},
+    {n:"Country Risk & Political Risk in Project Evaluation",w:"Medium"},
+    {n:"Capital Budgeting under Risk: Risk-adjusted Discount Rate, Certainty Equivalent",w:"High"},
+    {n:"Sensitivity Analysis, Scenario Analysis, Simulation (Monte Carlo)",w:"High"},
+    {n:"Decision Tree Analysis in Capital Budgeting",w:"High"},
+    {n:"Dividend Policy: Walter's Model, Gordon's Model, MM Hypothesis, Residual Approach",w:"High"},
+    {n:"Lease vs Buy: NPV Method, IRR Method, Tax Shield",w:"Medium"},
+    {n:"Hire Purchase vs Instalment: Total Cost Comparison",w:"Medium"},
+  ]},
+]},
+
+/* ════════════════════════════════════════════════════════
+   PAPER 3: ADVANCED AUDITING & ASSURANCE
+   Past paper: SA 315, 540, 570, 700 series appear every exam
+   Ethics + CARO + Bank Audit are annual fixtures
+════════════════════════════════════════════════════════ */
+{id:"aaa",short:"AAA",emoji:"🔍",group:1,paper:3,name:"Advanced Auditing & Assurance",color:"#a78bfa",bg:"rgba(167,139,250,0.12)",
+ units:[
+  {title:"Unit 1: Quality Control",chapters:[
+    {n:"SQC 1 – Quality Control for Firms: Leadership, Ethical, Acceptance, Human Resources, Engagement Performance, Monitoring",w:"High"},
+    {n:"SA 220 – Quality Control for Audit of FS: Leadership, Ethics, Client Relationships, Engagement Team",w:"High"},
+    {n:"SA 230 – Audit Documentation: Form, Content, Assembly, Retention, Ownership",w:"High"},
+    {n:"Peer Review – Objectives, Process, Stages, Reviewer Qualifications",w:"Medium"},
+  ]},
+  {title:"Unit 2: Basic Principles & Ethics",chapters:[
+    {n:"SA 200 – Overall Objectives: Reasonable Assurance, Limitations of Audit, Audit Risk Model",w:"High"},
+    {n:"SA 200 – Professional Judgement, Professional Scepticism, Conduct of Audit",w:"High"},
+    {n:"SA 210 – Engagement Letter: Preconditions, Terms, Agreed-upon Procedures, Recurring Audits",w:"High"},
+    {n:"ICAI Code of Ethics – Fundamental Principles: Integrity, Objectivity, Competence, Confidentiality, Professional Behaviour",w:"High"},
+    {n:"Ethics – Independence: Conceptual Framework, Threats (Self-interest, Self-review, Advocacy, Familiarity, Intimidation)",w:"High"},
+    {n:"Ethics – Safeguards, Non-assurance Services, Fees, Gifts, Conflicts of Interest",w:"High"},
+    {n:"Ethics – Money Laundering, Reporting Obligations, NOCLAR (Non-compliance with Laws)",w:"High"},
+  ]},
+  {title:"Unit 3: Risk Assessment & Planning",chapters:[
+    {n:"SA 300 – Planning: Overall Audit Strategy, Audit Plan, Direction/Supervision/Review",w:"High"},
+    {n:"SA 315 – Risk Identification: Understanding the Entity, Internal Control Components (COSO)",w:"High"},
+    {n:"SA 315 – Inherent Risk Factors, Control Risk, Significant Risks, IT Environment, Entity-level Controls",w:"High"},
+    {n:"SA 315 (Revised 2021) – Spectrum of Inherent Risk, Inherent Risk Factors, ITGCs",w:"High"},
+    {n:"SA 320 – Materiality: Performance Materiality, Clearly Trivial Threshold, Revision of Materiality",w:"High"},
+    {n:"SA 330 – Responses: Overall Responses, Substantive Procedures, Tests of Controls, Dual Purpose Tests",w:"High"},
+    {n:"SA 240 – Fraud: Auditor Responsibility, Fraud Risk Factors, Fraudulent Financial Reporting, Misappropriation",w:"High"},
+    {n:"SA 250 – Laws & Regulations: Compliance Framework, Procedures, Non-compliance Reporting",w:"High"},
+    {n:"SA 260 – Communication with TCWG: Matters to Communicate, Timing, Two-way Communication",w:"High"},
+    {n:"SA 265 – Deficiencies in Internal Control: Significant Deficiency, Material Weakness, Communication",w:"High"},
+  ]},
+  {title:"Unit 4: Audit Evidence",chapters:[
+    {n:"SA 500 – Audit Evidence: Sufficiency & Appropriateness, Procedures (Inspection, Observation, Inquiry, Confirmation, Recalculation, Re-performance, Analytical)",w:"High"},
+    {n:"SA 501 – Specific Evidence: Inventory (Attendance), Litigation & Claims, Segment Information",w:"High"},
+    {n:"SA 505 – External Confirmations: Positive vs Negative, Management Override, Alternative Procedures",w:"High"},
+    {n:"SA 510 – Opening Balances: Initial Engagements, Audit Procedures, Reporting",w:"Medium"},
+    {n:"SA 520 – Analytical Procedures: Substantive AP, Final AP, Investigating Unusual Fluctuations",w:"High"},
+    {n:"SA 530 – Audit Sampling: Statistical vs Non-statistical, Stratification, Sample Selection, Projection",w:"High"},
+    {n:"SA 540 (Revised) – Accounting Estimates: Inherent Risk, Management Bias, Point Estimate vs Range",w:"High"},
+    {n:"SA 540 – Substantive Procedures for Estimates, Audit of Fair Values",w:"High"},
+    {n:"SA 550 – Related Parties: Identification, Arm's Length, Undisclosed Related Parties",w:"High"},
+    {n:"SA 560 – Subsequent Events: Events to Reporting Date, Events After Report Date, Dual Dating",w:"High"},
+    {n:"SA 570 (Revised) – Going Concern: Indicators, Management Assessment, Audit Procedures, Reporting",w:"High"},
+    {n:"SA 580 – Written Representations: Not Substitute for Evidence, Specific Representations",w:"High"},
+    {n:"SA 402 – Service Organisations: Type 1 & Type 2 Reports, Complementary Controls",w:"Medium"},
+    {n:"SA 450 – Evaluation of Misstatements: Accumulation, Tolerable Misstatement, Communication",w:"High"},
+  ]},
+  {title:"Unit 5: Using Work of Others",chapters:[
+    {n:"SA 600 – Using Work of Another Auditor: Lead Auditor, Component Auditor, Instructions",w:"Medium"},
+    {n:"SA 610 – Using Work of Internal Auditors: Direct Assistance, Objectivity, Competence",w:"High"},
+    {n:"SA 620 – Using Work of Auditor's Expert: Management's Expert vs Auditor's Expert, Evaluating Adequacy",w:"High"},
+  ]},
+  {title:"Unit 6: Reporting",chapters:[
+    {n:"SA 700 (Revised) – Auditor's Report: Contents, Basis for Opinion, KAM, Other Information",w:"High"},
+    {n:"SA 701 – Key Audit Matters: Selection Criteria, Communicating KAMs, Relationship with Modifications",w:"High"},
+    {n:"SA 705 (Revised) – Modified Opinions: Qualified, Adverse, Disclaimer of Opinion – Conditions & Wording",w:"High"},
+    {n:"SA 706 (Revised) – Emphasis of Matter & Other Matter Paragraphs: When to Include",w:"High"},
+    {n:"SA 710 – Comparative Information: Corresponding Figures vs Comparative FS",w:"Medium"},
+    {n:"SA 720 (Revised) – Other Information: Read for Material Inconsistency, Material Misstatement of Fact",w:"High"},
+    {n:"SA 800/805/810 – Special Purpose: Compliance Framework, Single FS, Summary FS",w:"Medium"},
+  ]},
+  {title:"Unit 7: Company Audit",chapters:[
+    {n:"Companies Act 2013 – Appointment of Auditor: Sec 139–141, Rotation, Casual Vacancy, Removal",w:"High"},
+    {n:"Companies Act 2013 – Auditor's Powers & Duties: Sec 143, Right of Access, Reporting on Frauds",w:"High"},
+    {n:"Companies Act 2013 – Branch Audit, Joint Audit, Audit of Cost Records",w:"High"},
+    {n:"CARO 2020 – All Clauses: Fixed Assets, Inventory, Loans, Investments, Deposits, Statutory Dues, Fraud, etc.",w:"High"},
+    {n:"Companies Act – Audit Committee (Sec 177), Board Report, Annual Report Disclosures",w:"High"},
+    {n:"Companies Act – Internal Financial Controls (IFC): Reporting on IFC, Deficiencies",w:"High"},
+    {n:"Secretarial Audit – Sec 204, Form MR-3, Applicability, Matters to be Examined",w:"Medium"},
+    {n:"Tax Audit – Sec 44AB: Applicability Limits, Form 3CA/3CB/3CD, Key Clauses",w:"High"},
+    {n:"Cost Audit – Cost Audit Rules, Cost Audit Report, Applicability",w:"Medium"},
+  ]},
+  {title:"Unit 8: Sector Audits",chapters:[
+    {n:"Audit of Banks: RBI Guidelines, Long Form Audit Report (LFAR), Prudential Norms, NPA Classification",w:"High"},
+    {n:"Audit of Banks: Income Recognition, Capital Adequacy (Basel), Advances, Investments, Treasury",w:"High"},
+    {n:"Audit of NBFCs: RBI Framework, Systemically Important NBFCs, Income Recognition, Asset Classification",w:"High"},
+    {n:"Audit of Insurance Companies: IRDAI Regulations, Revenue Account, P&L, Balance Sheet, Claims",w:"High"},
+    {n:"Audit of Insurance: Actuarial Valuation, Reinsurance, ULIP, Solvency Margin",w:"High"},
+    {n:"Audit of Co-operative Societies: Maharashtra/State Cooperative Acts (overview)",w:"Low"},
+    {n:"Audit of Consolidated Financial Statements: Group Audit, Component Auditor, Goodwill Impairment",w:"High"},
+    {n:"IT Audit: IS Audit Objectives, Application Controls, General Controls, ITGC",w:"High"},
+    {n:"IT Audit: CAATs – Audit Software, Test Data, Integrated Test Facility, Embedded Audit Module",w:"High"},
+    {n:"Audit of Public Sector Undertakings: CAG, Supplementary Audit, C&AG Reporting",w:"Medium"},
+  ]},
+  {title:"Unit 9: Special Assurance & Other Services",chapters:[
+    {n:"Due Diligence: Financial DD, Legal DD, Tax DD – Process, Report Format",w:"High"},
+    {n:"Forensic Audit: Objectives, Techniques, Fraud Investigation, Chain of Custody, Report",w:"High"},
+    {n:"Internal Audit: Standards (IIA), Risk-based Internal Audit, Internal Audit Charter, Reporting",w:"High"},
+    {n:"Audit Committee & Corporate Governance: Role, Functions, Oversight of External Auditor",w:"High"},
+    {n:"Reporting on Internal Controls: ICFR, SOX Section 404, Auditor's Report on ICFR",w:"High"},
+    {n:"Liabilities of Auditor: Civil Liability (Negligence), Criminal Liability (Sec 447), Professional Misconduct",w:"High"},
+    {n:"Auditor's Lien, Indemnity, Limitation of Liability Clauses",w:"Medium"},
+  ]},
+]},
+
+/* ════════════════════════════════════════════════════════
+   PAPER 4: DIRECT TAX LAWS & INTERNATIONAL TAXATION
+   ICAI May/Nov 2027 study material chapter structure
+   Income-tax Act, 2025 applies from 1 April 2026
+════════════════════════════════════════════════════════ */
+{id:"dt",short:"DT",emoji:"📑",group:2,paper:4,name:"Direct Tax Laws & International Taxation",color:"#fbbf24",bg:"rgba(251,191,36,0.12)",
+ units:[
+  {title:"Module 1 · Chapter 1: Basic Concepts",chapters:[
+    {n:"Components of income-tax law: Act, Finance Act, Rules, circulars, notifications and case law"},
+    {n:"Rules of interpretation: literal, golden, mischief, harmonious and beneficial construction"},
+    {n:"Charge of income-tax; important definitions; capital vs revenue receipts and expenditure"},
+    {n:"Application vs diversion of income; income taxable in the same tax year; rates, surcharge and cess"}
+  ]},
+  {title:"Module 1 · Chapter 2: Incomes which do not form part of Total Income",chapters:[
+    {n:"Incomes excluded from total income: exemptions and conditions under the chapter"},
+    {n:"Exempt income relating to specified funds, institutions, allowances and receipts"},
+    {n:"Agricultural income and other specifically exempt categories covered in the material"}
+  ]},
+  {title:"Module 1 · Chapter 3: Profits and Gains of Business or Profession",chapters:[
+    {n:"Meaning of business, profession and vocation; income chargeable under this head"},
+    {n:"Computation of business income: admissible deductions and expenses not deductible"},
+    {n:"Expenses allowed only on actual payment; depreciation and other specified deductions"},
+    {n:"Presumptive taxation and special computation provisions covered in the chapter"},
+    {n:"Tax treatment of specified business transactions, incentives and disallowances"}
+  ]},
+  {title:"Module 1 · Chapter 4: Capital Gains",chapters:[
+    {n:"Meaning and types of capital assets; transfer and transactions not regarded as transfer"},
+    {n:"Full value of consideration, cost of acquisition/improvement and transfer expenses"},
+    {n:"Computation of short-term and long-term capital gains; applicable special rates"},
+    {n:"Exemptions/rollover relief on reinvestment and conditions for claiming relief"},
+    {n:"Special situations: depreciable assets, inherited/gifted assets and specified transfers"}
+  ]},
+  {title:"Module 1 · Chapter 5: Income from Other Sources",chapters:[
+    {n:"Chargeability and computation of income from other sources"},
+    {n:"Dividends, interest, winnings and other specified receipts"},
+    {n:"Deductions and disallowances while computing income from other sources"},
+    {n:"Gifts and sums received without or for inadequate consideration; exceptions and valuation"}
+  ]},
+  {title:"Module 1 · Chapter 6: Income of Other Persons included in Assessee’s Total Income",chapters:[
+    {n:"Clubbing of income: income of spouse, minor child and other specified persons"},
+    {n:"Transfer of assets/income arrangements and exceptions to clubbing provisions"},
+    {n:"Computation and attribution of clubbed income in the assessee’s total income"}
+  ]},
+  {title:"Module 1 · Chapter 7: Set Off or Carry Forward",chapters:[
+    {n:"Inter-head and intra-head set-off; order and restrictions on set-off"},
+    {n:"Carry forward and set-off of house-property, business and capital losses"},
+    {n:"Speculation, specified business and other restricted losses"},
+    {n:"Special rules for firms, closely held companies, eligible start-ups and amalgamations"}
+  ]},
+  {title:"Module 1 · Chapter 8: Deductions from Gross Total Income",chapters:[
+    {n:"Deductions from gross total income: eligibility, limits and conditions"},
+    {n:"Contributions, savings, insurance, health and other personal deductions covered by the Act"},
+    {n:"Deductions relating to donations, specified institutions and eligible activities"},
+    {n:"Business-linked and other deductions; restrictions, documentation and interaction with tax regimes"}
+  ]},
+  {title:"Module 2 · Chapter 9: Assessment of Various Entities",chapters:[
+    {n:"Company taxation: total income, tax liability, surcharge and MAT"},
+    {n:"Concessional tax regimes for companies: eligibility, conditions, option and consequences"},
+    {n:"Firms/LLPs: computation, partner remuneration/interest and tax consequences on dissolution"},
+    {n:"Individuals, HUFs, AOPs/BOIs: default regime vs normal provisions and optimum tax liability"},
+    {n:"Co-operative societies: normal and concessional regimes; AMT for non-corporate persons"},
+    {n:"Special provisions for shipping companies, local authorities, mutual concerns and other specified entities"},
+    {n:"Tax planning considerations for business; income from GDRs and transfer of carbon credits"}
+  ]},
+  {title:"Module 2 · Chapter 10: Assessment of Trusts and Institutions, Political Parties and Other Special Entities",chapters:[
+    {n:"Registered Non-Profit Organisations: registration, conditions, application of income and compliance"},
+    {n:"Exemptions for specified universities, educational institutions, hospitals and other institutions"},
+    {n:"Taxation of trusts, including discretionary trusts and specified trust income"},
+    {n:"Political parties and electoral trusts: conditions for exemption and compliance"},
+    {n:"Securitisation trusts, business trusts, investment funds and taxation of investors/unit holders"}
+  ]},
+  {title:"Module 2 · Chapter 11: Tax Planning, Tax Avoidance and Tax Evasion",chapters:[
+    {n:"Tax planning, tax avoidance and tax evasion: meaning, distinction and ethical considerations"},
+    {n:"Choosing a tax-efficient business form and evaluating tax consequences of transactions"},
+    {n:"Anti-avoidance principles and the legal/ethical limits of tax planning discussed in the material"}
+  ]},
+  {title:"Module 2 · Chapter 12: Taxation of Digital Transactions",chapters:[
+    {n:"E-commerce and digital business models; tax-jurisdiction, nexus and characterisation issues"},
+    {n:"Taxation issues relating to the digital economy and measures covered in the chapter"},
+    {n:"Virtual Digital Assets: meaning, transfer, computation and tax treatment"}
+  ]},
+  {title:"Module 3 · Chapter 13: Deduction, Collection and Recovery of Tax",chapters:[
+    {n:"Tax deduction at source: scope, timing, rates, thresholds, deposit, returns and certificates"},
+    {n:"Tax collection at source: applicability, collection, deposit, statements and credit"},
+    {n:"Advance tax: liability, instalments, computation, interest and exceptions"},
+    {n:"Collection and recovery of tax; modes of recovery and recovery-related procedures"},
+    {n:"Interest, refunds and adjustment/credit of tax deducted, collected or paid"}
+  ]},
+  {title:"Module 3 · Chapter 14: Income Tax Authorities",chapters:[
+    {n:"Income-tax authorities: hierarchy, appointment, control and instructions"},
+    {n:"Jurisdiction of authorities and transfer of cases"},
+    {n:"Powers and functions of income-tax authorities; taxpayer’s charter"}
+  ]},
+  {title:"Module 3 · Chapter 15: Assessment Procedure",chapters:[
+    {n:"PAN and other preliminary compliance requirements"},
+    {n:"Return processing, inquiry, assessment and best-judgment assessment"},
+    {n:"Faceless assessment and reference to the Dispute Resolution Panel"},
+    {n:"Income escaping assessment, search cases and related procedures"},
+    {n:"Time limits for assessment; rectification, amendments, demand and intimation of loss"}
+  ]},
+  {title:"Module 3 · Chapter 16: Appeals and Revision",chapters:[
+    {n:"First appeals: eligibility, orders appealable, procedure and limitation"},
+    {n:"Further appeals to the Tribunal, High Court and Supreme Court"},
+    {n:"Revision of orders; powers and conditions for revision"},
+    {n:"Monetary limits for departmental appeals; partial merger and total merger"}
+  ]},
+  {title:"Module 3 · Chapter 17: Dispute Resolution",chapters:[
+    {n:"Dispute Resolution Committee: constitution, composition and eligibility"},
+    {n:"Specified orders/conditions; application, screening and dispute-resolution procedure"},
+    {n:"DRC powers to modify variations, waive/reduce penalty and grant immunity"},
+    {n:"Termination of proceedings and time limits for orders giving effect to DRC directions"}
+  ]},
+  {title:"Module 3 · Chapter 18: Miscellaneous Provisions",chapters:[
+    {n:"Repeal and savings: transition from the Income-tax Act, 1961 to the Income-tax Act, 2025"},
+    {n:"Refund-related and miscellaneous procedural provisions covered in the chapter"},
+    {n:"Specified financial transactions/reportable accounts, crypto-asset information and Annual Information Statement"}
+  ]},
+  {title:"Module 3 · Chapter 19: Provisions to Counteract Unethical Tax Practices",chapters:[
+    {n:"Provisions counteracting tax evasion and unethical tax practices"},
+    {n:"Penalty for under-reporting and other defaults; procedure, limitation and immunity from penalty/prosecution"},
+    {n:"Offences and prosecution under the Income-tax Act, 2025; Black Money (Undisclosed Foreign Income and Assets) law"}
+  ]},
+  {title:"Module 3 · Chapter 20: Tax Audit and Ethical Compliances",chapters:[
+    {n:"Tax audit: applicability, threshold conditions, audit report and prescribed forms"},
+    {n:"Accountant’s responsibilities, reporting requirements and tax-audit compliances"},
+    {n:"Ethical compliances and professional responsibilities in tax audit"}
+  ]},
+  {title:"Module 4 · Chapter 21: Non Resident Taxation",chapters:[
+    {n:"Residential status of non-residents and scope of income taxable in India"},
+    {n:"Income deemed to accrue or arise in India; business connection and permanent establishment concepts"},
+    {n:"Taxation of non-residents: specified incomes, withholding and related compliance"},
+    {n:"Special provisions for non-residents and cross-border transactions covered in the material"}
+  ]},
+  {title:"Module 4 · Chapter 22: Double Taxation Relief",chapters:[
+    {n:"Double taxation: economic vs juridical double taxation and relief methods"},
+    {n:"Unilateral relief and bilateral relief under tax treaties"},
+    {n:"Computation of foreign income, foreign tax credit and conditions for claiming relief"}
+  ]},
+  {title:"Module 4 · Chapter 23: Advance Rulings",chapters:[
+    {n:"Advance rulings: purpose, eligible applicants and questions on which ruling may be sought"},
+    {n:"Application procedure, powers/procedure of the authority and binding nature of rulings"},
+    {n:"Time limits, withdrawal/rejection and other procedural aspects covered in the material"}
+  ]},
+  {title:"Module 4 · Chapter 24: Transfer Pricing",chapters:[
+    {n:"Transfer pricing framework; associated enterprises and international transactions"},
+    {n:"Arm’s length price: comparable uncontrolled price, resale price, cost plus and other prescribed methods"},
+    {n:"Comparability analysis, adjustments, range/other rules and computation of ALP"},
+    {n:"Documentation, accountant’s report, assessment, reference to TPO and penalties"},
+    {n:"Specified domestic transactions and other transfer-pricing provisions covered in the chapter"}
+  ]},
+  {title:"Module 4 · Chapter 25: Fundamentals of BEPS",chapters:[
+    {n:"BEPS: background, objectives, action-plan framework and three fundamental pillars"},
+    {n:"BEPS Actions 1–15, minimum standards and Indian tax-law measures covered in the material"},
+    {n:"Digital economy, hybrid mismatches, treaty abuse, PE avoidance, transfer-pricing documentation and dispute resolution"}
+  ]},
+  {title:"Module 4 · Chapter 26: Application and Interpretation of Tax Treaties",chapters:[
+    {n:"Tax treaties: structure, interpretation and interaction with domestic tax law"},
+    {n:"Treaty terminology, residence, source, permanent establishment and allocation of taxing rights"},
+    {n:"Treaty relief, anti-abuse provisions and application of treaty provisions to cross-border income"}
+  ]},
+  {title:"Module 4 · Chapter 27: Overview of Model Tax Conventions",chapters:[
+    {n:"OECD and UN Model Tax Conventions: structure, purpose and key differences"},
+    {n:"Articles dealing with residence, business profits, dividends, interest, royalties and capital gains"},
+    {n:"Elimination of double taxation, non-discrimination, mutual agreement procedure and exchange of information"}
+  ]},
+  {title:"Module 4 · Chapter 28: Latest Developments in International Taxation",chapters:[
+    {n:"OECD/G20 BEPS developments and Inclusive Framework; implementation and monitoring of BEPS measures"},
+    {n:"BEPS 2.0 two-pillar solution: Pillar One Amount A and Amount B; Pillar Two GloBE Rules and Subject-to-Tax Rule (STTR)"}
+  ]}
+ ]},
+{id:"idt",short:"IDT",emoji:"🧾",group:2,paper:5,name:"Indirect Tax Laws",color:"#34d399",bg:"rgba(52,211,153,0.12)",
+ units:[
+  {title:"Module 1 · Chapter 1: Supply under GST",chapters:[
+    {n:"Meaning and scope of supply; goods vs services; taxable supply and consideration"},
+    {n:"Activities treated as supply without consideration; Schedule I"},
+    {n:"Activities treated as neither supply of goods nor services; Schedule III"},
+    {n:"Composite and mixed supplies; principal supply and rate implications"},
+    {n:"Transactions involving agents, related persons, import of services and business activities"}
+  ]},
+  {title:"Module 1 · Chapter 2: Charge of GST",chapters:[
+    {n:"Levy and collection of CGST/IGST; taxable event and extent of supply"},
+    {n:"Forward charge and reverse charge; notified goods/services and recipient liability"},
+    {n:"Composition levy: eligibility, restrictions, rates, option and withdrawal"},
+    {n:"Exempt/non-taxable supplies, non-applicability of GST and special charge provisions"}
+  ]},
+  {title:"Module 1 · Chapter 3: Place of Supply",chapters:[
+    {n:"Place of supply of goods: movement, no movement, bill-to/ship-to and installation"},
+    {n:"Place of supply of services: general rule for registered and unregistered recipients"},
+    {n:"Specific service rules: immovable property, events, transport, telecom, banking and intermediaries"},
+    {n:"Import/export of services; location of supplier/recipient and inter-State vs intra-State supply"}
+  ]},
+  {title:"Module 1 · Chapter 4: Exemptions from GST",chapters:[
+    {n:"Exemption notifications: goods/services, conditions, exclusions and effective dates"},
+    {n:"Conditional and absolute exemptions; general, specific and recipient-based exemptions"},
+    {n:"Exemptions for specified sectors/activities and treatment of related input tax credit"}
+  ]},
+  {title:"Module 1 · Chapter 5: Time of Supply",chapters:[
+    {n:"Time of supply of goods and services under forward and reverse charge"},
+    {n:"Invoices, payment, vouchers, change in tax rate and continuous supplies"},
+    {n:"Time of supply for vouchers, interest/late fee/penalty and associated special cases"}
+  ]},
+  {title:"Module 1 · Chapter 6: Value of Supply",chapters:[
+    {n:"Transaction value and conditions for acceptance as value of supply"},
+    {n:"Inclusions/exclusions: incidental expenses, subsidies, interest, discounts and reimbursements"},
+    {n:"Valuation rules: related/distinct persons, agents, cost/residual methods and special supplies"},
+    {n:"Pure agent, foreign currency and practical valuation computations"}
+  ]},
+  {title:"Module 2 · Chapter 7: Input Tax Credit",chapters:[
+    {n:"Conditions for input tax credit; possession of documents, receipt, tax payment and return filing"},
+    {n:"Time limit, matching/reconciliation, distribution and utilisation of ITC"},
+    {n:"Blocked credits; motor vehicles, food/beverages, works contract, construction and personal use"},
+    {n:"Apportionment and reversal for exempt/non-business use; Rules 42 and 43"},
+    {n:"ITC on capital goods, job work, business reorganisation and special circumstances"},
+    {n:"ITC utilisation order, reversals, re-availment and computation-based questions"}
+  ]},
+  {title:"Module 2 · Chapter 8: Registration",chapters:[
+    {n:"Persons liable and not liable for registration; threshold and compulsory registration"},
+    {n:"Registration procedure, effective date, amendment, cancellation and revocation"},
+    {n:"Separate registrations, casual/non-resident taxable persons, ISD and special cases"},
+    {n:"GSTIN, place of business, transfer of registration and consequences of non-registration"}
+  ]},
+  {title:"Module 2 · Chapter 9: Tax Invoice, Credit and Debit Notes",chapters:[
+    {n:"Tax invoice, bill of supply, receipt voucher, refund voucher and payment voucher"},
+    {n:"Credit notes/debit notes, time limits, particulars and reporting"},
+    {n:"E-invoicing, revised invoices, invoice timing and documentation requirements"}
+  ]},
+  {title:"Module 2 · Chapter 10: Accounts and Records; E-way Bill",chapters:[
+    {n:"Accounts and records: retention period, electronic records, stock and production records"},
+    {n:"Records for agents, works contractors, warehouse operators and specified persons"},
+    {n:"E-way bill: when required, person responsible, validity, cancellation and exceptions"},
+    {n:"E-way bill in movement/vehicle change/trans-shipment cases and detention issues"}
+  ]},
+  {title:"Module 2 · Chapter 11: Payment of Tax",chapters:[
+    {n:"Electronic cash, credit and liability ledgers; payment and challan process"},
+    {n:"Utilisation of ITC, interest, late fee, TDS/TCS credits and payment allocation"},
+    {n:"Refund of excess balance and consequences of non-payment"}
+  ]},
+  {title:"Module 2 · Chapter 12: Electronic Commerce Transactions",chapters:[
+    {n:"E-commerce operator and supplier obligations; ECO liable to pay tax"},
+    {n:"TCS by e-commerce operators, statements, registration and credit to suppliers"},
+    {n:"Specified services supplied through ECOs; liability, exemptions and practical scenarios"}
+  ]},
+  {title:"Module 2 · Chapter 13: Returns",chapters:[
+    {n:"Returns: GSTR-1, GSTR-3B and annual/final returns; due dates and corrections"},
+    {n:"Nil, late and non-filer returns; ITC linkage, late fee, interest and notices"},
+    {n:"Matching books with returns, amendments, rectification and return-related restrictions"}
+  ]},
+  {title:"Module 3 · Chapter 14: Import and Export Under GST",chapters:[
+    {n:"Export of goods/services, zero-rated supply and export conditions"},
+    {n:"Import of goods/services; IGST on imports and place-of-supply interaction"},
+    {n:"Supply to SEZ developer/unit; LUT/bond vs payment of IGST and related conditions"},
+    {n:"Inter-State trade, zero-rated supply and related documentation"}
+  ]},
+  {title:"Module 3 · Chapter 15: Refunds",chapters:[
+    {n:"Refund of tax/ITC; eligible applicants, forms, limitation and unjust enrichment"},
+    {n:"Refund on exports with/without payment of tax; inverted duty structure"},
+    {n:"Deemed exports, excess cash balance, provisional refund and withheld/refused claims"},
+    {n:"Refund computation, relevant date, deficiency memo, interest and appeal implications"}
+  ]},
+  {title:"Module 3 · Chapter 16: Job Work",chapters:[
+    {n:"Job work: principal/job worker definitions, sending inputs/capital goods and records"},
+    {n:"Time limits for return of goods; direct dispatch and job-work ITC"},
+    {n:"Waste/scrap, challans, responsibility for tax and practical job-work cases"}
+  ]},
+  {title:"Module 3 · Chapter 17: Assessment and Audit",chapters:[
+    {n:"Self-assessment, provisional assessment, scrutiny and best-judgment assessment"},
+    {n:"Summary assessment, audit by tax authorities and special audit"},
+    {n:"Assessment orders, time limits, records and taxpayer response"}
+  ]},
+  {title:"Module 3 · Chapter 18: Inspection, Search, Seizure and Arrest",chapters:[
+    {n:"Inspection, search and seizure: authorisation, grounds and procedure"},
+    {n:"Power to summon persons and access business premises/documents"},
+    {n:"Arrest, safeguards, statement/evidence and release/bail provisions"}
+  ]},
+  {title:"Module 3 · Chapter 19: Demands and Recovery",chapters:[
+    {n:"Determination of tax not paid/short paid, erroneous refund and ITC wrongly availed/utilised"},
+    {n:"Fraud vs non-fraud cases; notices, orders, limitation and penalty consequences"},
+    {n:"Voluntary payment, recovery modes, instalments, attachment and recovery from third parties"}
+  ]},
+  {title:"Module 3 · Chapter 20: Liability to Pay in Certain Cases",chapters:[
+    {n:"Liability on transfer of business, agent/principal, company liquidation and directors"},
+    {n:"Liability of partners, guardians/trustees, amalgamated entities and other specified persons"},
+    {n:"Joint and several liability and case-based determination of liable person"}
+  ]},
+  {title:"Module 3 · Chapter 21: Offences and Penalties and Ethical Aspects under GST",chapters:[
+    {n:"Offences, general penalties, prosecution and compounding"},
+    {n:"Fraud, fake invoices, wrongful ITC, evidence and consequences"},
+    {n:"Ethical aspects, tax-professional responsibilities and compliance conduct"}
+  ]},
+  {title:"Module 3 · Chapter 22: Appeals and Revision",chapters:[
+    {n:"Appeals to Appellate Authority and Appellate Tribunal: eligibility, time and pre-deposit"},
+    {n:"Revision, High Court/Supreme Court appeal, condonation and rectification"},
+    {n:"Orders appealable, procedure, powers and case-based remedies"}
+  ]},
+  {title:"Module 3 · Chapter 23: Advance Ruling",chapters:[
+    {n:"Advance ruling: eligible applicant, questions, application and procedure"},
+    {n:"Authority/ Appellate Authority for Advance Ruling; appeal and binding effect"},
+    {n:"When ruling ceases to apply; limitation and practical eligibility cases"}
+  ]},
+  {title:"Module 3 · Chapter 24: Miscellaneous Provisions",chapters:[
+    {n:"Common portal, authorised representatives, information return and confidentiality"},
+    {n:"Other miscellaneous provisions, transitional/interpretive issues and statutory powers"}
+  ]},
+  {title:"Module 4 · Customs Chapter 1: Levy of and Exemptions from Customs Duty",chapters:[
+    {n:"Charge of customs duty; taxable event, territorial waters and levy"},
+    {n:"Dutiable goods, valuation basis, exemptions and conditional notifications"},
+    {n:"Date for rate of duty and tariff valuation; warehoused and imported goods"}
+  ]},
+  {title:"Module 4 · Customs Chapter 2: Types of Duty",chapters:[
+    {n:"Basic Customs Duty, Social Welfare Surcharge, IGST and other duties"},
+    {n:"Anti-dumping, safeguard and countervailing duties; applicability and computation"},
+    {n:"Duty exemption/remission schemes and interaction of multiple duties"}
+  ]},
+  {title:"Module 4 · Customs Chapter 3: Classification of Imported and Export Goods",chapters:[
+    {n:"Customs Tariff: classification principles, Section/Chapter Notes and GIR"},
+    {n:"Classification of composite goods, sets, parts/accessories and competing headings"},
+    {n:"Import/export tariff entries and application of interpretative rules"}
+  ]},
+  {title:"Module 4 · Customs Chapter 4: Valuation under the Customs Act, 1962",chapters:[
+    {n:"Transaction value and conditions for acceptance under Customs Valuation Rules"},
+    {n:"Additions: commissions, assists, royalties, packing, freight, insurance and related costs"},
+    {n:"Related-party transactions, alternative valuation methods and sequential application"},
+    {n:"Assessable value and customs duty computation including exchange rates"}
+  ]},
+  {title:"Module 4 · Customs Chapter 5: Importation and Exportation of Goods",chapters:[
+    {n:"Import procedure: arrival, entry, bill of entry, assessment, clearance and duty payment"},
+    {n:"Export procedure: shipping bill, examination, clearance and export manifest"},
+    {n:"Baggage, courier/post, prohibited/restricted goods and confiscation-related provisions"},
+    {n:"Import/export documentation, warehousing links and practical duty calculations"}
+  ]},
+  {title:"Module 4 · Customs Chapter 6: Warehousing",chapters:[
+    {n:"Warehousing: public/private/special warehouses, licensing and warehousing bond"},
+    {n:"Warehousing period, interest, removal, ex-bond bill of entry and clearance"},
+    {n:"Improper removal, warehousing liability and re-export/destruction cases"}
+  ]},
+  {title:"Module 4 · Customs Chapter 7: Refund",chapters:[
+    {n:"Refund of customs duty: eligibility, limitation, documents and unjust enrichment"},
+    {n:"Refunds following reassessment/appeal, duty paid in excess and interest"},
+    {n:"Drawback and other refund/remission mechanisms included in the study material"}
+  ]},
+  {title:"Module 4 · Customs Chapter 8: Foreign Trade Policy",chapters:[
+    {n:"Foreign Trade Policy framework, DGFT and import-export authorisation"},
+    {n:"ITC(HS) classification, restricted/prohibited goods and export promotion schemes"},
+    {n:"Advance Authorisation, EPCG, duty exemption/remission and export obligations"},
+    {n:"EOU/SEZ-related trade benefits, fulfilment of conditions and non-compliance"}
+  ]}
+ ]},
+{id:"ibs",short:"IBS",emoji:"🗂️",group:2,paper:6,name:"Integrated Business Solutions",color:"#f472b6",bg:"rgba(244,114,182,0.12)",
+ units:[
+  {title:"Unit 1: FR Application in Case Studies",chapters:[
+    {n:"Ind AS Application in Real Business Scenarios: Identify standard, Apply, Compute, Disclose",w:"High"},
+    {n:"Consolidation Case: Step acquisition, Loss of control, Partial disposal, NCI choices",w:"High"},
+    {n:"Business Combination: Goodwill computation, Bargain purchase, Contingent consideration",w:"High"},
+    {n:"Lease (Ind AS 116) in case: Identify lease, Compute ROU asset, Interest, Depreciation",w:"High"},
+    {n:"Financial Instruments (Ind AS 109) in case: ECL, EIR, Classification, Hedge",w:"High"},
+    {n:"Revenue Recognition (Ind AS 115) in case: Variable consideration, Principal-agent, Licences",w:"High"},
+    {n:"Deferred Tax (Ind AS 12) in integrated scenarios",w:"High"},
+    {n:"EPS (Ind AS 33) in complex scenarios: ESOP, Convertibles, Rights issue",w:"Medium"},
+  ]},
+  {title:"Unit 2: AFM Application in Case Studies",chapters:[
+    {n:"Corporate Valuation in case: DCF, Relative, EVA – apply and justify",w:"High"},
+    {n:"M&A Analysis: Exchange ratio, EPS dilution, Post-merger value, Synergy attribution",w:"High"},
+    {n:"Derivatives in case: Which hedge instrument, Compute payoff, Net position",w:"High"},
+    {n:"Forex Hedging in case: Forward vs Option vs Money Market – compare costs",w:"High"},
+    {n:"Portfolio in case: Compute return, Risk, Sharpe, Jensen, Recommend changes",w:"High"},
+    {n:"Capital Budgeting in case: NPV, Sensitivity, Real Options – Decision with justification",w:"High"},
+    {n:"Risk Management in case: Identify risks, Quantify (VaR), Propose mitigation",w:"High"},
+  ]},
+  {title:"Unit 3: AAA Application in Case Studies",chapters:[
+    {n:"Audit Risk Assessment in case: Identify RMM, Control deficiencies, Audit response",w:"High"},
+    {n:"Modified Audit Report scenarios: Draft qualified/adverse/disclaimer + reasons",w:"High"},
+    {n:"KAM identification in case: Criteria, How to communicate in report",w:"High"},
+    {n:"Going Concern scenarios: Indicators, Audit procedures, Reporting implications",w:"High"},
+    {n:"Ethics in case: Identify threats, Safeguards, Independence evaluation",w:"High"},
+    {n:"Fraud scenarios: Red flags, Auditor's responsibilities, Reporting to management/TCWG",w:"High"},
+    {n:"IFC (Internal Financial Controls) in case: Identify deficiency, Reporting impact",w:"High"},
+  ]},
+  {title:"Unit 4: Direct Tax — ICAI Paper 4 Integration",chapters:[
+    {n:"Compute business income and taxable total income from case facts under the Income-tax Act, 2025"},
+    {n:"Apply capital gains provisions to asset/share transfers, business restructuring and transaction costs"},
+    {n:"Compare entity-level tax consequences: company, firm/LLP and other eligible entity structures"},
+    {n:"Analyse tax deduction/collection at source, advance tax, return filing, interest and compliance exposure"},
+    {n:"Identify non-resident income, source rules, PE/business connection and treaty relief"},
+    {n:"Transfer pricing case: associated enterprises, ALP method selection, comparability and documentation"},
+    {n:"Evaluate tax planning vs avoidance/evasion and apply anti-avoidance provisions where relevant"}
+  ]},
+  {title:"Unit 5: Indirect Tax — ICAI Paper 5 Integration",chapters:[
+    {n:"Analyse the transaction chain: supply classification, composite/mixed supply, charge and exemption"},
+    {n:"Determine place and time of supply; decide intra-State vs inter-State tax treatment"},
+    {n:"Compute GST value including discounts, related-party supplies, reimbursements and incidental charges"},
+    {n:"Prepare output GST and eligible ITC computation; apply blocked credits and Rules 42/43 reversals"},
+    {n:"Reconcile invoice, e-invoice, e-way bill, returns, ledgers and payment facts in a business case"},
+    {n:"Determine export/SEZ zero-rating route, LUT vs IGST payment and refund eligibility"},
+    {n:"Resolve GST demand, interest, penalty, recovery, appeal and liability-in-special-cases issues"},
+    {n:"Customs case: classify goods, determine assessable value, compute applicable duties and assess exemption"},
+    {n:"Connect import GST/IGST, customs clearance, warehousing and export-promotion scheme conditions"},
+    {n:"Integrated recommendation: quantify tax cost, compliance risks, documentation and next action"}
+  ]},
+  {title:"Unit 6: Strategic Management",chapters:[
+    {n:"Strategic Analysis Tools: PESTLE, Porter's Five Forces, Value Chain, VRIO Framework",w:"High"},
+    {n:"Corporate Strategy: Ansoff Matrix, BCG Matrix, GE-McKinsey Matrix",w:"High"},
+    {n:"Competitive Strategy: Cost Leadership, Differentiation, Focus (Porter's Generic Strategies)",w:"High"},
+    {n:"Business Level Strategy: Blue Ocean Strategy, Disruptive Innovation",w:"Medium"},
+    {n:"Corporate Governance: Board Composition, Committees (Audit, Nomination, Remuneration)",w:"High"},
+    {n:"Corporate Governance: Stewardship Theory, Agency Theory, Stakeholder Theory",w:"High"},
+    {n:"Risk Management Framework: ERM (COSO), ISO 31000, Risk Appetite, Risk Register",w:"High"},
+    {n:"ESG (Environmental, Social, Governance): Reporting, Integrated Reporting (IR Framework)",w:"High"},
+    {n:"Digital Transformation & Technology Risk: Cybersecurity, Data Privacy, Fintech",w:"Medium"},
+    {n:"Ethics in Business: Ethical Decision-making Models, Whistleblowing, Bribery & Corruption",w:"High"},
+  ]},
+  {title:"Unit 7: Case Study Methodology & Answer Writing",chapters:[
+    {n:"Understanding Case Study Format: Case Facts, Exhibits, Requirements (Compulsory)",w:"High"},
+    {n:"Time Management in IBS: Allocation per requirement, Reading time, Prioritisation",w:"High"},
+    {n:"Answer Structure: Identify Issue → Apply Law/Concept → Compute → Conclude → Recommend",w:"High"},
+    {n:"ICAI Past Year IBS Case Studies: Attempt all previous papers under timed conditions",w:"High"},
+    {n:"RTP Case Studies: May 2025, Nov 2025, May 2026 RTPs",w:"High"},
+    {n:"MTP Case Studies: ICAI issued MTPs for IBS paper",w:"High"},
+    {n:"Integration Practice: Build cross-subject answer (e.g. Acquisition – FR + DT + AFM together)",w:"High"},
+  ]},
+]},
+
+];
+
+
+/* ═══ FR BHAVIK CHOKSHI DATA ═══ */
+const FR_LECTURES=[
+  {day:1,id:"1_1",topic:"Applicability of Ind AS",concepts:"Intro, AS phase wise applicability, Additional Guidance",dur:"1:25:46"},
+  {day:1,id:"1_2",topic:"Ind AS 16 PPE",concepts:"Intro, Scope, Biological Assets, Bearer plants, Initial Recognition, Directly attributable expenses",dur:"1:29:00"},
+  {day:2,id:"2_1a",topic:"Ind AS 16 PPE",concepts:"Changes in provision for site restoration",dur:"1:37:49"},
+  {day:2,id:"2_1b",topic:"Ind AS 16 PPE",concepts:"Initial Recognition Special Cases - Deferred Payment & Barter, Subsequent expenditure",dur:"1:33:35"},
+  {day:3,id:"3_1",topic:"Ind AS 16 PPE",concepts:"Subsequent Valuation - Valuation model, Sufficient intervals; Revaluation",dur:"1:40:31"},
+  {day:3,id:"3_2",topic:"Ind AS 16 PPE",concepts:"Depreciation",dur:"1:31:03"},
+  {day:4,id:"4_1",topic:"Ind AS 16 PPE",concepts:"Major inspections or Overhauls",dur:"2:05:48"},
+  {day:4,id:"4_2",topic:"Ind AS 38 Intangible Assets",concepts:"Definition, Recognition of intangible assets",dur:"0:50:29"},
+  {day:5,id:"5_1",topic:"Ind AS 38 Intangible Assets",concepts:"Research & Development, Amortisation Principles, Other acc principles, Crypto Accounting",dur:"1:39:17"},
+  {day:5,id:"5_2",topic:"Ind AS 38 Intangible Assets",concepts:"Sums",dur:"0:42:50"},
+  {day:5,id:"5_3",topic:"Ind AS 40 Investment Property",concepts:"Definition, Owned/leased property, Dual use property",dur:"0:39:16"},
+  {day:6,id:"6_1",topic:"Ind AS 40 Investment Property",concepts:"Special Case, Accounting, Reclassification",dur:"1:57:14"},
+  {day:6,id:"6_2",topic:"Ind AS 36 Impairment of Assets",concepts:"Meaning, Treatment of Impairment Loss, Timing of Impairment Testing",dur:"1:00:09"},
+  {day:7,id:"7_1a",topic:"Ind AS 36 Impairment of Assets",concepts:"Value in Use",dur:"0:46:46"},
+  {day:7,id:"7_1b",topic:"Ind AS 36 Impairment of Assets",concepts:"Value in Use (continued)",dur:"1:01:29"},
+  {day:7,id:"7_2",topic:"Ind AS 36 Impairment of Assets",concepts:"Reversal of Impairment",dur:"1:07:27"},
+  {day:8,id:"8_1",topic:"Ind AS 36 Impairment of Assets",concepts:"Cash Generating Unit (CGU), Allocation of impairment loss in case of CGU",dur:"1:26:34"},
+  {day:8,id:"8_2",topic:"Ind AS 36 Impairment of Assets",concepts:"Sums",dur:"1:19:15"},
+  {day:9,id:"9_1",topic:"Ind AS 36 Impairment of Assets",concepts:"Appropriate allocation ratio for allocable corporate assets, Unallocable corporate assets, Impairment loss in CFS",dur:"1:48:44"},
+  {day:9,id:"9_2",topic:"Ind AS 36 Impairment of Assets",concepts:"Partial Goodwill method",dur:"0:54:02"},
+  {day:10,id:"10_1",topic:"Ind AS 105 Non-Current Assets Held for Sale",concepts:"Intro, Key terms, Scope, Classification, Accounting Principles, Disposal group as held for sale",dur:"1:36:11"},
+  {day:10,id:"10_2",topic:"Ind AS 105 Non-Current Assets Held for Sale",concepts:"Discontinued Operations, Change in plan to sale, Change in fair value",dur:"1:24:52"},
+  {day:11,id:"11_1",topic:"Ind AS 23 Borrowing Costs",concepts:"Intro, Accounting for borrowing costs, Scope - Exclusions, Borrowing cost",dur:"1:39:04"},
+  {day:11,id:"11_2",topic:"Ind AS 23 Borrowing Costs",concepts:"Timing for capitalization, General Borrowings",dur:"1:18:35"},
+  {day:12,id:"12_1",topic:"Ind AS 23 Borrowing Costs",concepts:"Sums",dur:"1:49:38"},
+  {day:12,id:"12_2",topic:"Ind AS 23 Borrowing Costs",concepts:"Expenditure incurred for qualifying asset",dur:"1:10:24"},
+  {day:13,id:"13_1",topic:"Ind AS 23 Borrowing Costs",concepts:"Sums",dur:"0:47:38"},
+  {day:13,id:"13_2",topic:"Ind AS 41 Agriculture",concepts:"Scope, Agricultural Activity",dur:"0:54:11"},
+  {day:13,id:"13_3",topic:"Ind AS 41 Agriculture",concepts:"Acc Treatment - Biological Assets - Special Cases",dur:"1:06:17"},
+  {day:14,id:"14_1",topic:"Ind AS 41 Agriculture",concepts:"Agricultural Produce, Govt Grants",dur:"1:39:49"},
+  {day:14,id:"14_2",topic:"Ind AS 41 Agriculture",concepts:"Sum",dur:"0:32:35"},
+  {day:14,id:"14_3",topic:"Ind AS 20 Government Grants",concepts:"Key terms, Applicability, Initial Recognition, Accounting for Grants, Assets, Amortisation",dur:"0:44:53"},
+  {day:15,id:"15_1",topic:"Ind AS 20 Government Grants",concepts:"Income, Special Cases",dur:"1:40:34"},
+  {day:15,id:"15_2",topic:"Ind AS 20 Government Grants",concepts:"Loan at concession rate, Refund of Govt Grants",dur:"1:14:43"},
+  {day:16,id:"16_1",topic:"Ind AS 20 Government Grants",concepts:"Sums",dur:"0:27:41"},
+  {day:16,id:"16_2",topic:"Ind AS 113 Fair Value Measurement",concepts:"Intro, Meaning of Fair Value, Fair Value for Non Financial Assets, Fair Value Hierarchy & Valuation Method",dur:"1:12:27"},
+  {day:16,id:"16_3",topic:"Ind AS 113 Fair Value Measurement",concepts:"Sums",dur:"1:15:47"},
+  {day:17,id:"17_1",topic:"Ind AS 2 Inventories",concepts:"Meaning, Initial Recognition of Inventory - At Cost",dur:"1:42:50"},
+  {day:17,id:"17_2",topic:"Ind AS 2 Inventories",concepts:"Cash Flow Assumptions, Valuation - Net Realisable Value (NRV)",dur:"1:11:56"},
+  {day:18,id:"18_1",topic:"Ind AS 2 Inventories",concepts:"Replacement Cost, Difference between NRV & Fair Value",dur:"0:23:24"},
+  {day:18,id:"18_2",topic:"Ind AS 2 Inventories",concepts:"Subsequent Re-assessment of NRV",dur:"1:22:13"},
+  {day:18,id:"18_3",topic:"Ind AS 10 Events After Reporting Period",concepts:"Post B/S Period, Events, Exceptions to Non-Adjusting Events",dur:"1:16:42"},
+  {day:19,id:"19_1",topic:"Ind AS 102 Share Based Payments",concepts:"Introduction",dur:"1:39:35"},
+  {day:19,id:"19_2",topic:"Ind AS 102 Share Based Payments",concepts:"Equity / Cash Settled SBP - Employees, SBP - Other Than Employees",dur:"1:17:03"},
+  {day:20,id:"20_1",topic:"Ind AS 102 Share Based Payments",concepts:"Group SBP, Cash Plans with Equity Settlement Alternative, Scope Exclusions",dur:"1:50:19"},
+  {day:20,id:"20_2",topic:"Ind AS 102 Share Based Payments",concepts:"Vesting Conditions, Non Vesting Conditions, Market Linked Performance Condition",dur:"1:10:19"},
+  {day:21,id:"21_1",topic:"Ind AS 102 Share Based Payments",concepts:"Graded Vesting",dur:"1:30:17"},
+  {day:21,id:"21_2",topic:"Ind AS 102 Share Based Payments",concepts:"Modification, Cancellation",dur:"1:03:00"},
+  {day:21,id:"21_3",topic:"Ind AS 108 Operating Segments",concepts:"Core Principles, CODM, Operating segments, Identification of Segments, Aggregation Criteria",dur:"0:26:38"},
+  {day:22,id:"22_1",topic:"Ind AS 108 Operating Segments",concepts:"Reportable Segments, Presentation of Segment Report",dur:"1:41:47"},
+  {day:22,id:"22_2",topic:"Ind AS 108 Operating Segments",concepts:"Sums",dur:"0:30:31"},
+  {day:22,id:"22_3",topic:"Ind AS 37 Provisions, Contingent Liability And Assets",concepts:"Key Terms, Contingencies, Provision",dur:"0:51:19"},
+  {day:23,id:"23_1",topic:"Ind AS 37 Provisions, Contingent Liability And Assets",concepts:"Sums",dur:"1:39:08"},
+  {day:23,id:"23_2",topic:"Ind AS 37 Provisions, Contingent Liability And Assets",concepts:"Onerous Contracts, Provisions for Restructuring",dur:"1:19:22"},
+  {day:24,id:"24_1",topic:"Financial Instruments",concepts:"Definition, Financial Asset, Fin Liability, Special Cases, Note on Net Settlement",dur:"1:39:52"},
+  {day:24,id:"24_2",topic:"Financial Instruments",concepts:"Fin Liability, Pref Shares / Debentures Issued",dur:"1:18:04"},
+  {day:25,id:"25_1",topic:"Financial Instruments",concepts:"Exceptions for fixed-to-fixed rule, Classification, CCFC/SPPI Test, Special cases, Business Model Test",dur:"1:42:04"},
+  {day:25,id:"25_2",topic:"Financial Instruments",concepts:"Accounting For FS",dur:"1:20:22"},
+  {day:26,id:"26_1",topic:"Financial Instruments",concepts:"Financial Liabilities - Classification & Accounting",dur:"1:47:32"},
+  {day:26,id:"26_2",topic:"Financial Instruments",concepts:"Sums",dur:"1:09:58"},
+  {day:27,id:"27_1",topic:"Financial Instruments",concepts:"Loan at off Market Terms - Part Payment, Loans Repayable on Demand / After Project, Equity",dur:"1:42:57"},
+  {day:27,id:"27_2",topic:"Financial Instruments",concepts:"Compound Financial Instruments - From issuer's perspective",dur:"1:17:50"},
+  {day:28,id:"28_1",topic:"Financial Instruments",concepts:"Transaction Cost in Case of a CFI, Early Redemption",dur:"1:50:11"},
+  {day:28,id:"28_3",topic:"Financial Instruments",concepts:"Callable/Putable Features, Valuation of Irredeemable Bond, Regular Way Contracts, Trade Date & Settlement Date",dur:"1:04:06"},
+  {day:29,id:"29_1",topic:"Financial Instruments",concepts:"Derivatives, Embedded Derivatives",dur:"1:48:49"},
+  {day:29,id:"29_2",topic:"Financial Instruments",concepts:"Sums",dur:"1:07:49"},
+  {day:30,id:"30_1",topic:"Financial Instruments",concepts:"Derecognition of Financial Assets - Bill Discounted, REPO, Sale with Repurchase Options, Securitization, Continuing Involvement, Partial Derecognition",dur:"1:55:05"},
+  {day:30,id:"30_2",topic:"Financial Instruments",concepts:"Derecognition of Financial Liabilities - Modification",dur:"1:01:12"},
+  {day:31,id:"31_1",topic:"Financial Instruments",concepts:"Debt for Equity Swaps",dur:"1:23:21"},
+  {day:31,id:"31_2",topic:"Financial Instruments",concepts:"Impairment of Financial Assets, Expected Credit Loss Approach",dur:"1:37:33"},
+  {day:32,id:"32_1",topic:"Financial Instruments",concepts:"Financial Guarantee, Hedge Accounting",dur:"1:48:38"},
+  {day:32,id:"32_2",topic:"Financial Instruments",concepts:"Reclassification, Special Cases",dur:"1:05:30"},
+  {day:33,id:"33_1",topic:"Financial Instruments",concepts:"Written Put Options, Financial Liability Measured at FVTPL",dur:"1:09:54"},
+  {day:33,id:"33_2",topic:"Ind AS 33 Earnings Per Share",concepts:"Basic EPS, Warrants, Treasury Shares",dur:"0:34:30"},
+  {day:33,id:"33_3",topic:"Ind AS 33 Earnings Per Share",concepts:"Numerator of Basic EPS Calculation, Preference Dividend, Rights issue",dur:"1:18:08"},
+  {day:34,id:"34_1",topic:"Ind AS 33 Earnings Per Share",concepts:"Participating Preference Shares, Diluted EPS",dur:"1:44:54"},
+  {day:34,id:"34_2",topic:"Ind AS 33 Earnings Per Share",concepts:"Sums",dur:"1:15:25"},
+  {day:35,id:"35_1",topic:"Ind AS 33 Earnings Per Share",concepts:"Options/Warrants, Order of Solving Multiple Potential Equity Shares, Presentation of EPS, Written Put Options",dur:"1:18:14"},
+  {day:35,id:"35_2",topic:"Ind AS 33 Earnings Per Share",concepts:"Contingent Shares",dur:"1:25:26"},
+  {day:35,id:"35_3",topic:"Analysis of FS Schedule III",concepts:"Sums",dur:"0:10:38"},
+  {day:36,id:"36_1",topic:"Ind AS 116 Leases",concepts:"Leases, Identified Assets, Substantive Substitution Rights, Right to Control The Use",dur:"1:36:09"},
+  {day:36,id:"36_2",topic:"Ind AS 116 Leases",concepts:"Separation of Lease & Non-Lease Components",dur:"1:19:26"},
+  {day:37,id:"37_1",topic:"Ind AS 116 Leases",concepts:"Inception & Commencement Date, Lease Term, Lease Payments",dur:"1:42:15"},
+  {day:37,id:"37_2",topic:"Ind AS 116 Leases",concepts:"Initial Direct Costs, Discount Rate",dur:"1:18:27"},
+  {day:38,id:"38_1",topic:"Ind AS 116 Leases",concepts:"Accounting In Books of Lessee, Measurement of Lease Liability",dur:"1:31:29"},
+  {day:38,id:"38_2",topic:"Ind AS 116 Leases",concepts:"Re-measurement, Lease Modification - Lessee",dur:"1:27:49"},
+  {day:39,id:"39_1",topic:"Ind AS 116 Leases",concepts:"Steps in Case of Lease Modification, Lessor Accounting, Finance Lease",dur:"1:37:53"},
+  {day:39,id:"39_2",topic:"Ind AS 116 Leases",concepts:"Sums",dur:"1:26:23"},
+  {day:40,id:"40_1",topic:"Ind AS 116 Leases",concepts:"Sub Lease, Lease Modifications - Books of Lessor, Transition Approaches",dur:"1:44:48"},
+  {day:40,id:"40_2",topic:"Ind AS 116 Leases",concepts:"Sale & Lease Back, Gain on Sale",dur:"1:05:18"},
+  {day:41,id:"41_1",topic:"Ind AS 19 Employee Benefits",concepts:"Types, Short Term Benefits, Post Employment Plans, Types of Plan",dur:"1:38:41"},
+  {day:41,id:"41_2",topic:"Ind AS 19 Employee Benefits",concepts:"Defined Benefit Liability Measurement",dur:"0:48:10"},
+  {day:42,id:"42_1",topic:"Ind AS 19 Employee Benefits",concepts:"Defined Benefit Liability Measurement, Plan Assets, Presentation in B/S, Asset Ceiling, Summary",dur:"1:37:30"},
+  {day:42,id:"42_2",topic:"Ind AS 19 Employee Benefits",concepts:"Attribution of Current Service Cost, Termination Benefits (VRS & Retrenchment), Other Long term Benefits",dur:"1:24:42"},
+  {day:43,id:"43_1",topic:"Ind AS 1 Presentation of FS",concepts:"General Features of Financial Statements, Current & Non-Current Classification",dur:"1:24:28"},
+  {day:43,id:"43_2",topic:"Ind AS 1 Presentation of FS",concepts:"Special Cases",dur:"0:49:37"},
+  {day:43,id:"43_3",topic:"Conceptual Framework",concepts:"Intro, Obj of General Purpose Fin. Reporting, Qualitative Characteristics, Elements of FS, Measurements, Presentation & Disclosure",dur:"0:46:19"},
+  {day:44,id:"44_1",topic:"Ind AS 8 Accounting Policies Errors",concepts:"Accounting Policies - Retrospective Application, Errors",dur:"1:45:01"},
+  {day:44,id:"44_2",topic:"Ind AS 8 Accounting Policies Errors",concepts:"Sum",dur:"0:27:59"},
+  {day:44,id:"44_3",topic:"Ind AS 34 Interim Financial Reporting",concepts:"Interim Period, Presentation & Disclosure, Recognition & Measurement, Special cases",dur:"0:43:17"},
+  {day:45,id:"45_1",topic:"Ind AS 34 Interim Financial Reporting",concepts:"Case I - Slab Rates, Case II - Carry Forward Losses, Case III - Losses & Gains in Single Financial Year, Case V - Multiple Year, Integral View",dur:"1:31:53"},
+  {day:45,id:"45_2",topic:"Ind AS 12 Income Taxes",concepts:"Key Terms, Differences, Steps in Deferred Tax Working, Offsetting Principles",dur:"1:19:13"},
+  {day:46,id:"46_1",topic:"Ind AS 12 Income Taxes",concepts:"Tax Rate - Current Tax & Deferred Tax, Exception: Creation of Deferred Tax Asset",dur:"2:00:58"},
+  {day:46,id:"46_2",topic:"Ind AS 12 Income Taxes",concepts:"Deferred Tax & Share Based Payments",dur:"2:04:33"},
+  {day:47,id:"47_1",topic:"Ind AS 12 Income Taxes",concepts:"Deferred Tax on Business Combination, Exception to DTL",dur:"1:39:04"},
+  {day:47,id:"47_2",topic:"Ind AS 12 Income Taxes",concepts:"Sums",dur:"1:30:26"},
+  {day:48,id:"48_1",topic:"Ind AS 103 Business Combination",concepts:"Intro, Key Terms - Business, Assessment as Business, Control, Existing Rights, Practical Ability to Exercise",dur:"1:48:50"},
+  {day:48,id:"48_2",topic:"Ind AS 103 Business Combination",concepts:"Scope Exclusions - Assets Purchase & Joint Arrangements",dur:"0:55:24"},
+  {day:49,id:"49_1",topic:"Ind AS 103 Business Combination",concepts:"Illustration, Acc for Business Combination, Reverse Acquisition, Acquisition Date, Appointed date VS Acquisition date",dur:"1:29:21"},
+  {day:49,id:"49_2",topic:"Ind AS 103 Business Combination",concepts:"Determination of PC, Contingent Consideration, Fair Value of Replacement Awards",dur:"1:27:16"},
+  {day:50,id:"50_1",topic:"Ind AS 103 Business Combination",concepts:"Non Replacement Awards, Calculation of NCI, Goodwill Calculation, Key Points, Deferred Tax Adjustment",dur:"1:39:24"},
+  {day:50,id:"50_2",topic:"Ind AS 103 Business Combination",concepts:"Sums",dur:"1:11:34"},
+  {day:51,id:"51_1",topic:"Ind AS 103 Business Combination",concepts:"Contingent Liability, Indemnification Asset, In-process R&D, Measurement Period",dur:"1:40:27"},
+  {day:51,id:"51_2",topic:"Ind AS 103 Business Combination",concepts:"Components of purchase consideration, Contingent Consideration vs Contingent Payments linked to employee service",dur:"1:26:25"},
+  {day:52,id:"52_1",topic:"Ind AS 103 Business Combination",concepts:"Sum",dur:"0:59:42"},
+  {day:52,id:"52_2",topic:"Ind AS 103 Business Combination",concepts:"Sum",dur:"1:03:14"},
+  {day:52,id:"52_3",topic:"Ind AS 103 Business Combination",concepts:"Sums",dur:"0:58:41"},
+  {day:53,id:"53_1",topic:"Ind AS 103 Business Combination",concepts:"Common Control Combination, Accounting for Common Control Combination",dur:"1:40:02"},
+  {day:53,id:"53_2",topic:"Ind AS 103 Business Combination",concepts:"Demerger, Demerger Accounting",dur:"1:18:20"},
+  {day:54,id:"54_1",topic:"Ind AS 103 Business Combination",concepts:"Sums",dur:"1:38:06"},
+  {day:54,id:"54_2",topic:"Ind AS 103 Business Combination",concepts:"Sums",dur:"1:14:26"},
+  {day:55,id:"55_1",topic:"Ind AS 110 Consolidation",concepts:"Intro, Acc Framework, Full Consolidation Method, Steps in Consolidation Process",dur:"1:36:04"},
+  {day:55,id:"55_2",topic:"Ind AS 110 Consolidation",concepts:"Consolidation Adjustments, Negative NCI, Fair Value Adjustments",dur:"1:27:07"},
+  {day:56,id:"56_1",topic:"Ind AS 110 Consolidation",concepts:"Goodwill Impairment, Unrealized Profits on Inter Company Transactions",dur:"1:27:23"},
+  {day:56,id:"56_2",topic:"Ind AS 110 Consolidation",concepts:"Accounting Rationale - Dividend out of Pre/Post Acquisition Profits, Uniform Acc Policies, Special Cases",dur:"1:25:57"},
+  {day:57,id:"57_1",topic:"Ind AS 110 Consolidation",concepts:"Sums",dur:"1:19:22"},
+  {day:57,id:"57_2",topic:"Ind AS 110 Consolidation",concepts:"Chain Holding - Assessment of Control, Determination of NCI, Acquisition Date, Changes in Consolidation Process",dur:"1:34:47"},
+  {day:58,id:"58_1",topic:"Ind AS 110 Consolidation",concepts:"Inter Company Elimination, Different Reporting Dates, Bonus",dur:"1:46:54"},
+  {day:58,id:"58_2",topic:"Ind AS 110 Consolidation",concepts:"Additional Stake Purchase",dur:"1:04:48"},
+  {day:59,id:"59_1",topic:"Ind AS 110 Consolidation",concepts:"Sums",dur:"1:54:37"},
+  {day:59,id:"59_2",topic:"Ind AS 110 Consolidation",concepts:"Stake Sale",dur:"1:00:46"},
+  {day:60,id:"60_1",topic:"Ind AS 110 Consolidation",concepts:"Stake Sale, Reclassifiable OCI, Non Reclassifiable OCI, Loss of Control in Multiple Transaction",dur:"1:44:13"},
+  {day:60,id:"60_2",topic:"Ind AS 110 Consolidation",concepts:"Exemption from Preparing CFS, Investment Entities",dur:"1:15:59"},
+  {day:61,id:"61_1",topic:"JV & Associates",concepts:"Joint Arrangements, Joint Operation & Joint Ventures",dur:"1:41:04"},
+  {day:61,id:"61_2",topic:"JV & Associates",concepts:"Significant Influence",dur:"1:08:59"},
+  {day:62,id:"62_1",topic:"JV & Associates",concepts:"Equity Method",dur:"1:33:29"},
+  {day:62,id:"62_2",topic:"JV & Associates",concepts:"Sums",dur:"1:16:34"},
+  {day:63,id:"63_1",topic:"JV & Associates",concepts:"Exceptions to equity method - investment entities, Investment in SFS",dur:"1:53:22"},
+  {day:63,id:"63_2",topic:"JV & Associates",concepts:"Long-Term Interests in associate/JV apart from equity, Loss making associate/JV",dur:"0:31:48"},
+  {day:63,id:"63_3",topic:"Ind AS 21 Forex",concepts:"Types of Currencies",dur:"0:36:59"},
+  {day:64,id:"64_1",topic:"Ind AS 21 Forex",concepts:"Conversion Principles, Monetary Items, Non-Monetary Items, Forex gain or loss",dur:"1:32:15"},
+  {day:64,id:"64_2",topic:"Ind AS 21 Forex",concepts:"Foreign Operation, Translation Principles",dur:"1:30:11"},
+  {day:65,id:"65_1",topic:"Ind AS 21 Forex",concepts:"Changes in consolidation process for foreign subsidiaries, Additional consolidation adjustments",dur:"1:27:26"},
+  {day:65,id:"65_2",topic:"Ind AS 21 Forex",concepts:"Additional consolidation adjustments, Disposal of Net Investment in Subsidiary, Additional Points",dur:"1:20:56"},
+  {day:66,id:"66_1",topic:"Ind AS 115 Revenue",concepts:"Intro, Core Principle, Step 1 - Identifying the contract, Step 2 - Identifying performance obligations",dur:"1:37:49"},
+  {day:66,id:"66_2",topic:"Ind AS 115 Revenue",concepts:"Special Points, Step 3 - Transaction Price, Variable consideration, Constraints on variable consideration",dur:"1:18:36"},
+  {day:67,id:"67_1",topic:"Ind AS 115 Revenue",concepts:"Sales with right of returns, Warranties, Significant Financing Component",dur:"1:35:30"},
+  {day:67,id:"67_2",topic:"Ind AS 115 Revenue",concepts:"Non-cash consideration (Barter), Change in fair value of consideration, Consideration payable to customer",dur:"1:26:25"},
+  {day:68,id:"68_1",topic:"Ind AS 115 Revenue",concepts:"Allocation of transaction price to Performance Obligation, Standalone Selling Price",dur:"1:38:24"},
+  {day:68,id:"68_2",topic:"Ind AS 115 Revenue",concepts:"Sums",dur:"1:22:52"},
+  {day:69,id:"69_1",topic:"Ind AS 115 Revenue",concepts:"Revenue recognition as performance obligations satisfied, Transfer of Control, Progress",dur:"1:28:12"},
+  {day:69,id:"69_2",topic:"Ind AS 115 Revenue",concepts:"Sale & Repurchase Agreements",dur:"1:30:20"},
+  {day:70,id:"70_1",topic:"Ind AS 115 Revenue",concepts:"Bill & Hold, License of Intellectual Property, Service Concessions, Contract Cost",dur:"1:34:26"},
+  {day:70,id:"70_2",topic:"Ind AS 115 Revenue",concepts:"Contract Modification",dur:"1:09:56"},
+  {day:71,id:"71_1",topic:"Ind AS 7 Cash Flows Statement",concepts:"Cash Equivalents, Bank Overdraft, Cash Flow Statement",dur:"0:54:41"},
+  {day:71,id:"71_2",topic:"Ind AS 7 Cash Flows Statement",concepts:"Indirect Method",dur:"2:07:14"},
+  {day:71,id:"71_3",topic:"Ind AS 7 Cash Flows Statement",concepts:"Sums",dur:"0:55:33"},
+  {day:72,id:"72_1",topic:"Ind AS 101 First Time Adoption",concepts:"Key, Applicability, Mandatory Exceptions & Optional Exemptions, Share Based Payments (ESOP)",dur:"1:26:15"},
+  {day:72,id:"72_2",topic:"Ind AS 101 First Time Adoption",concepts:"Foreign Exchange Rates, PPE/Intangible/Investment in Subsidiary/Associate/JV (SFS), Compound Financial Instruments",dur:"1:26:54"},
+  {day:73,id:"73_1",topic:"Ind AS 101 First Time Adoption",concepts:"Business Combinations, Non-Controlling Interests, Government Loans At Below Market Rates, Measurement of Financial Instruments, Estimates",dur:"2:50:47"},
+  {day:73,id:"73_2",topic:"Ind AS 24 Related Party Disclosures",concepts:"Related Party Disclosures",dur:"2:23:39"},
+  {day:74,id:"74_1",topic:"Professional and Ethical Duty of CA",concepts:"Misconduct, Code of Ethics, Relevant Schedules, CA in Service",dur:"1:58:23"},
+  {day:74,id:"74_2",topic:"Accounting & Technology",concepts:"History & Evolution, Automation Process, Cloud Computing, Cyber Security, ERP, ICOFR, Block Chain, AI, Ind AS & IT",dur:"1:49:56"},
+  {day:74,id:"74_3",topic:"Analysis of FS & Schedule III",concepts:"Important Points in Schedule III, Amendments in Schedule III",dur:"0:23:03"},
+];
+
+const FR_REV_CHAPTERS=[
+  {chapter:"Conceptual Framework 2018",std:"CF"},
+  {chapter:"Ind AS 1 – Presentation of Financial Statements",std:"Ind AS 1"},
+  {chapter:"Ind AS 8 – Accounting Policies, Estimates & Errors",std:"Ind AS 8"},
+  {chapter:"Ind AS 10 – Events After Reporting Period",std:"Ind AS 10"},
+  {chapter:"Ind AS 34 – Interim Financial Reporting",std:"Ind AS 34"},
+  {chapter:"Ind AS 24 – Related Party Disclosures",std:"Ind AS 24"},
+  {chapter:"Ind AS 33 – Earnings Per Share",std:"Ind AS 33"},
+  {chapter:"Ind AS 16 – Property, Plant & Equipment",std:"Ind AS 16"},
+  {chapter:"Ind AS 23 – Borrowing Costs",std:"Ind AS 23"},
+  {chapter:"Ind AS 38 – Intangible Assets",std:"Ind AS 38"},
+  {chapter:"Ind AS 40 – Investment Property",std:"Ind AS 40"},
+  {chapter:"Ind AS 41 – Agriculture",std:"Ind AS 41"},
+  {chapter:"Ind AS 105 – Non-Current Assets Held for Sale & Discontinued Operations",std:"Ind AS 105"},
+  {chapter:"Ind AS 36 – Impairment of Assets",std:"Ind AS 36"},
+  {chapter:"Ind AS 37 – Provisions, Contingent Liabilities & Assets",std:"Ind AS 37"},
+  {chapter:"Ind AS 2 – Inventories",std:"Ind AS 2"},
+  {chapter:"Financial Instruments – Definition & Classification (Ind AS 32/109/107)",std:"FI"},
+  {chapter:"Financial Instruments – Measurement & EIR",std:"FI"},
+  {chapter:"Financial Instruments – Derecognition",std:"FI"},
+  {chapter:"Financial Instruments – Impairment / ECL",std:"FI"},
+  {chapter:"Financial Instruments – Hedge Accounting",std:"FI"},
+  {chapter:"Financial Instruments – Compound & Special Cases",std:"FI"},
+  {chapter:"Ind AS 115 – Revenue Recognition (Steps 1–3)",std:"Ind AS 115"},
+  {chapter:"Ind AS 115 – Revenue Recognition (Steps 4–5, Variable Consideration)",std:"Ind AS 115"},
+  {chapter:"Ind AS 115 – Special Cases (B&H, Licences, Repurchase)",std:"Ind AS 115"},
+  {chapter:"Ind AS 115 – Contract Modifications",std:"Ind AS 115"},
+  {chapter:"Ind AS 116 – Leases (Lessee Accounting)",std:"Ind AS 116"},
+  {chapter:"Ind AS 116 – Leases (Lease Modifications, Sale & Leaseback)",std:"Ind AS 116"},
+  {chapter:"Ind AS 116 – Leases (Lessor Accounting)",std:"Ind AS 116"},
+  {chapter:"Ind AS 19 – Employee Benefits (Short-term & Post-employment)",std:"Ind AS 19"},
+  {chapter:"Ind AS 19 – Employee Benefits (Defined Benefit Plans)",std:"Ind AS 19"},
+  {chapter:"Ind AS 102 – Share Based Payments",std:"Ind AS 102"},
+  {chapter:"Ind AS 12 – Income Taxes (Current & Deferred Tax)",std:"Ind AS 12"},
+  {chapter:"Ind AS 12 – Deferred Tax on Business Combinations",std:"Ind AS 12"},
+  {chapter:"Ind AS 20 – Government Grants",std:"Ind AS 20"},
+  {chapter:"Ind AS 21 – Foreign Currency Translation",std:"Ind AS 21"},
+  {chapter:"Ind AS 21 – Foreign Operations (CFS Translation)",std:"Ind AS 21"},
+  {chapter:"Ind AS 113 – Fair Value Measurement",std:"Ind AS 113"},
+  {chapter:"Ind AS 108 – Operating Segments",std:"Ind AS 108"},
+  {chapter:"Ind AS 103 – Business Combinations (Acquisition Method)",std:"Ind AS 103"},
+  {chapter:"Ind AS 103 – Goodwill, NCI, Contingent Consideration",std:"Ind AS 103"},
+  {chapter:"Ind AS 103 – Common Control Combinations & Demergers",std:"Ind AS 103"},
+  {chapter:"Ind AS 110 – Consolidation (Basic Procedure & Adjustments)",std:"Ind AS 110"},
+  {chapter:"Ind AS 110 – Step Acquisition, Stake Sale, Loss of Control",std:"Ind AS 110"},
+  {chapter:"Ind AS 110 – Investment Entities, Exemptions",std:"Ind AS 110"},
+  {chapter:"Ind AS 28/111 – Associates, Joint Ventures & Equity Method",std:"Ind AS 28"},
+  {chapter:"Ind AS 27/112 – Separate FS & Disclosure of Interests",std:"Ind AS 27"},
+  {chapter:"Ind AS 101 – First Time Adoption",std:"Ind AS 101"},
+  {chapter:"Ind AS 7 – Cash Flow Statement",std:"Ind AS 7"},
+  {chapter:"Analysis of FS & Schedule III",std:"Sch III"},
+  {chapter:"Professional & Ethical Duty of CA",std:"Ethics"},
+  {chapter:"Accounting & Technology",std:"A&T"},
+];
+
+const EXAM_DATES={
+  fr:{date:"2027-05-03",label:"Paper 1 – Financial Reporting"},
+  afm:{date:"2027-05-05",label:"Paper 2 – Advanced Financial Management"},
+  aaa:{date:"2027-05-07",label:"Paper 3 – Advanced Auditing & Assurance"},
+  dt:{date:"2027-05-10",label:"Paper 4 – Direct Tax Laws"},
+  idt:{date:"2027-05-12",label:"Paper 5 – Indirect Tax Laws"},
+  ibs:{date:"2027-05-14",label:"Paper 6 – Integrated Business Solutions"},
+};
+
+const LECTURE_SOURCES=["ICAI Videos","Pendrive Classes","YouTube","Coaching Live","Self Study","Tutor Batch","Other"];
+const REV_STATUSES=["Not Started","In Progress","Completed","Stuck"];
+const CONFIDENCE=[1,2,3,4,5];
+
+/* ═══ UTILS ═══ */
+const toFlat=(subject)=>{const out=[];subject.units.forEach(u=>u.chapters.forEach(ch=>out.push(ch)));return out;};
+const allChapters=(subject)=>toFlat(subject);
+const totalChapterCount=()=>SUBJECTS.reduce((a,s)=>a+allChapters(s).length,0);
+const daysUntil=d=>{const t=new Date(d);t.setHours(0,0,0,0);const n=new Date();n.setHours(0,0,0,0);return Math.max(0,Math.ceil((t-n)/86400000));};
+const daysSince=d=>{if(!d)return null;const dt=new Date(d);dt.setHours(0,0,0,0);const n=new Date();n.setHours(0,0,0,0);return Math.max(0,Math.round((n-dt)/86400000));};
+const today=()=>new Date().toISOString().slice(0,10);
+const fmtDate=d=>{try{return new Date(d+"T00:00:00").toLocaleDateString("en-IN",{day:"numeric",month:"short"});}catch{return d;}};
+
+let SUBJECTS=ALL_SUBJECTS;
+
+/* flat chapter index for storage keys */
+const chKey=(sid,flatIdx,type)=>`${sid}_${flatIdx}_${type}`;
+
+/* ═══ STORAGE ═══ */
+const STORE_KEY="ca_v3";
+const LSTORE_KEY="ca_lec_v3";
+const defLec=()=>({status:"Not Started",progress:0,source:"",notes:"",updated:""});
+const defRev=()=>({status:"Not Started",confidence:0,notes:"",revDates:[],updated:""});
+
+function profileStorageKey(base){
+  try{
+    const p=JSON.parse(localStorage.getItem("ca_user_profile")||"null");
+    if(!p||!p.name)return base+"__new_user";
+    const identity=(p.name+"_"+(p.attempt||"unspecified")).toLowerCase().replace(/[^a-z0-9]+/g,"_").replace(/^_+|_+$/g,"")||"user";
+    const target=base+"__"+identity;
+    // One-time migration: keep the existing profile's data in its current attempt.
+    // The migration marker prevents old data being copied into every later attempt.
+    if(p.storageId){
+      const legacy=base+"__"+p.storageId;
+      const marker="ca_attempt_migration_v1__"+base+"__"+p.storageId;
+      if(!localStorage.getItem(marker)){
+        if(!localStorage.getItem(target)&&localStorage.getItem(legacy)!==null)localStorage.setItem(target,localStorage.getItem(legacy));
+        localStorage.setItem(marker,"1");
+      }
+    }
+    return target;
+  }catch{return base+"__new_user";}
+}
+function loadStore(){
+  try{
+    const s=localStorage.getItem(profileStorageKey(STORE_KEY));
+    if(!s)return null;
+    const data=JSON.parse(s);
+    // DT/IDT chapter indices changed for the May 2027 ICAI syllabus.
+    // Drop only legacy chapter-status keys so old chapter progress is not assigned to new chapters.
+    if(data.revData)for(const k of Object.keys(data.revData))if(/^(dt|idt)_\d+_rev$/.test(k))delete data.revData[k];
+    return data;
+  }catch{return null;}
+}
+function saveStore(v){try{localStorage.setItem(profileStorageKey(STORE_KEY),JSON.stringify(v));}catch{}}
+function loadLec(){
+  try{
+    const s=localStorage.getItem(profileStorageKey(LSTORE_KEY));
+    const data=s?JSON.parse(s):{};
+    // Keep lecture progress for other papers; rebuild DT/IDT against the revised chapter list.
+    for(const k of Object.keys(data))if(/^(dt|idt)_\d+_lec$/.test(k))delete data[k];
+    return data;
+  }catch{return {};}
+}
+function saveLec(v){try{localStorage.setItem(profileStorageKey(LSTORE_KEY),JSON.stringify(v));}catch{}}
+
+function initRevData(){
+  const d={};
+  SUBJECTS.forEach(s=>allChapters(s).forEach((_,i)=>{d[chKey(s.id,i,"rev")]=defRev();}));
+  return d;
+}
+function initLecData(){
+  const d={};
+  SUBJECTS.forEach(s=>allChapters(s).forEach((_,i)=>{d[chKey(s.id,i,"lec")]=defLec();}));
+  return d;
+}
+
+/* ═══ SHARED UI ═══ */
+const PBar=({value,color,h=6})=>{
+  const p=Math.min(100,Math.max(0,value||0));
+  return <div style={{width:"100%",height:h,background:"var(--surface3)",borderRadius:99,overflow:"hidden"}}>
+    <div style={{width:`${p}%`,height:"100%",background:color,borderRadius:99,transition:"width 0.5s ease"}}/>
+  </div>;
+};
+const PRing=({pct,color,size=72,stroke=6})=>{
+  const r=(size-stroke)/2,circ=2*Math.PI*r,off=circ-((pct||0)/100)*circ;
+  return <div style={{position:"relative",width:size,height:size,flexShrink:0}}>
+    <svg width={size} height={size} style={{transform:"rotate(-90deg)"}}>
+      <circle cx={size/2} cy={size/2} r={r} fill="none" stroke="rgba(255,255,255,0.07)" strokeWidth={stroke}/>
+      <circle cx={size/2} cy={size/2} r={r} fill="none" stroke={color} strokeWidth={stroke} strokeDasharray={circ} strokeDashoffset={off} strokeLinecap="round" style={{transition:"stroke-dashoffset 0.6s ease"}}/>
+    </svg>
+    <div style={{position:"absolute",inset:0,display:"flex",alignItems:"center",justifyContent:"center"}}>
+      <span style={{color,fontSize:size*0.2,fontWeight:900,fontFamily:"'JetBrains Mono',monospace"}}>{pct||0}%</span>
+    </div>
+  </div>;
+};
+const Tag=({children,color,bg})=><span style={{background:bg||`${color}20`,color,borderRadius:20,padding:"2px 9px",fontSize:10,fontWeight:700,whiteSpace:"nowrap"}}>{children}</span>;
+const Btn=({children,onClick,color="#818cf8",outline,sm,style:st})=>{
+  const base={border:"none",borderRadius:8,fontFamily:"inherit",fontWeight:700,cursor:"pointer",transition:"all 0.15s",...(sm?{padding:"5px 12px",fontSize:11}:{padding:"9px 18px",fontSize:13}),...(outline?{background:"transparent",border:`1.5px solid ${color}44`,color}:{background:color,color:"#fff",boxShadow:`0 4px 14px ${color}33`}),...st};
+  return <button onClick={onClick} style={base}>{children}</button>;
+};
+
+/* ═══ POMODORO ═══ */
+function Pomodoro({onClose}){
+  const T={focus:25*60,break:5*60,long:15*60};
+  const [mode,setMode]=useState("focus");
+  const [secs,setSecs]=useState(T.focus);
+  const [running,setRunning]=useState(false);
+  const [sessions,setSessions]=useState(0);
+  const ref=useRef();
+  useEffect(()=>{
+    if(running){ref.current=setInterval(()=>setSecs(s=>{if(s<=1){clearInterval(ref.current);setRunning(false);if(mode==="focus")setSessions(p=>p+1);return 0;}return s-1;}),1000);}
+    return()=>clearInterval(ref.current);
+  },[running,mode]);
+  const sw=m=>{clearInterval(ref.current);setRunning(false);setMode(m);setSecs(T[m]);};
+  const mm=String(Math.floor(secs/60)).padStart(2,"0"),ss=String(secs%60).padStart(2,"0");
+  const colors={focus:"#818cf8",break:"#34d399",long:"#fbbf24"};
+  const c=colors[mode];
+  const r=70,circ=2*Math.PI*r,off=circ*(1-(1-secs/T[mode]));
+  return <div onClick={onClose} style={{position:"fixed",inset:0,background:"rgba(0,0,0,0.8)",zIndex:3000,display:"flex",alignItems:"center",justifyContent:"center",backdropFilter:"blur(8px)"}}>
+    <div onClick={e=>e.stopPropagation()} style={{background:"var(--surface)",border:"1px solid var(--border2)",borderRadius:24,padding:"32px 36px",maxWidth:340,width:"100%",textAlign:"center",boxShadow:"var(--shadow-lg)",animation:"slideUp 0.2s ease"}}>
+      <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:20}}>
+        <span style={{fontWeight:800,fontSize:17,color:"var(--text)"}}>⏱ Pomodoro</span>
+        <button onClick={onClose} style={{background:"var(--surface2)",border:"none",borderRadius:8,width:30,height:30,cursor:"pointer",color:"var(--text2)",fontSize:16}}>×</button>
+      </div>
+      <div style={{display:"flex",gap:6,justifyContent:"center",marginBottom:24}}>
+        {[["focus","🎯 Focus"],["break","☕ Break"],["long","🛌 Long"]].map(([m,l])=>(
+          <button key={m} onClick={()=>sw(m)} style={{background:mode===m?c:"rgba(255,255,255,0.05)",color:mode===m?"#fff":"#64748b",border:`1px solid ${mode===m?c:"rgba(255,255,255,0.08)"}`,borderRadius:9,padding:"5px 12px",fontSize:11,fontWeight:700,cursor:"pointer"}}>{l}</button>
+        ))}
+      </div>
+      <div style={{position:"relative",width:160,height:160,margin:"0 auto 24px"}}>
+        <svg width="160" height="160" style={{transform:"rotate(-90deg)"}}>
+          <circle cx="80" cy="80" r={r} fill="none" stroke="rgba(255,255,255,0.06)" strokeWidth="8"/>
+          <circle cx="80" cy="80" r={r} fill="none" stroke={c} strokeWidth="8" strokeDasharray={circ} strokeDashoffset={off} strokeLinecap="round" style={{transition:"stroke-dashoffset 0.5s",filter:`drop-shadow(0 0 8px ${c}88)`}}/>
+        </svg>
+        <div style={{position:"absolute",inset:0,display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center"}}>
+          <div style={{fontSize:40,fontWeight:900,color:c,fontFamily:"'JetBrains Mono',monospace",lineHeight:1}}>{mm}:{ss}</div>
+          <div style={{fontSize:10,color:"var(--text2)",marginTop:4}}>{mode==="focus"?"Deep Focus":mode==="break"?"Rest":"Long Rest"}</div>
+        </div>
+      </div>
+      <div style={{display:"flex",gap:8,justifyContent:"center",marginBottom:14}}>
+        <button onClick={()=>setRunning(p=>!p)} style={{background:c,color:"#fff",border:"none",borderRadius:12,padding:"11px 32px",fontSize:14,fontWeight:800,cursor:"pointer",boxShadow:`0 4px 16px ${c}44`}}>{running?"⏸ Pause":"▶ Start"}</button>
+        <button onClick={()=>sw(mode)} style={{background:"var(--surface2)",border:"1px solid var(--border2)",borderRadius:12,padding:"11px 14px",fontSize:14,cursor:"pointer",color:"var(--text2)"}}>↺</button>
+      </div>
+      <div style={{background:`${c}18`,border:`1px solid ${c}33`,borderRadius:10,padding:"8px",fontSize:13,color:c,fontWeight:700}}>🍅 {sessions} sessions today</div>
+    </div>
+  </div>;
+}
+
+/* ═══ NOTES MODAL ═══ */
+function NotesModal({title,value,onSave,onClose}){
+  const [v,setV]=useState(value||"");
+  return <div onClick={onClose} style={{position:"fixed",inset:0,background:"rgba(0,0,0,0.75)",zIndex:3000,display:"flex",alignItems:"center",justifyContent:"center",padding:16,backdropFilter:"blur(8px)"}}>
+    <div onClick={e=>e.stopPropagation()} style={{background:"var(--surface)",border:"1px solid var(--border2)",borderRadius:20,padding:24,maxWidth:520,width:"100%",boxShadow:"var(--shadow-lg)",animation:"slideUp 0.2s ease"}}>
+      <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:14}}>
+        <div style={{fontWeight:700,fontSize:14,color:"var(--text)"}}>{title}</div>
+        <button onClick={onClose} style={{background:"var(--surface2)",border:"none",borderRadius:8,width:30,height:30,cursor:"pointer",color:"var(--text2)",fontSize:16}}>×</button>
+      </div>
+      <textarea autoFocus value={v} onChange={e=>setV(e.target.value)} placeholder="Key points, formulas, exam tricks, doubts…" style={{width:"100%",minHeight:150,background:"var(--surface2)",border:"1px solid var(--border2)",borderRadius:10,color:"var(--text)",padding:"12px",fontSize:13,lineHeight:1.7,resize:"vertical"}}/>
+      <div style={{display:"flex",gap:8,marginTop:12,justifyContent:"flex-end"}}>
+        <Btn onClick={onClose} outline color="#94a3b8">Cancel</Btn>
+        <Btn onClick={()=>{onSave(v);onClose();}} color="#818cf8">Save Notes</Btn>
+      </div>
+    </div>
+  </div>;
+}
+
+/* ═══════════════════════════════════════
+   WORLD A: LECTURES
+═══════════════════════════════════════ */
+function LecturesWorld({lectures,setLectures,frLec,setFrLec}){
+  const [activeSub,setActiveSub]=useState(SUBJECTS[0].id);
+  const [notesModal,setNotesModal]=useState(null);
+  const [filter,setFilter]=useState("all");
+  const [frSearch,setFrSearch]=useState("");
+  const subj=SUBJECTS.find(s=>s.id===activeSub)||SUBJECTS[0];
+  const chs=allChapters(subj);
+
+  const getLec=(sid,i)=>{const k=chKey(sid,i,"lec");return lectures[k]||defLec();};
+  const patchLec=(sid,i,upd)=>{
+    const k=chKey(sid,i,"lec");
+    const cur=lectures[k]||defLec();
+    const merged={...cur,...upd,updated:today()};
+    if(upd.progress===100)merged.status="Completed";
+    else if(upd.progress>0&&merged.status==="Not Started")merged.status="In Progress";
+    if(upd.status==="Completed")merged.progress=100;
+    setLectures(p=>({...p,[k]:merged}));
+  };
+  const subStats=(sid)=>{
+    const c2=allChapters(SUBJECTS.find(s=>s.id===sid));
+    const comp=c2.filter((_,i)=>getLec(sid,i).status==="Completed").length;
+    const inProg=c2.filter((_,i)=>getLec(sid,i).status==="In Progress").length;
+    return{comp,inProg,total:c2.length,pct:Math.round(comp/c2.length*100)};
+  };
+  const overall=SUBJECTS.reduce((a,s)=>{const st=subStats(s.id);return{comp:a.comp+st.comp,total:a.total+st.total};},{comp:0,total:0});
+  const overallPct=overall.total?Math.round(overall.comp/overall.total*100):0;
+
+  // FR helpers
+  const FR_STATUSES=["⏳ Pending","🔄 In Progress","✅ Done","📝 Revision Due","⭐ Important"];
+  const frSC={"✅ Done":"#34d399","🔄 In Progress":"#fbbf24","⏳ Pending":"var(--text3)","📝 Revision Due":"#818cf8","⭐ Important":"#f87171"};
+  const getFrL=(id)=>frLec[id]||{status:"⏳ Pending",dateWatched:"",rev1:"",notes:""};
+  const patchFrL=(id,upd)=>setFrLec(p=>({...p,[id]:{...getFrL(id),...upd}}));
+  const frDone=FR_LECTURES.filter(l=>getFrL(l.id).status==="✅ Done").length;
+  const frTotal=FR_LECTURES.length;
+  const isFR=activeSub==="fr";
+
+  const wColors={High:"#fbbf24",Medium:"#a78bfa",Low:"#34d399"};
+  const sColors={Completed:"#34d399","In Progress":"#fbbf24","Not Started":"var(--text3)"};
+
+  const markAllDone=()=>{
+    if(isFR){const u={};FR_LECTURES.forEach(l=>{u[l.id]={...getFrL(l.id),status:"✅ Done",dateWatched:getFrL(l.id).dateWatched||today()};});setFrLec(p=>({...p,...u}));}
+    else{const u={};chs.forEach((_,i)=>{u[chKey(activeSub,i,"lec")]={...defLec(),status:"Completed",progress:100,updated:today()};});setLectures(p=>({...p,...u}));}
+  };
+
+  // Non-FR units
+  const displayUnits=!isFR?subj.units.map(u=>{
+    let c2=u.chapters;
+    if(filter==="pending")c2=u.chapters.filter(ch=>{const gi=chs.indexOf(ch);return getLec(activeSub,gi).status!=="Completed";});
+    if(filter==="inprog")c2=u.chapters.filter(ch=>{const gi=chs.indexOf(ch);return getLec(activeSub,gi).status==="In Progress";});
+    if(filter==="done")c2=u.chapters.filter(ch=>{const gi=chs.indexOf(ch);return getLec(activeSub,gi).status==="Completed";});
+    if(filter==="high")c2=u.chapters.filter(c=>c.w==="High");
+    return{...u,chapters:c2};
+  }).filter(u=>u.chapters.length>0):[];
+
+  // FR filtered + grouped
+  const frTopics=[...new Set(FR_LECTURES.map(l=>l.topic))];
+  const frFiltered=FR_LECTURES.filter(l=>{
+    const e=getFrL(l.id);
+    if(filter==="done")return e.status==="✅ Done";
+    if(filter==="pending")return e.status==="⏳ Pending";
+    if(filter==="inprog")return e.status==="🔄 In Progress";
+    if(frSearch)return l.topic.toLowerCase().includes(frSearch.toLowerCase())||l.concepts.toLowerCase().includes(frSearch.toLowerCase())||String(l.day).includes(frSearch);
+    return true;
+  });
+  const frGrouped=frTopics.map(t=>({topic:t,lecs:frFiltered.filter(l=>l.topic===t)})).filter(g=>g.lecs.length>0);
+
+  return <div style={{animation:"slideUp 0.2s ease"}}>
+    {notesModal&&<NotesModal title={`Notes — ${notesModal.name}`} value={notesModal.val} onSave={v=>isFR?patchFrL(notesModal.id,{notes:v}):patchLec(activeSub,notesModal.i,{notes:v})} onClose={()=>setNotesModal(null)}/>}
+
+    {/* Top bar */}
+    <div style={{background:"linear-gradient(135deg,rgba(244,114,182,0.15),rgba(244,114,182,0.05))",border:"1px solid rgba(244,114,182,0.25)",borderRadius:16,padding:"20px 24px",marginBottom:20}}>
+      <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",flexWrap:"wrap",gap:12}}>
+        <div>
+          <div style={{color:"#f472b6",fontSize:10,fontWeight:700,textTransform:"uppercase",letterSpacing:2,marginBottom:4}}>🎬 Lectures World</div>
+          <div style={{color:"var(--text)",fontSize:20,fontWeight:800}}>{isFR?"FR — Bhavik Chokshi (FR 10 Exam Oriented)":"Track Your Video Lectures"}</div>
+          <div style={{color:"var(--text2)",fontSize:12,marginTop:4}}>{isFR?`74 Days · ${frTotal} Sub-lectures · ${frDone} done`:"Complete all lectures before moving to Revision World"}</div>
+        </div>
+        <div style={{display:"flex",alignItems:"center",gap:20}}>
+          <PRing pct={isFR?Math.round(frDone/frTotal*100):overallPct} color="#f472b6" size={80}/>
+          <div style={{textAlign:"right"}}>
+            <div style={{color:"#f472b6",fontSize:28,fontWeight:900,fontFamily:"'JetBrains Mono',monospace"}}>{isFR?frDone:overall.comp}</div>
+            <div style={{color:"var(--text2)",fontSize:12}}>of {isFR?frTotal:overall.total} {isFR?"lectures":"chapters"} done</div>
+          </div>
+        </div>
+      </div>
+      <div style={{marginTop:14}}><PBar value={isFR?Math.round(frDone/frTotal*100):overallPct} color="#f472b6" h={8}/></div>
+    </div>
+
+    {/* Subject pills */}
+    <div style={{display:"flex",gap:8,flexWrap:"wrap",marginBottom:16}}>
+      {SUBJECTS.map(s=>{
+        const st=subStats(s.id);
+        const active=activeSub===s.id;
+        const pct=s.id==="fr"?Math.round(frDone/frTotal*100):st.pct;
+        const label=s.id==="fr"?`${pct}% · ${frDone}/${frTotal} lec`:`${pct}% · ${st.comp}/${st.total}`;
+        return <button key={s.id} onClick={()=>{setActiveSub(s.id);setFilter("all");setFrSearch("");}} style={{display:"flex",alignItems:"center",gap:8,background:active?`${s.color}20`:"var(--surface)",border:`${active?2:1}px solid ${active?s.color:s.color+"30"}`,borderRadius:12,padding:"10px 16px",cursor:"pointer",transition:"all 0.15s",flexShrink:0}}>
+          <span style={{fontSize:16}}>{s.emoji}</span>
+          <div style={{textAlign:"left"}}>
+            <div style={{color:active?s.color:"var(--text2)",fontSize:12,fontWeight:700}}>{s.short}</div>
+            <div style={{color:"var(--text3)",fontSize:10}}>{label}</div>
+          </div>
+          <PRing pct={pct} color={s.color} size={32} stroke={3}/>
+        </button>;
+      })}
+    </div>
+
+    {/* Controls bar */}
+    <div className="card" style={{padding:"12px 16px",marginBottom:14,display:"flex",alignItems:"center",gap:10,flexWrap:"wrap"}}>
+      {isFR
+        ?<input value={frSearch} onChange={e=>setFrSearch(e.target.value)} placeholder="Search topic / concept / day…" style={{flex:1,minWidth:160,background:"var(--surface2)",border:"1px solid var(--border)",borderRadius:8,padding:"7px 12px",fontSize:12,color:"var(--text)"}}/>
+        :<><span style={{fontSize:22}}>{subj.emoji}</span>
+          <div style={{flex:1}}>
+            <div style={{color:subj.color,fontSize:11,fontWeight:700,textTransform:"uppercase",letterSpacing:1.5}}>{subj.short} — Group {subj.group}, Paper {subj.paper}</div>
+            <div style={{color:"var(--text)",fontSize:14,fontWeight:700}}>{subj.name}</div>
+          </div></>
+      }
+      <div style={{display:"flex",background:"var(--surface2)",border:"1px solid var(--border)",borderRadius:9,overflow:"hidden"}}>
+        {(isFR?[["all","All"],["done","✅"],["inprog","🔄"],["pending","⏳"]]:
+                [["all","All"],["high","⭐ High"],["pending","Pending"],["inprog","Active"],["done","Done"]]).map(([v,l])=>(
+          <button key={v} onClick={()=>setFilter(v)} style={{background:filter===v?"var(--border2)":"transparent",border:"none",color:filter===v?"var(--text)":"var(--text3)",padding:"6px 11px",fontSize:11,fontWeight:700,cursor:"pointer"}}>{l}</button>
+        ))}
+      </div>
+      <Btn onClick={markAllDone} color={isFR?"#818cf8":subj.color} sm>✓ All Done</Btn>
+    </div>
+
+    {/* FR view: grouped by standard/topic */}
+    {isFR&&frGrouped.map((g,gi)=>{
+      const tDone=FR_LECTURES.filter(l=>l.topic===g.topic&&getFrL(l.id).status==="✅ Done").length;
+      const tTotal=FR_LECTURES.filter(l=>l.topic===g.topic).length;
+      return <div key={gi} className="card" style={{marginBottom:12,overflow:"hidden"}}>
+        <div style={{padding:"10px 16px",background:"var(--surface2)",borderBottom:"1px solid var(--border)",display:"flex",alignItems:"center",gap:8}}>
+          <label style={{display:"flex",alignItems:"center",gap:8,flex:1,cursor:"pointer",color:"#818cf8",fontSize:11,fontWeight:800,textTransform:"uppercase",letterSpacing:1}}>
+            <input type="checkbox" aria-label={`Mark chapter ${g.topic} completed`} checked={tDone===tTotal&&tTotal>0} onChange={ev=>{const checked=ev.target.checked;const updates={};FR_LECTURES.filter(x=>x.topic===g.topic).forEach(x=>{updates[x.id]={...getFrL(x.id),status:checked?"✅ Done":"⏳ Pending",dateWatched:checked?(getFrL(x.id).dateWatched||today()):""};});setFrLec(p=>({...p,...updates}));}} style={{accentColor:"#34d399",width:15,height:15,flexShrink:0,cursor:"pointer"}}/>
+            {g.topic}
+          </label>
+          <span style={{color:"var(--text3)",fontSize:10}}>{tDone}/{tTotal}</span>
+          <div style={{width:60}}><PBar value={Math.round(tDone/tTotal*100)} color="#818cf8" h={4}/></div>
+        </div>
+        <div style={{display:"grid",gridTemplateColumns:"38px 58px 1fr 48px 106px 106px 44px 42px",padding:"5px 12px",fontSize:9,fontWeight:700,textTransform:"uppercase",letterSpacing:1,color:"var(--text3)",borderBottom:"1px solid var(--border)"}}>
+          <div>Day</div><div>ID</div><div>Concepts</div><div>Dur</div><div style={{textAlign:"center"}}>Status</div><div style={{textAlign:"center"}}>Date Watched</div><div style={{textAlign:"center"}}>Rev1</div><div style={{textAlign:"center"}}>Notes</div>
+        </div>
+        {g.lecs.map(l=>{
+          const e=getFrL(l.id);
+          const done=e.status==="✅ Done";
+          const imp=e.status==="⭐ Important";
+          return <div key={l.id} style={{display:"grid",gridTemplateColumns:"38px 58px 1fr 48px 106px 106px 44px 42px",padding:"7px 12px",borderBottom:"1px solid var(--border)",alignItems:"center",background:done?"rgba(52,211,153,0.03)":imp?"rgba(248,113,113,0.03)":"transparent"}}>
+            <div style={{color:"var(--text3)",fontSize:10,fontFamily:"'JetBrains Mono',monospace"}}>D{l.day}</div>
+            <div style={{color:"#818cf8",fontSize:10,fontWeight:700}}>{l.id}</div>
+            <div style={{display:"flex",alignItems:"flex-start",gap:6,color:done?"var(--text3)":"var(--text)",fontSize:11,lineHeight:1.3,textDecoration:done?"line-through":"none",paddingRight:6}}><span>{l.concepts}</span></div>
+            <div style={{color:"var(--text3)",fontSize:10,fontFamily:"'JetBrains Mono',monospace"}}>{l.dur}</div>
+            <select value={e.status} onChange={ev=>patchFrL(l.id,{status:ev.target.value})} style={{background:"transparent",border:`1px solid ${frSC[e.status]||"var(--border)"}55`,borderRadius:6,color:frSC[e.status]||"var(--text2)",padding:"3px 4px",fontSize:10,fontWeight:700,cursor:"pointer",width:"100%"}}>
+              {FR_STATUSES.map(s=><option key={s} value={s}>{s}</option>)}
+            </select>
+            <input type="date" value={e.dateWatched||""} onChange={ev=>patchFrL(l.id,{dateWatched:ev.target.value})} style={{background:"var(--surface2)",border:"1px solid var(--border)",borderRadius:6,padding:"3px 5px",fontSize:10,color:"var(--text)",width:"100%"}}/>
+            <div style={{textAlign:"center"}}>
+              <input type="checkbox" checked={!!e.rev1} onChange={ev=>patchFrL(l.id,{rev1:ev.target.checked?today():""})} style={{accentColor:"#818cf8",width:14,height:14,cursor:"pointer"}}/>
+            </div>
+            <div style={{textAlign:"center"}}>
+              <button onClick={()=>setNotesModal({id:l.id,name:l.concepts.slice(0,35),val:e.notes})} style={{background:e.notes?"rgba(129,140,248,0.15)":"var(--surface2)",border:`1px solid ${e.notes?"rgba(129,140,248,0.4)":"var(--border)"}`,color:e.notes?"#818cf8":"var(--text3)",borderRadius:6,padding:"3px 7px",fontSize:11,cursor:"pointer"}}>{e.notes?"📝":"+"}</button>
+            </div>
+          </div>;
+        })}
+      </div>;
+    })}
+
+    {/* Non-FR view: chapter list by unit */}
+    {!isFR&&displayUnits.map((unit,ui)=>(
+      <div key={ui} className="card" style={{marginBottom:12,overflow:"hidden"}}>
+        <div style={{padding:"11px 16px",background:"var(--surface2)",borderBottom:"1px solid var(--border)",display:"flex",alignItems:"center",gap:8}}>
+          <label style={{display:"flex",alignItems:"center",gap:8,flex:1,cursor:"pointer",color:subj.color,fontSize:11,fontWeight:800,textTransform:"uppercase",letterSpacing:1}}>
+            <input type="checkbox" aria-label={`Mark ${unit.title} completed`} checked={unit.chapters.length>0&&unit.chapters.every(ch=>getLec(activeSub,chs.indexOf(ch)).status==="Completed")} onChange={ev=>{const checked=ev.target.checked;const updates={};unit.chapters.forEach(ch=>{const gi=chs.indexOf(ch);updates[chKey(activeSub,gi,"lec")]={...(lectures[chKey(activeSub,gi,"lec")]||defLec()),status:checked?"Completed":"Not Started",progress:checked?100:0,updated:today()};});setLectures(p=>({...p,...updates}));}} style={{accentColor:"#34d399",width:15,height:15,flexShrink:0,cursor:"pointer"}}/>
+            {unit.title}
+          </label>
+          <span style={{color:"var(--text3)",fontSize:10,marginLeft:"auto"}}>{unit.chapters.filter(ch=>{const gi=chs.indexOf(ch);return getLec(activeSub,gi).status==="Completed";}).length}/{unit.chapters.length} done</span>
+        </div>
+        <div style={{display:"grid",gridTemplateColumns:"1fr 88px 56px 130px 44px",padding:"7px 16px",fontSize:9,fontWeight:700,textTransform:"uppercase",letterSpacing:1,color:"var(--text3)",borderBottom:"1px solid var(--border)"}}>
+          <div>Chapter</div><div style={{textAlign:"center"}}>Status</div><div style={{textAlign:"center"}}>%</div><div style={{textAlign:"center"}}>Source</div><div style={{textAlign:"center"}}>Notes</div>
+        </div>
+        {unit.chapters.map((ch)=>{
+          const gi=chs.indexOf(ch);
+          const e=getLec(activeSub,gi);
+          const isDone=e.status==="Completed";
+          const isInProg=e.status==="In Progress";
+          return <div key={gi} style={{display:"grid",gridTemplateColumns:"1fr 88px 56px 130px 44px",padding:"9px 16px",borderBottom:"1px solid var(--border)",alignItems:"center",background:isDone?"rgba(52,211,153,0.03)":isInProg?"rgba(251,191,36,0.03)":"transparent",transition:"background 0.1s"}}>
+            <div>
+              <div style={{display:"flex",alignItems:"flex-start",gap:7,color:isDone?"var(--text3)":"var(--text)",fontSize:12,fontWeight:500,textDecoration:isDone?"line-through":"none",lineHeight:1.3}}><span>{ch.n}</span></div>
+              <span style={{background:wColors[ch.w]+"20",color:wColors[ch.w],borderRadius:20,padding:"1px 7px",fontSize:9,fontWeight:700,marginTop:3,display:"inline-block"}}>{ch.w}</span>
+            </div>
+            <div style={{textAlign:"center"}}>
+              <select value={e.status} onChange={ev=>patchLec(activeSub,gi,{status:ev.target.value})} style={{background:"transparent",border:`1px solid ${sColors[e.status]}44`,borderRadius:7,color:sColors[e.status],padding:"4px 6px",fontSize:10,fontWeight:700,cursor:"pointer",width:"100%"}}>
+                {["Not Started","In Progress","Completed"].map(st=><option key={st} value={st}>{st}</option>)}
+              </select>
+            </div>
+            <div style={{textAlign:"center"}}>
+              <input type="range" min="0" max="100" step="10" value={e.progress} onChange={ev=>patchLec(activeSub,gi,{progress:parseInt(ev.target.value)})} style={{width:"100%",accentColor:subj.color}} title={`${e.progress}%`}/>
+              <div style={{color:"var(--text3)",fontSize:9,textAlign:"center"}}>{e.progress}%</div>
+            </div>
+            <div>
+              <input list={`src-${activeSub}-${gi}`} value={e.source||""} onChange={ev=>patchLec(activeSub,gi,{source:ev.target.value})} placeholder="Source…" style={{width:"100%",background:"var(--surface2)",border:"1px solid var(--border)",borderRadius:7,padding:"5px 7px",fontSize:10,color:"var(--text)"}}/>
+              <datalist id={`src-${activeSub}-${gi}`}>{LECTURE_SOURCES.map(l=><option key={l} value={l}/>)}</datalist>
+            </div>
+            <div style={{textAlign:"center"}}>
+              <button onClick={()=>setNotesModal({i:gi,name:ch.n,val:e.notes})} style={{background:e.notes?"rgba(244,114,182,0.15)":"var(--surface2)",border:`1px solid ${e.notes?"rgba(244,114,182,0.35)":"var(--border)"}`,color:e.notes?"#f472b6":"var(--text3)",borderRadius:7,padding:"4px 9px",fontSize:11,cursor:"pointer",fontWeight:e.notes?700:400}}>{e.notes?"📝":"+"}</button>
+            </div>
+          </div>;
+        })}
+      </div>
+    ))}
+  </div>;
+}
+
+/* ═══════════════════════════════════════
+   WORLD B: REVISION
+═══════════════════════════════════════ */
+function IQModal({idx,chapter,data,patchR,onClose}){
+  const [qs,setQs]=useState(()=>(data.importantQs||[]).length>0?[...data.importantQs]:[]);
+  const [newQ,setNewQ]=useState("");
+  const save=()=>{patchR(idx,{importantQs:qs.filter(q=>q.text.trim())});onClose();};
+  const addQ=()=>{if(!newQ.trim())return;setQs(p=>[...p,{text:newQ.trim(),done:false}]);setNewQ("");};
+  const doneCount=qs.filter(q=>q.done&&q.text).length;
+  const tot=qs.filter(q=>q.text).length;
+  return <div onClick={onClose} style={{position:"fixed",inset:0,background:"rgba(0,0,0,0.8)",zIndex:3000,display:"flex",alignItems:"center",justifyContent:"center",padding:16,backdropFilter:"blur(8px)"}}>
+    <div onClick={e=>e.stopPropagation()} style={{background:"var(--surface)",border:"1px solid rgba(129,140,248,0.4)",borderRadius:20,padding:24,maxWidth:540,width:"100%",maxHeight:"85vh",display:"flex",flexDirection:"column",boxShadow:"var(--shadow-lg)"}}>
+      <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",marginBottom:14}}>
+        <div>
+          <div style={{color:"#818cf8",fontSize:10,fontWeight:700,textTransform:"uppercase",letterSpacing:1.5,marginBottom:4}}>❓ Important Questions</div>
+          <div style={{color:"var(--text)",fontSize:13,fontWeight:700,lineHeight:1.3}}>{chapter}</div>
+          {tot>0&&<div style={{color:"var(--text3)",fontSize:11,marginTop:2}}>{doneCount}/{tot} practiced</div>}
+        </div>
+        <button onClick={onClose} style={{background:"var(--surface2)",border:"none",borderRadius:8,width:30,height:30,cursor:"pointer",color:"var(--text2)",fontSize:16}}>×</button>
+      </div>
+      <div style={{display:"flex",gap:8,marginBottom:12}}>
+        <input value={newQ} onChange={e=>setNewQ(e.target.value)} onKeyDown={e=>e.key==="Enter"&&addQ()} placeholder="e.g. Q5 Nov 24, Lease Modification Q, Goodwill impairment…" style={{flex:1,background:"var(--surface2)",border:"1px solid rgba(129,140,248,0.3)",borderRadius:8,padding:"8px 12px",fontSize:12,color:"var(--text)"}}/>
+        <Btn onClick={addQ} color="#818cf8" sm>Add</Btn>
+      </div>
+      <div style={{flex:1,overflowY:"auto",display:"flex",flexDirection:"column",gap:5}}>
+        {qs.filter(q=>q.text).length===0&&<div style={{color:"var(--text3)",fontSize:12,textAlign:"center",padding:"24px 0"}}>No questions yet — add question numbers or descriptions above</div>}
+        {qs.map((q,i)=>q.text?<div key={i} style={{display:"flex",alignItems:"center",gap:8,background:q.done?"rgba(52,211,153,0.06)":"var(--surface2)",border:`1px solid ${q.done?"rgba(52,211,153,0.25)":"var(--border)"}`,borderRadius:9,padding:"9px 12px"}}>
+          <input type="checkbox" checked={q.done} onChange={()=>setQs(p=>p.map((x,j)=>j===i?{...x,done:!x.done}:x))} style={{accentColor:"#34d399",width:15,height:15,cursor:"pointer",flexShrink:0}}/>
+          <div style={{flex:1,color:q.done?"var(--text3)":"var(--text)",fontSize:12,textDecoration:q.done?"line-through":"none"}}>{q.text}</div>
+          <button onClick={()=>setQs(p=>p.filter((_,j)=>j!==i))} style={{background:"transparent",border:"none",color:"var(--text3)",cursor:"pointer",fontSize:13}}>✕</button>
+        </div>:null)}
+      </div>
+      <div style={{display:"flex",gap:8,marginTop:14,paddingTop:12,borderTop:"1px solid var(--border)"}}>
+        <Btn onClick={onClose} outline color="#94a3b8" sm>Cancel</Btn>
+        <Btn onClick={save} color="#818cf8">Save</Btn>
+      </div>
+    </div>
+  </div>;
+}
+
+function RevisionWorld({revData,setRevData,lectures,frRev,setFrRev}){
+  const [activeSub,setActiveSub]=useState(SUBJECTS[0].id);
+  const [notesModal,setNotesModal]=useState(null);
+  const [filter,setFilter]=useState("all");
+  const [iqModal,setIqModal]=useState(null);
+  const subj=SUBJECTS.find(s=>s.id===activeSub)||SUBJECTS[0];
+  const chs=allChapters(subj);
+  const isFR=activeSub==="fr";
+
+  const getRev=(sid,i)=>{const k=chKey(sid,i,"rev");return revData[k]||defRev();};
+  const patchRev=(sid,i,upd)=>{const k=chKey(sid,i,"rev");const cur=revData[k]||defRev();setRevData(p=>({...p,[k]:{...cur,...upd,updated:today()}}));};
+  const markRevised=(sid,i)=>{const k=chKey(sid,i,"rev");const cur=revData[k]||defRev();const dates=[...(cur.revDates||[]),today()].filter((v,j,a)=>a.indexOf(v)===j);setRevData(p=>({...p,[k]:{...cur,revDates:dates,updated:today()}}));};
+
+  const getFrR=(i)=>frRev[i]||{status:"Not Started",confidence:0,revDates:[],notes:"",importantQs:[]};
+  const patchFrR=(i,upd)=>setFrRev(p=>({...p,[i]:{...getFrR(i),...upd}}));
+  const markFrRevised=(i)=>{const cur=getFrR(i);const dates=[...(cur.revDates||[]),today()].filter((v,j,a)=>a.indexOf(v)===j);patchFrR(i,{revDates:dates,status:cur.status==="Not Started"?"In Progress":cur.status});};
+  const frDone=FR_REV_CHAPTERS.filter((_,i)=>getFrR(i).status==="Completed").length;
+  const frTotal=FR_REV_CHAPTERS.length;
+
+  const subStats=(sid)=>{
+    const c2=allChapters(SUBJECTS.find(s=>s.id===sid));
+    const comp=c2.filter((_,i)=>getRev(sid,i).status==="Completed").length;
+    const stuck=c2.filter((_,i)=>getRev(sid,i).status==="Stuck").length;
+    return{comp,stuck,total:c2.length,pct:Math.round(comp/c2.length*100)};
+  };
+  const overall=SUBJECTS.reduce((a,s)=>{const st=subStats(s.id);return{comp:a.comp+st.comp,total:a.total+st.total};},{comp:0,total:0});
+  const overallPct=overall.total?Math.round(overall.comp/overall.total*100):0;
+
+  const lecGatePct=(sid)=>{
+    if(sid==="fr"){const d=FR_LECTURES.filter(l=>(frLec[l.id]||{}).status==="✅ Done").length;return Math.round(d/FR_LECTURES.length*100);}
+    const c2=allChapters(SUBJECTS.find(s=>s.id===sid));
+    const comp=c2.filter((_,i)=>{const k=chKey(sid,i,"lec");return lectures[k]?.status==="Completed";}).length;
+    return Math.round(comp/c2.length*100);
+  };
+
+  const displayUnits=!isFR?subj.units.map(u=>{
+    let c2=u.chapters;
+    if(filter==="stuck")c2=u.chapters.filter(ch=>{const gi=chs.indexOf(ch);return getRev(activeSub,gi).status==="Stuck";});
+    if(filter==="weak")c2=u.chapters.filter(ch=>{const gi=chs.indexOf(ch);const e=getRev(activeSub,gi);return e.confidence>0&&e.confidence<=2;});
+    if(filter==="overdue")c2=u.chapters.filter(ch=>{const gi=chs.indexOf(ch);const e=getRev(activeSub,gi);const lr=e.revDates?.slice(-1)[0]||null;return lr&&daysSince(lr)>14;});
+    if(filter==="high")c2=u.chapters.filter(c=>c.w==="High");
+    if(filter==="done")c2=u.chapters.filter(ch=>{const gi=chs.indexOf(ch);return getRev(activeSub,gi).status==="Completed";});
+    return{...u,chapters:c2};
+  }).filter(u=>u.chapters.length>0):[];
+
+  const frDisplayChs=FR_REV_CHAPTERS.map((c,i)=>({...c,i})).filter(({i})=>{
+    const e=getFrR(i);
+    if(filter==="done")return e.status==="Completed";
+    if(filter==="stuck")return e.status==="Stuck";
+    if(filter==="weak")return e.confidence>0&&e.confidence<=2;
+    if(filter==="overdue"){const lr=e.revDates?.slice(-1)[0]||null;return lr&&daysSince(lr)>14;}
+    return true;
+  });
+
+  const wColors={High:"#fbbf24",Medium:"#a78bfa",Low:"#34d399"};
+  const confColors=["","#f87171","#fb923c","#fbbf24","#a3e635","#34d399"];
+  const sColorFr={"Completed":"#34d399","In Progress":"#fbbf24","Not Started":"var(--text3)","Stuck":"#f87171"};
+
+  return <div style={{animation:"slideUp 0.2s ease"}}>
+    {notesModal&&<NotesModal title={`Notes — ${notesModal.name}`} value={notesModal.val} onSave={v=>patchRev(activeSub,notesModal.i,{notes:v})} onClose={()=>setNotesModal(null)}/>}
+    {iqModal!==null&&<IQModal idx={iqModal} chapter={FR_REV_CHAPTERS[iqModal].chapter} data={getFrR(iqModal)} patchR={patchFrR} onClose={()=>setIqModal(null)}/>}
+
+    {/* Top bar */}
+    <div style={{background:"linear-gradient(135deg,rgba(129,140,248,0.15),rgba(129,140,248,0.05))",border:"1px solid rgba(129,140,248,0.25)",borderRadius:16,padding:"20px 24px",marginBottom:20}}>
+      <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",flexWrap:"wrap",gap:12}}>
+        <div>
+          <div style={{color:"#818cf8",fontSize:10,fontWeight:700,textTransform:"uppercase",letterSpacing:2,marginBottom:4}}>📖 Revision World</div>
+          <div style={{color:"var(--text)",fontSize:20,fontWeight:800}}>{isFR?"FR — Chapter Revision Tracker":"Track Your Revision Progress"}</div>
+          <div style={{color:"var(--text2)",fontSize:12,marginTop:4}}>{isFR?`${frTotal} chapters · Status + Confidence + Important Questions`:"Complete lectures → revise → mark confidence → track overdue"}</div>
+        </div>
+        <div style={{display:"flex",alignItems:"center",gap:16}}>
+          <PRing pct={isFR?Math.round(frDone/frTotal*100):overallPct} color="#818cf8" size={80}/>
+          <div style={{textAlign:"right"}}>
+            <div style={{color:"#818cf8",fontSize:28,fontWeight:900,fontFamily:"'JetBrains Mono',monospace"}}>{isFR?frDone:overall.comp}</div>
+            <div style={{color:"var(--text2)",fontSize:12}}>of {isFR?frTotal:overall.total} chapters revised</div>
+          </div>
+        </div>
+      </div>
+      <div style={{marginTop:14}}><PBar value={isFR?Math.round(frDone/frTotal*100):overallPct} color="#818cf8" h={8}/></div>
+    </div>
+
+    {/* Subject pills */}
+    <div style={{display:"flex",gap:8,flexWrap:"wrap",marginBottom:16}}>
+      {SUBJECTS.map(s=>{
+        const st=subStats(s.id);
+        const active=activeSub===s.id;
+        const pct=s.id==="fr"?Math.round(frDone/frTotal*100):st.pct;
+        return <button key={s.id} onClick={()=>{setActiveSub(s.id);setFilter("all");}} style={{display:"flex",alignItems:"center",gap:8,background:active?`${s.color}20`:"var(--surface)",border:`${active?2:1}px solid ${active?s.color:s.color+"30"}`,borderRadius:12,padding:"10px 16px",cursor:"pointer",transition:"all 0.15s",flexShrink:0}}>
+          <span style={{fontSize:16}}>{s.emoji}</span>
+          <div style={{textAlign:"left"}}>
+            <div style={{color:active?s.color:"var(--text2)",fontSize:12,fontWeight:700}}>{s.short}</div>
+            <div style={{color:"var(--text3)",fontSize:10}}>{s.id==="fr"?`${pct}% rev`:`${pct}% rev · 🎬${lecGatePct(s.id)}% lec`}</div>
+          </div>
+          {s.id!=="fr"&&st.stuck>0&&<Tag color="#f87171">{st.stuck}⚠</Tag>}
+        </button>;
+      })}
+    </div>
+
+    {/* Controls */}
+    <div className="card" style={{padding:"12px 16px",marginBottom:14,display:"flex",gap:8,flexWrap:"wrap",alignItems:"center"}}>
+      <div style={{display:"flex",background:"var(--surface2)",border:"1px solid var(--border)",borderRadius:9,overflow:"hidden"}}>
+        {[["all","All"],["stuck","🔴 Stuck"],["weak","⚡ Weak"],["overdue","🕐 Overdue"],["done","✓ Done"]].map(([v,l])=>(
+          <button key={v} onClick={()=>setFilter(v)} style={{background:filter===v?"var(--border2)":"transparent",border:"none",color:filter===v?"var(--text)":"var(--text3)",padding:"6px 11px",fontSize:11,fontWeight:700,cursor:"pointer"}}>{l}</button>
+        ))}
+      </div>
+      {isFR&&<div style={{color:"var(--text3)",fontSize:11,marginLeft:"auto"}}>Click <span style={{color:"#818cf8",fontWeight:700}}>IQ</span> button to add important questions per chapter</div>}
+    </div>
+
+    {/* Non-FR gate warning */}
+    {!isFR&&lecGatePct(activeSub)<100&&<div style={{background:"rgba(251,191,36,0.08)",border:"1px solid rgba(251,191,36,0.3)",borderRadius:12,padding:"12px 16px",marginBottom:14,display:"flex",alignItems:"center",gap:10}}>
+      <span style={{fontSize:18}}>⚠️</span>
+      <div>
+        <div style={{color:"#fbbf24",fontSize:13,fontWeight:700}}>Lectures not fully done — {lecGatePct(activeSub)}% complete</div>
+        <div style={{color:"var(--text3)",fontSize:12}}>Finish {subj.short} lectures first for best retention.</div>
+      </div>
+    </div>}
+
+    {/* FR chapter list */}
+    {isFR&&<div className="card" style={{overflow:"hidden"}}>
+      <div style={{display:"grid",gridTemplateColumns:"1fr 100px 90px 110px 48px 52px",padding:"7px 16px",fontSize:9,fontWeight:700,textTransform:"uppercase",letterSpacing:1,color:"var(--text3)",borderBottom:"1px solid var(--border)",background:"var(--surface2)"}}>
+        <div>Chapter</div><div style={{textAlign:"center"}}>Status</div><div style={{textAlign:"center"}}>Confidence</div><div style={{textAlign:"center"}}>Last Revised</div><div style={{textAlign:"center"}}>✓</div><div style={{textAlign:"center"}}>IQ</div>
+      </div>
+      {frDisplayChs.map(({chapter,std,i})=>{
+        const e=getFrR(i);
+        const isDone=e.status==="Completed";
+        const isStuck=e.status==="Stuck";
+        const lr=e.revDates?.slice(-1)[0]||null;
+        const ds=lr?daysSince(lr):null;
+        const overdue=ds!==null&&ds>14;
+        const iqCount=e.importantQs?.filter(q=>q.text).length||0;
+        const iqDone=e.importantQs?.filter(q=>q.done).length||0;
+        return <div key={i} style={{display:"grid",gridTemplateColumns:"1fr 100px 90px 110px 48px 52px",padding:"10px 16px",borderBottom:"1px solid var(--border)",alignItems:"center",background:isStuck?"rgba(248,113,113,0.04)":overdue?"rgba(251,191,36,0.02)":isDone?"rgba(52,211,153,0.02)":"transparent"}}>
+          <div>
+            <div style={{display:"flex",alignItems:"flex-start",gap:7,color:isDone?"var(--text3)":"var(--text)",fontSize:12,fontWeight:600,lineHeight:1.3}}><input type="checkbox" aria-label={`Mark FR revision chapter ${chapter} completed`} checked={isDone} onChange={ev=>patchFrR(i,{status:ev.target.checked?"Completed":"Not Started"})} style={{accentColor:"#34d399",width:15,height:15,marginTop:1,flexShrink:0,cursor:"pointer"}}/><span>{chapter}</span></div>
+            <div style={{display:"flex",gap:4,marginTop:3,flexWrap:"wrap"}}>
+              <span style={{background:"rgba(129,140,248,0.15)",color:"#818cf8",borderRadius:20,padding:"1px 7px",fontSize:9,fontWeight:700}}>{std}</span>
+              {overdue&&<span style={{background:"rgba(251,191,36,0.15)",color:"#fbbf24",borderRadius:20,padding:"1px 7px",fontSize:9,fontWeight:700}}>Overdue {ds}d</span>}
+              {iqCount>0&&<span style={{background:"rgba(129,140,248,0.12)",color:"#818cf8",borderRadius:20,padding:"1px 7px",fontSize:9,fontWeight:700}}>IQ {iqDone}/{iqCount}</span>}
+            </div>
+          </div>
+          <div style={{textAlign:"center"}}>
+            <select value={e.status} onChange={ev=>patchFrR(i,{status:ev.target.value})} style={{background:"transparent",border:`1px solid ${sColorFr[e.status]||"var(--border)"}44`,borderRadius:7,color:sColorFr[e.status]||"var(--text2)",padding:"4px 4px",fontSize:10,fontWeight:700,cursor:"pointer",width:"100%"}}>
+              {REV_STATUSES.map(s=><option key={s} value={s}>{s}</option>)}
+            </select>
+          </div>
+          <div style={{textAlign:"center"}}>
+            <div style={{display:"flex",gap:2,justifyContent:"center"}}>
+              {CONFIDENCE.map(c=><button key={c} onClick={()=>patchFrR(i,{confidence:c})} style={{width:16,height:16,borderRadius:"50%",border:`2px solid ${e.confidence>=c?confColors[c]:"rgba(255,255,255,0.1)"}`,background:e.confidence>=c?confColors[c]+"30":"transparent",cursor:"pointer"}} title={`${c}/5`}/>)}
+            </div>
+            <div style={{color:"var(--text3)",fontSize:9,marginTop:2}}>{e.confidence>0?`${e.confidence}/5`:"—"}</div>
+          </div>
+          <div style={{textAlign:"center",fontSize:10}}>
+            {lr?<><div style={{fontFamily:"'JetBrains Mono',monospace",color:overdue?"#fbbf24":"var(--text2)",fontSize:10,fontWeight:700}}>{fmtDate(lr)}</div><div style={{color:"var(--text3)",fontSize:9}}>{ds}d ago · {e.revDates.length}×</div></>:<div style={{color:"var(--text3)"}}>Never</div>}
+          </div>
+          <div style={{textAlign:"center"}}>
+            <button onClick={()=>markFrRevised(i)} style={{background:"rgba(52,211,153,0.12)",border:"1px solid rgba(52,211,153,0.3)",color:"#34d399",borderRadius:7,padding:"4px 7px",fontSize:11,cursor:"pointer",fontWeight:700}}>✓</button>
+          </div>
+          <div style={{textAlign:"center"}}>
+            <button onClick={()=>setIqModal(i)} style={{background:iqCount>0?"rgba(129,140,248,0.15)":"var(--surface2)",border:`1px solid ${iqCount>0?"rgba(129,140,248,0.4)":"var(--border)"}`,color:iqCount>0?"#818cf8":"var(--text3)",borderRadius:7,padding:"4px 7px",fontSize:10,cursor:"pointer",fontWeight:iqCount>0?700:400}}>
+              {iqCount>0?`${iqDone}/${iqCount}`:"IQ"}
+            </button>
+          </div>
+        </div>;
+      })}
+    </div>}
+
+    {/* Non-FR chapter list by unit */}
+    {!isFR&&displayUnits.map((unit,ui)=>(
+      <div key={ui} className="card" style={{marginBottom:12,overflow:"hidden"}}>
+        <div style={{padding:"11px 16px",background:"var(--surface2)",borderBottom:"1px solid var(--border)",display:"flex",alignItems:"center",gap:8}}>
+          <span style={{color:subj.color,fontSize:11,fontWeight:800,textTransform:"uppercase",letterSpacing:1}}>{unit.title}</span>
+          <span style={{color:"var(--text3)",fontSize:10,marginLeft:"auto"}}>{unit.chapters.filter(ch=>{const gi=chs.indexOf(ch);return getRev(activeSub,gi).status==="Completed";}).length}/{unit.chapters.length} done</span>
+        </div>
+        <div style={{display:"grid",gridTemplateColumns:"1fr 96px 80px 120px 52px 44px",padding:"7px 16px",fontSize:9,fontWeight:700,textTransform:"uppercase",letterSpacing:1,color:"var(--text3)",borderBottom:"1px solid var(--border)"}}>
+          <div>Chapter</div><div style={{textAlign:"center"}}>Status</div><div style={{textAlign:"center"}}>Confidence</div><div style={{textAlign:"center"}}>Last Revised</div><div style={{textAlign:"center"}}>Mark ✓</div><div style={{textAlign:"center"}}>Notes</div>
+        </div>
+        {unit.chapters.map((ch)=>{
+          const gi=chs.indexOf(ch);
+          const e=getRev(activeSub,gi);
+          const isDone=e.status==="Completed";
+          const isStuck=e.status==="Stuck";
+          const lr=e.revDates?.slice(-1)[0]||null;
+          const ds=lr?daysSince(lr):null;
+          const overdue=ds!==null&&ds>14;
+          const revSoon=ds!==null&&ds>7&&!overdue;
+          return <div key={gi} style={{display:"grid",gridTemplateColumns:"1fr 96px 80px 120px 52px 44px",padding:"9px 16px",borderBottom:"1px solid var(--border)",alignItems:"center",background:isStuck?"rgba(248,113,113,0.04)":overdue?"rgba(251,191,36,0.03)":isDone?"rgba(52,211,153,0.03)":"transparent"}}>
+            <div>
+              <div style={{display:"flex",alignItems:"flex-start",gap:7,color:isDone?"var(--text3)":"var(--text)",fontSize:12,fontWeight:500,lineHeight:1.3}}><input aria-label={`Mark revision chapter ${ch.n} completed`} title={isDone?"Unmark chapter completed":"Mark chapter completed"} type="checkbox" checked={isDone} onChange={ev=>patchRev(activeSub,gi,{status:ev.target.checked?"Completed":"Not Started"})} style={{accentColor:"#34d399",width:15,height:15,marginTop:1,flexShrink:0,cursor:"pointer"}}/><span style={{textDecoration:isDone?"line-through":"none"}}>{ch.n}</span></div>
+              <div style={{display:"flex",gap:4,marginTop:3,flexWrap:"wrap"}}>
+                <span style={{background:wColors[ch.w]+"20",color:wColors[ch.w],borderRadius:20,padding:"1px 7px",fontSize:9,fontWeight:700}}>{ch.w}</span>
+                {overdue&&<span style={{background:"rgba(251,191,36,0.15)",color:"#fbbf24",borderRadius:20,padding:"1px 7px",fontSize:9,fontWeight:700}}>Overdue {ds}d</span>}
+                {revSoon&&<span style={{background:"rgba(251,146,60,0.1)",color:"#fb923c",borderRadius:20,padding:"1px 7px",fontSize:9,fontWeight:700}}>Revise Soon</span>}
+              </div>
+            </div>
+            <div style={{textAlign:"center"}}>
+              <select value={e.status} onChange={ev=>patchRev(activeSub,gi,{status:ev.target.value})} style={{background:"transparent",border:`1px solid ${isStuck?"#f87171":isDone?"#34d399":"rgba(255,255,255,0.1)"}`,borderRadius:7,color:isStuck?"#f87171":isDone?"#34d399":"var(--text2)",padding:"4px 5px",fontSize:10,fontWeight:700,cursor:"pointer",width:"100%"}}>
+                {REV_STATUSES.map(st=><option key={st} value={st}>{st}</option>)}
+              </select>
+            </div>
+            <div style={{textAlign:"center"}}>
+              <div style={{display:"flex",gap:2,justifyContent:"center"}}>
+                {CONFIDENCE.map(c=><button key={c} onClick={()=>patchRev(activeSub,gi,{confidence:c})} style={{width:18,height:18,borderRadius:"50%",border:`2px solid ${e.confidence>=c?confColors[c]:"rgba(255,255,255,0.1)"}`,background:e.confidence>=c?confColors[c]+"30":"transparent",cursor:"pointer"}} title={`${c}/5`}/>)}
+              </div>
+              <div style={{color:"var(--text3)",fontSize:9,marginTop:2}}>{e.confidence>0?`${e.confidence}/5`:"—"}</div>
+            </div>
+            <div style={{textAlign:"center",color:"var(--text3)",fontSize:10}}>
+              {lr?<><div style={{fontFamily:"'JetBrains Mono',monospace",color:overdue?"#fbbf24":"var(--text2)",fontSize:10,fontWeight:700}}>{fmtDate(lr)}</div><div style={{fontSize:9,color:"var(--text3)"}}>{ds}d ago</div></>:<div style={{color:"var(--text3)",fontSize:10}}>Never</div>}
+              {e.revDates?.length>0&&<div style={{color:"var(--text3)",fontSize:9}}>{e.revDates.length}× revised</div>}
+            </div>
+            <div style={{textAlign:"center"}}>
+              <button onClick={()=>markRevised(activeSub,gi)} style={{background:"rgba(52,211,153,0.12)",border:"1px solid rgba(52,211,153,0.3)",color:"#34d399",borderRadius:7,padding:"5px 8px",fontSize:11,cursor:"pointer",fontWeight:700}}>✓</button>
+            </div>
+            <div style={{textAlign:"center"}}>
+              <button onClick={()=>setNotesModal({i:gi,name:ch.n,val:e.notes})} style={{background:e.notes?"rgba(129,140,248,0.15)":"var(--surface2)",border:`1px solid ${e.notes?"rgba(129,140,248,0.35)":"var(--border)"}`,color:e.notes?"#818cf8":"var(--text3)",borderRadius:7,padding:"4px 9px",fontSize:11,cursor:"pointer",fontWeight:e.notes?700:400}}>{e.notes?"📝":"+"}</button>
+            </div>
+          </div>;
+        })}
+      </div>
+    ))}
+  </div>;
+}
+
+/* ═══════════════════════════════════════
+   DASHBOARD
+═══════════════════════════════════════ */
+function Dashboard({lectures,revData,studyLog,setStudyLog,tests,streak,weeklyTarget,setWeeklyTarget}){
+  const todayStr=today();
+  const [hoursInput,setHoursInput]=useState(()=>String(studyLog[todayStr]||""));
+  const saveHours=()=>{const h=parseFloat(hoursInput)||0;setStudyLog(p=>({...p,[todayStr]:h}));};
+
+  const totalHrs=Object.values(studyLog).reduce((a,b)=>a+b,0);
+  const weekHrs=Array.from({length:7},(_,i)=>{const d=new Date();d.setDate(d.getDate()-i);return studyLog[d.toISOString().slice(0,10)]||0;}).reduce((a,b)=>a+b,0);
+
+  // overall lecture %
+  const lecComp=SUBJECTS.reduce((a,s)=>a+allChapters(s).filter((_,i)=>{const k=chKey(s.id,i,"lec");return lectures[k]?.status==="Completed";}).length,0);
+  const lecTotal=SUBJECTS.reduce((a,s)=>a+allChapters(s).length,0);
+  const lecPct=Math.round(lecComp/lecTotal*100);
+
+  // overall revision %
+  const revComp=SUBJECTS.reduce((a,s)=>a+allChapters(s).filter((_,i)=>{const k=chKey(s.id,i,"rev");return revData[k]?.status==="Completed";}).length,0);
+  const revTotal=lecTotal;
+  const revPct=Math.round(revComp/revTotal*100);
+
+  // overdue revisions
+  const overdueCount=SUBJECTS.reduce((a,s)=>a+allChapters(s).filter((_,i)=>{const k=chKey(s.id,i,"rev");const e=revData[k];const lr=e?.revDates?.slice(-1)[0]||null;return lr&&daysSince(lr)>14;}).length,0);
+
+  // weak chapters
+  const weakCount=SUBJECTS.reduce((a,s)=>a+allChapters(s).filter((_,i)=>{const k=chKey(s.id,i,"rev");const e=revData[k];return e?.confidence>0&&e.confidence<=2;}).length,0);
+
+  // heatmap
+  const heatDays=Array.from({length:63},(_,i)=>{const d=new Date();d.setDate(d.getDate()-(62-i));const key=d.toISOString().slice(0,10);const h=studyLog[key]||0;return{key,h,dow:d.toLocaleDateString("en",{weekday:"short"}).slice(0,1)};});
+
+  // next exam
+  const nextExam=Object.entries(EXAM_DATES).map(([id,e])=>({id,...e,days:daysUntil(e.date)})).filter(e=>e.days>0).sort((a,b)=>a.days-b.days)[0];
+
+  // per-subject progress
+  const subjectRows=SUBJECTS.map(s=>{
+    const chs=allChapters(s);
+    const lPct=Math.round(chs.filter((_,i)=>{const k=chKey(s.id,i,"lec");return lectures[k]?.status==="Completed";}).length/chs.length*100);
+    const rPct=Math.round(chs.filter((_,i)=>{const k=chKey(s.id,i,"rev");return revData[k]?.status==="Completed";}).length/chs.length*100);
+    const stuck=chs.filter((_,i)=>{const k=chKey(s.id,i,"rev");return revData[k]?.status==="Stuck";}).length;
+    return{s,lPct,rPct,stuck};
+  });
+
+  const scored=tests.filter(t=>t.score!=null);
+  const avgScore=scored.length?Math.round(scored.reduce((a,t)=>a+t.score,0)/scored.length):null;
+
+  return <div style={{animation:"slideUp 0.2s ease"}}>
+    {/* Big readiness card */}
+    <div style={{background:"var(--surface)",border:"1px solid var(--border)",borderRadius:16,padding:"20px 24px",marginBottom:16,backgroundImage:"linear-gradient(135deg,rgba(99,102,241,0.06),transparent)"}}>
+      <div style={{display:"flex",gap:20,flexWrap:"wrap",alignItems:"center"}}>
+        <div style={{flex:1,minWidth:200}}>
+          <div style={{color:"var(--text3)",fontSize:10,fontWeight:700,textTransform:"uppercase",letterSpacing:2,marginBottom:6}}>Overall Readiness — May 2027</div>
+          <div style={{fontSize:40,fontWeight:900,color:"var(--text)",lineHeight:1,fontFamily:"'JetBrains Mono',monospace"}}>{Math.round((lecPct*0.4+revPct*0.6))}%</div>
+          <div style={{color:"var(--text2)",fontSize:12,marginTop:4}}>Lectures {lecPct}% · Revision {revPct}%</div>
+          <div style={{marginTop:12,display:"flex",flexDirection:"column",gap:6}}>
+            <div style={{display:"flex",alignItems:"center",gap:8}}>
+              <span style={{color:"#f472b6",fontSize:11,fontWeight:700,width:80,flexShrink:0}}>🎬 Lectures</span>
+              <div style={{flex:1}}><PBar value={lecPct} color="#f472b6" h={7}/></div>
+              <span style={{color:"#f472b6",fontSize:11,fontWeight:800,fontFamily:"'JetBrains Mono',monospace",width:36,textAlign:"right"}}>{lecPct}%</span>
+            </div>
+            <div style={{display:"flex",alignItems:"center",gap:8}}>
+              <span style={{color:"#818cf8",fontSize:11,fontWeight:700,width:80,flexShrink:0}}>📖 Revision</span>
+              <div style={{flex:1}}><PBar value={revPct} color="#818cf8" h={7}/></div>
+              <span style={{color:"#818cf8",fontSize:11,fontWeight:800,fontFamily:"'JetBrains Mono',monospace",width:36,textAlign:"right"}}>{revPct}%</span>
+            </div>
+          </div>
+        </div>
+        <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:10,minWidth:280}}>
+          {[{l:"Total Hours",v:`${totalHrs.toFixed(0)}h`,c:"#818cf8"},{l:"This Week",v:`${weekHrs.toFixed(1)}h`,c:"#38bdf8"},{l:"🔥 Streak",v:`${streak}d`,c:"#fb923c"},{l:"Overdue",v:overdueCount,c:overdueCount>0?"#f87171":"#34d399"},{l:"Weak Topics",v:weakCount,c:weakCount>0?"#fbbf24":"#34d399"},{l:"Avg Test Score",v:avgScore!=null?`${avgScore}%`:"—",c:avgScore!=null?(avgScore>=50?"#34d399":avgScore>=40?"#fbbf24":"#f87171"):"var(--text3)"}].map(({l,v,c})=>(
+            <div key={l} style={{background:"var(--surface2)",border:"1px solid var(--border)",borderRadius:10,padding:"12px 14px"}}>
+              <div style={{color:"var(--text3)",fontSize:9,textTransform:"uppercase",letterSpacing:1,marginBottom:5}}>{l}</div>
+              <div style={{color:c,fontSize:20,fontWeight:900,fontFamily:"'JetBrains Mono',monospace"}}>{v}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+
+    <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:14,marginBottom:14}}>
+      {/* Session redirect card */}
+      <div className="card" style={{padding:"18px",background:"linear-gradient(135deg,rgba(52,211,153,0.06),transparent)",border:"1px solid rgba(52,211,153,0.2)"}}>
+        <div style={{color:"#34d399",fontSize:9,fontWeight:700,textTransform:"uppercase",letterSpacing:1.5,marginBottom:8}}>⏱ Study Session Timer</div>
+        <div style={{color:"var(--text)",fontSize:15,fontWeight:800,marginBottom:4}}>{weekHrs.toFixed(1)}h this week</div>
+        <div style={{color:"var(--text3)",fontSize:11,marginBottom:10}}>Target: <input type="number" value={weeklyTarget} onChange={e=>setWeeklyTarget(parseInt(e.target.value)||40)} style={{width:36,background:"transparent",border:"none",color:"var(--text2)",fontWeight:700,fontSize:11,outline:"none"}}/>h · {Math.max(0,weeklyTarget-weekHrs).toFixed(1)}h remaining</div>
+        <PBar value={Math.min(weekHrs/weeklyTarget*100,100)} color="#34d399" h={5}/>
+        <button onClick={()=>setWorld("session")} style={{marginTop:12,width:"100%",background:"rgba(52,211,153,0.12)",border:"1px solid rgba(52,211,153,0.3)",borderRadius:10,padding:"10px",fontSize:13,fontWeight:800,cursor:"pointer",color:"#34d399",display:"flex",alignItems:"center",justifyContent:"center",gap:8}}>
+          <span style={{fontSize:16}}>▶</span> Start a Study Session
+        </button>
+      </div>
+
+      {/* Next exam */}
+      <div className="card" style={{padding:"18px"}}>
+        <div style={{color:"var(--text3)",fontSize:9,fontWeight:700,textTransform:"uppercase",letterSpacing:1.5,marginBottom:12}}>Exam Schedule</div>
+        <div style={{display:"flex",flexDirection:"column",gap:5}}>
+          {Object.entries(EXAM_DATES).slice(0,6).map(([id,{date,label}])=>{
+            const dl=daysUntil(date);
+            const s=SUBJECTS.find(x=>x.id===id);
+            const isNext=nextExam?.id===id;
+            return <div key={id} style={{display:"flex",alignItems:"center",gap:8,background:isNext?"rgba(129,140,248,0.08)":"transparent",border:`1px solid ${isNext?"rgba(129,140,248,0.2)":"transparent"}`,borderRadius:8,padding:"5px 8px"}}>
+              <span style={{fontSize:12}}>{s?.emoji}</span>
+              <div style={{flex:1,fontSize:11,color:isNext?"var(--text)":"var(--text2)",fontWeight:isNext?700:400,overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}}>{label}</div>
+              <span style={{background:isNext?"#818cf8":"rgba(255,255,255,0.05)",color:isNext?"#fff":"var(--text3)",borderRadius:20,padding:"2px 9px",fontSize:10,fontWeight:800,whiteSpace:"nowrap"}}>{dl===0?"TODAY":`${dl}d`}</span>
+            </div>;
+          })}
+        </div>
+      </div>
+    </div>
+
+    {/* Subject progress table */}
+    <div className="card" style={{padding:0,overflow:"hidden",marginBottom:14}}>
+      <div style={{padding:"14px 18px",borderBottom:"1px solid var(--border)",display:"flex",alignItems:"center",gap:8}}>
+        <span style={{fontWeight:700,color:"var(--text)",fontSize:14}}>Subject Progress</span>
+        <span style={{color:"var(--text3)",fontSize:11,marginLeft:"auto"}}>Lectures (pink) + Revision (purple)</span>
+      </div>
+      {subjectRows.map(({s,lPct,rPct,stuck})=>(
+        <div key={s.id} style={{padding:"12px 18px",borderBottom:"1px solid var(--border)",display:"flex",gap:14,alignItems:"center"}}>
+          <div style={{width:36,height:36,borderRadius:10,background:s.bg,display:"flex",alignItems:"center",justifyContent:"center",fontSize:18,flexShrink:0}}>{s.emoji}</div>
+          <div style={{flex:1}}>
+            <div style={{display:"flex",justifyContent:"space-between",marginBottom:5}}>
+              <span style={{color:"var(--text)",fontSize:12,fontWeight:700}}>{s.short} — {s.name}</span>
+              {stuck>0&&<Tag color="#f87171">{stuck} stuck</Tag>}
+            </div>
+            <div style={{display:"flex",flexDirection:"column",gap:4}}>
+              <div style={{display:"flex",gap:8,alignItems:"center"}}>
+                <span style={{color:"#f472b6",fontSize:10,width:60,flexShrink:0}}>🎬 {lPct}%</span>
+                <div style={{flex:1}}><PBar value={lPct} color="#f472b6" h={5}/></div>
+              </div>
+              <div style={{display:"flex",gap:8,alignItems:"center"}}>
+                <span style={{color:"#818cf8",fontSize:10,width:60,flexShrink:0}}>📖 {rPct}%</span>
+                <div style={{flex:1}}><PBar value={rPct} color="#818cf8" h={5}/></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      ))}
+    </div>
+
+    {/* Heatmap */}
+    <div className="card" style={{padding:"18px",marginBottom:14}}>
+      <div style={{color:"var(--text3)",fontSize:9,fontWeight:700,textTransform:"uppercase",letterSpacing:1.5,marginBottom:12}}>Study Activity — Last 9 Weeks</div>
+      <div style={{display:"grid",gridTemplateColumns:"repeat(63,1fr)",gap:2}}>
+        {heatDays.map(d=>{
+          const c=d.h===0?"var(--surface3)":d.h<2?"#BFDBFE":d.h<4?"#93C5FD":d.h<7?"#3B82F6":"#1D4ED8";
+          return <div key={d.key} title={`${d.key}: ${d.h}h`} style={{height:10,borderRadius:2,background:c}}/>;
+        })}
+      </div>
+      <div style={{display:"flex",alignItems:"center",gap:6,marginTop:8,fontSize:10,color:"var(--text3)"}}>
+        <span>Less</span>
+        {["var(--surface3)","#BFDBFE","#93C5FD","#3B82F6","#1D4ED8"].map((c,i)=><div key={i} style={{width:10,height:10,borderRadius:2,background:c}}/>)}
+        <span>More</span>
+        <span style={{marginLeft:"auto"}}>Total: {totalHrs.toFixed(1)}h · Target: ~1,400h</span>
+      </div>
+    </div>
+  </div>;
+}
+
+/* ═══════════════════════════════════════
+   TESTS TRACKER
+═══════════════════════════════════════ */
+function QuestionPractice({questionPractice,setQuestionPractice}){
+ const [form,setForm]=useState({date:today(),subject:SUBJECTS[0].id,chapter:"",source:"Self Practice",attempted:"10",correct:"",notes:""}),[adding,setAdding]=useState(false);
+ const sub=SUBJECTS.find(x=>x.id===form.subject)||SUBJECTS[0],chs=allChapters(sub),attempted=questionPractice.reduce((a,x)=>a+(+x.attempted||0),0),correct=questionPractice.reduce((a,x)=>a+(+x.correct||0),0),accuracy=attempted?Math.round(correct/attempted*100):0;
+ const save=()=>{const a=Math.max(0,parseInt(form.attempted,10)||0),c=Math.max(0,Math.min(a,parseInt(form.correct,10)||0));if(!a){alert("Enter questions attempted.");return;}setQuestionPractice(p=>[{id:Date.now(),...form,chapter:form.chapter||chs[0]?.n||"General practice",attempted:a,correct:c,accuracy:Math.round(c/a*100)},...p]);setForm(f=>({...f,date:today(),chapter:"",attempted:"10",correct:"",notes:""}));setAdding(false)};
+ const bySub=SUBJECTS.map(x=>{const rows=questionPractice.filter(q=>q.subject===x.id),a=rows.reduce((n,q)=>n+(+q.attempted||0),0),c=rows.reduce((n,q)=>n+(+q.correct||0),0);return{x,rows,a,c,p:a?Math.round(c/a*100):null}}).filter(x=>x.rows.length);
+ return <div style={{animation:"slideUp .2s ease"}}>
+ <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(145px,1fr))",gap:10,marginBottom:16}}>{[["Practice logs",questionPractice.length],["Questions attempted",attempted],["Correct answers",correct],["Accuracy",attempted?accuracy+"%":"—"]].map(([l,v],i)=><div className="card" key={l} style={{padding:15}}><div style={{fontSize:10,color:"var(--text3)",marginBottom:6}}>{l}</div><div style={{fontSize:24,fontWeight:900,color:["#818cf8","#38bdf8","#34d399",accuracy>=60?"#34d399":"#fbbf24"][i]}}>{v}</div></div>)}</div>
+ <div style={{display:"flex",alignItems:"center",marginBottom:12}}><strong>Question practice log</strong><button onClick={()=>setAdding(v=>!v)} style={{marginLeft:"auto",padding:"8px 12px",borderRadius:8,border:"1px solid var(--border)",background:"var(--surface2)",color:"var(--text)",cursor:"pointer"}}>{adding?"Cancel":"+ Log practice"}</button></div>
+ {adding&&<div className="card" style={{padding:15,marginBottom:14,display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(170px,1fr))",gap:10}}>
+ <label>Date<input type="date" value={form.date} onChange={e=>setForm(f=>({...f,date:e.target.value}))} style={{display:"block",width:"100%",padding:8,marginTop:4}}/></label>
+ <label>Paper<select value={form.subject} onChange={e=>setForm(f=>({...f,subject:e.target.value,chapter:""}))} style={{display:"block",width:"100%",padding:8,marginTop:4}}>{SUBJECTS.map(x=><option key={x.id} value={x.id}>{x.short} — {x.name}</option>)}</select></label>
+ <label>Chapter<select value={form.chapter} onChange={e=>setForm(f=>({...f,chapter:e.target.value}))} style={{display:"block",width:"100%",padding:8,marginTop:4}}><option value="">Choose chapter</option>{chs.map((x,i)=><option key={i} value={x.n}>{x.n}</option>)}</select></label>
+ <label>Source<input value={form.source} onChange={e=>setForm(f=>({...f,source:e.target.value}))} placeholder="RTP / MTP / module" style={{display:"block",width:"100%",padding:8,marginTop:4}}/></label>
+ <label>Questions attempted<input type="number" min="1" value={form.attempted} onChange={e=>setForm(f=>({...f,attempted:e.target.value}))} style={{display:"block",width:"100%",padding:8,marginTop:4}}/></label>
+ <label>Correct answers<input type="number" min="0" value={form.correct} onChange={e=>setForm(f=>({...f,correct:e.target.value}))} style={{display:"block",width:"100%",padding:8,marginTop:4}}/></label>
+ <label style={{gridColumn:"1/-1"}}>Mistakes / takeaway<textarea value={form.notes} onChange={e=>setForm(f=>({...f,notes:e.target.value}))} rows="2" style={{display:"block",width:"100%",padding:8,marginTop:4}}/></label><button onClick={save} style={{background:"#6366f1",color:"#fff",border:0,borderRadius:8,padding:9,cursor:"pointer"}}>Save practice log</button></div>}
+ {bySub.length>0&&<div className="card" style={{padding:15,marginBottom:14}}><strong>Paper-wise accuracy</strong><div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(180px,1fr))",gap:10,marginTop:10}}>{bySub.map(z=><div key={z.x.id} style={{background:"var(--surface2)",padding:12,borderRadius:9}}><b>{z.x.short}</b><div style={{fontSize:11,color:"var(--text3)",marginTop:4}}>{z.a} attempted · {z.c} correct</div><div style={{height:5,background:"var(--surface3)",marginTop:8,borderRadius:9}}><div style={{height:5,width:z.p+"%",background:z.x.color,borderRadius:9}}/></div><div style={{fontSize:11,marginTop:4}}>{z.p}% accuracy</div></div>)}</div></div>}
+ {questionPractice.length===0?<div className="card" style={{padding:24,textAlign:"center",color:"var(--text3)"}}>No practice logs yet. Start logging questions to track accuracy by paper and chapter.</div>:questionPractice.map(q=><div key={q.id} className="card" style={{padding:13,marginBottom:8,display:"flex",gap:12,flexWrap:"wrap"}}><div style={{flex:1,minWidth:200}}><b>{SUBJECTS.find(x=>x.id===q.subject)?.short||q.subject} · {q.chapter}</b><div style={{fontSize:10,color:"var(--text3)",marginTop:4}}>{q.date} · {q.source}</div>{q.notes&&<div style={{fontSize:11,marginTop:6,whiteSpace:"pre-wrap"}}>{q.notes}</div>}</div><div style={{textAlign:"right"}}><b style={{color:q.accuracy>=60?"#34d399":"#fbbf24"}}>{q.accuracy}%</b><div style={{fontSize:10,color:"var(--text3)"}}>{q.correct}/{q.attempted} correct</div><button onClick={()=>setQuestionPractice(p=>p.filter(x=>x.id!==q.id))} style={{marginTop:5}}>Delete</button></div></div>)}
+ </div>;
+}
+
+/* ═══════════════════════════════════════
+   TESTS TRACKER
+═══════════════════════════════════════ */
+function Tests({tests,setTests}){
+  const [adding,setAdding]=useState(false);
+  const [form,setForm]=useState({date:today(),subject:SUBJECTS[0].id,type:"RTP",name:"",marks:"",outOf:"100",notes:""});
+  const TYPES=["RTP","MTP","Mock Test","Past Paper","Practice Set"];
+  const save=()=>{
+    if(!form.name.trim())return;
+    const marks=parseFloat(form.marks);const outOf=parseFloat(form.outOf)||100;
+    const score=!isNaN(marks)?Math.round(marks/outOf*100):null;
+    setTests(p=>[{id:Date.now(),...form,marks:isNaN(marks)?null:marks,outOf,score},...p]);
+    setAdding(false);setForm({date:today(),subject:SUBJECTS[0].id,type:"RTP",name:"",marks:"",outOf:"100",notes:""});
+  };
+  const sc=v=>v>=50?"#34d399":v>=40?"#fbbf24":"#f87171";
+  const scored=tests.filter(t=>t.score!=null);
+  const avg=scored.length?Math.round(scored.reduce((a,t)=>a+t.score,0)/scored.length):null;
+  return <div style={{animation:"slideUp 0.2s ease"}}>
+    <div style={{display:"grid",gridTemplateColumns:"repeat(4,1fr)",gap:10,marginBottom:16}}>
+      {[{l:"Tests Logged",v:tests.length,c:"#818cf8"},{l:"Avg Score",v:avg!=null?`${avg}%`:"—",c:avg!=null?sc(avg):"#475569"},{l:"Pass Rate",v:scored.length?`${Math.round(scored.filter(t=>t.score>=50).length/scored.length*100)}%`:"—",c:"#34d399"},{l:"Last Score",v:scored.length?`${scored[0].score}%`:"—",c:scored.length?sc(scored[0].score):"#475569"}].map(({l,v,c})=>(
+        <div key={l} className="card" style={{padding:"16px 18px"}}>
+          <div style={{color:"var(--text3)",fontSize:9,textTransform:"uppercase",letterSpacing:1.5,marginBottom:6}}>{l}</div>
+          <div style={{color:c,fontSize:28,fontWeight:900,fontFamily:"'JetBrains Mono',monospace"}}>{v}</div>
+        </div>
+      ))}
+    </div>
+    <div className="card" style={{padding:16,marginBottom:14}}><div style={{fontSize:13,fontWeight:800,marginBottom:10}}>Paper-wise mock / RTP / MTP analysis</div><div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(180px,1fr))",gap:10}}>{SUBJECTS.map(sub=>{const rows=scored.filter(t=>t.subject===sub.id),mean=rows.length?Math.round(rows.reduce((a,t)=>a+t.score,0)/rows.length):null,best=rows.length?Math.max(...rows.map(t=>t.score)):null;return <div key={sub.id} style={{background:"var(--surface2)",borderRadius:10,padding:12}}><div style={{fontSize:12,fontWeight:800}}>{sub.emoji} {sub.short}</div><div style={{fontSize:10,color:"var(--text3)",marginTop:5}}>{rows.length} scored tests · Avg {mean==null?"—":mean+"%"}</div><div style={{fontSize:10,color:best==null?"var(--text3)":sc(best),marginTop:3}}>Best score: {best==null?"—":best+"%"}</div><div style={{height:5,background:"var(--surface3)",borderRadius:9,marginTop:8,overflow:"hidden"}}><div style={{height:"100%",width:(mean||0)+"%",background:sub.color}}/></div></div>})}</div></div>
+    <div style={{marginBottom:14}}><Btn onClick={()=>setAdding(p=>!p)} color="#6366f1">{adding?"✕ Cancel":"+ Add Test / RTP / MTP"}</Btn></div>
+    {adding&&<div className="card" style={{padding:"20px",marginBottom:14,border:"1px solid rgba(99,102,241,0.3)"}}>
+      <div style={{display:"flex",gap:8,flexWrap:"wrap"}}>
+        <input type="date" value={form.date} onChange={e=>setForm(f=>({...f,date:e.target.value}))} style={{background:"var(--surface2)",border:"1px solid var(--border)",borderRadius:8,padding:"8px 10px",fontSize:12,color:"var(--text)"}}/>
+        <select value={form.subject} onChange={e=>setForm(f=>({...f,subject:e.target.value}))} style={{background:"var(--surface2)",border:"1px solid var(--border)",borderRadius:8,padding:"8px 10px",fontSize:12,color:"var(--text)"}}>{SUBJECTS.map(s=><option key={s.id} value={s.id}>{s.emoji} {s.short}</option>)}</select>
+        <select value={form.type} onChange={e=>setForm(f=>({...f,type:e.target.value}))} style={{background:"var(--surface2)",border:"1px solid var(--border)",borderRadius:8,padding:"8px 10px",fontSize:12,color:"var(--text)"}}>{TYPES.map(t=><option key={t} value={t}>{t}</option>)}</select>
+        <input value={form.name} onChange={e=>setForm(f=>({...f,name:e.target.value}))} placeholder="Test name *" style={{flex:2,minWidth:140,background:"var(--surface2)",border:"1px solid var(--border)",borderRadius:8,padding:"8px 10px",fontSize:12,color:"var(--text)"}}/>
+        <input type="number" value={form.marks} onChange={e=>setForm(f=>({...f,marks:e.target.value}))} placeholder="Marks" style={{width:70,background:"var(--surface2)",border:"1px solid var(--border)",borderRadius:8,padding:"8px 10px",fontSize:12,color:"var(--text)"}}/>
+        <span style={{lineHeight:"36px",color:"var(--text3)"}}>/</span>
+        <input type="number" value={form.outOf} onChange={e=>setForm(f=>({...f,outOf:e.target.value}))} style={{width:60,background:"var(--surface2)",border:"1px solid var(--border)",borderRadius:8,padding:"8px 10px",fontSize:12,color:"var(--text)"}}/>
+        <input value={form.notes} onChange={e=>setForm(f=>({...f,notes:e.target.value}))} placeholder="Notes / weak areas…" style={{flex:2,minWidth:120,background:"var(--surface2)",border:"1px solid var(--border)",borderRadius:8,padding:"8px 10px",fontSize:12,color:"var(--text)"}}/>
+        <Btn onClick={save} color="#34d399">Save</Btn>
+      </div>
+    </div>}
+    {tests.length===0?<div style={{textAlign:"center",padding:"60px",border:"2px dashed var(--border)",borderRadius:14,color:"var(--text3)"}}>📝 No tests yet — attempt an RTP or MTP and log your score here</div>:(
+      <div style={{display:"flex",flexDirection:"column",gap:8}}>
+        {tests.map(t=>{const s=SUBJECTS.find(x=>x.id===t.subject);return(
+          <div key={t.id} className="card" style={{padding:"16px 18px",display:"flex",alignItems:"center",gap:14,flexWrap:"wrap",borderLeft:`3px solid ${t.score!=null?sc(t.score)+"66":"var(--border)"}`}}>
+            {t.score!=null?<div style={{background:`${sc(t.score)}15`,border:`1.5px solid ${sc(t.score)}44`,borderRadius:10,padding:"8px 12px",textAlign:"center",minWidth:64,flexShrink:0}}>
+              <div style={{color:sc(t.score),fontSize:22,fontWeight:900,fontFamily:"'JetBrains Mono',monospace",lineHeight:1}}>{t.score}%</div>
+              <div style={{color:sc(t.score),fontSize:9,fontWeight:800,marginTop:2}}>{t.score>=50?"PASS":"FAIL"}</div>
+            </div>:<div style={{background:"var(--surface2)",borderRadius:10,padding:"8px 12px",minWidth:64,textAlign:"center",color:"var(--text3)",fontSize:18}}>—</div>}
+            <div style={{flex:1}}>
+              <div style={{display:"flex",gap:6,marginBottom:4}}>
+                <Tag color={s?.color||"#818cf8"}>{s?.short}</Tag>
+                <Tag color="#475569">{t.type}</Tag>
+                <span style={{color:"var(--text3)",fontSize:11}}>{t.date}</span>
+              </div>
+              <div style={{color:"var(--text)",fontSize:13,fontWeight:700}}>{t.name}</div>
+              {t.score!=null&&<div style={{marginTop:6}}><PBar value={t.score} color={sc(t.score)} h={4}/></div>}
+              {t.notes&&<div style={{color:"var(--text2)",fontSize:11,marginTop:4}}>💡 {t.notes}</div>}
+            </div>
+            <button onClick={()=>setTests(p=>p.filter(x=>x.id!==t.id))} style={{background:"var(--surface2)",border:"1px solid var(--border)",color:"var(--text3)",borderRadius:8,padding:"5px 10px",fontSize:11,cursor:"pointer"}}>✕</button>
+          </div>
+        );})}
+      </div>
+    )}
+  </div>;
+}
+
+/* ═══════════════════════════════════════
+   TODAY'S FOCUS — Dashboard Widget
+═══════════════════════════════════════ */
+function TodayFocus({revData,lectures,tasks,studyLog,setWorld}){
+  const todayStr=today();
+  const todayHrs=studyLog[todayStr]||0;
+
+  // Overdue revisions (not revised in 14+ days)
+  const overdueChapters=[];
+  SUBJECTS.forEach(s=>{
+    allChapters(s).forEach((ch,i)=>{
+      const k=chKey(s.id,i,"rev");
+      const e=revData[k];
+      const lr=e?.revDates?.slice(-1)[0]||null;
+      if(lr&&daysSince(lr)>14&&e?.status!=="Not Started"){
+        overdueChapters.push({sub:s.short,color:s.color,bg:s.bg,name:ch.n,days:daysSince(lr),conf:e?.confidence||0});
+      }
+    });
+  });
+  overdueChapters.sort((a,b)=>b.days-a.days);
+
+  // Spaced repetition — chapters due today
+  const srDue=[];
+  const SR_INTERVALS=[1,3,7,14,30];
+  SUBJECTS.forEach(s=>{
+    allChapters(s).forEach((ch,i)=>{
+      const k=chKey(s.id,i,"rev");
+      const e=revData[k];
+      if(!e||e.status==="Not Started")return;
+      const lr=e.revDates?.slice(-1)[0]||null;
+      if(!lr)return;
+      const ds=daysSince(lr);
+      const conf=e.confidence||3;
+      // next interval based on confidence
+      const intervals=conf<=2?[1,2,4,7,14]:conf===3?[1,3,7,14,30]:[1,3,7,21,60];
+      const revCount=e.revDates?.length||1;
+      const nextInterval=intervals[Math.min(revCount-1,intervals.length-1)]||30;
+      if(ds>=nextInterval&&ds<nextInterval+3){
+        srDue.push({sub:s.short,color:s.color,name:ch.n,daysOverdue:ds-nextInterval});
+      }
+    });
+  });
+
+  // Today's planner tasks
+  const todayTasks=tasks.filter(t=>t.date===todayStr&&!t.done);
+
+  // Pending lectures
+  const pendingLec=[];
+  SUBJECTS.forEach(s=>{
+    const done=allChapters(s).filter((_,i)=>lectures[chKey(s.id,i,"lec")]?.status==="Completed").length;
+    const total=allChapters(s).length;
+    if(done<total) pendingLec.push({sub:s.short,color:s.color,done,total,pct:Math.round(done/total*100)});
+  });
+
+  const hasAnything=overdueChapters.length>0||srDue.length>0||todayTasks.length>0;
+
+  return <div style={{marginBottom:20,animation:"slideUp 0.2s ease"}}>
+    <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(280px,1fr))",gap:12}}>
+
+      {/* Today's hours + greeting */}
+      <div style={{background:"linear-gradient(135deg,var(--surface),var(--surface2))",border:"1px solid var(--border)",borderRadius:14,padding:"16px 18px"}}>
+        <div style={{color:"var(--text3)",fontSize:9,fontWeight:700,textTransform:"uppercase",letterSpacing:1.5,marginBottom:8}}>Good {new Date().getHours()<12?"Morning":"Afternoon"}, Nishanth 👋</div>
+        <div style={{display:"flex",alignItems:"baseline",gap:6,marginBottom:4}}>
+          <span style={{color:"#818cf8",fontSize:36,fontWeight:900,fontFamily:"'Inter',sans-serif",fontVariantNumeric:"tabular-nums"}}>{todayHrs.toFixed(1)}</span>
+          <span style={{color:"var(--text)",fontSize:14,fontWeight:500}}>hours today</span>
+        </div>
+        <div style={{width:"100%",height:6,background:"var(--surface3)",borderRadius:99,overflow:"hidden",marginBottom:6}}>
+          <div style={{width:`${Math.min(todayHrs/10*100,100)}%`,height:"100%",background:"#818cf8",borderRadius:99,transition:"width 0.5s ease"}}/>
+        </div>
+        <div style={{color:"var(--text3)",fontSize:11}}>Target: 10h/day · {Math.max(0,10-todayHrs).toFixed(1)}h remaining</div>
+        <div style={{marginTop:10,display:"flex",gap:6,flexWrap:"wrap"}}>
+          <button onClick={()=>setWorld("session")} style={{background:"linear-gradient(135deg,#34d399,#059669)",border:"none",color:"#fff",borderRadius:8,padding:"6px 14px",fontSize:11,fontWeight:800,cursor:"pointer",boxShadow:"0 2px 10px rgba(52,211,153,0.3)",display:"flex",alignItems:"center",gap:5}}>▶ Start Session</button>
+          <button onClick={()=>setWorld("lectures")} style={{background:"rgba(244,114,182,0.12)",border:"1px solid rgba(244,114,182,0.3)",color:"#f472b6",borderRadius:8,padding:"6px 12px",fontSize:11,fontWeight:700,cursor:"pointer"}}>🎬 Lectures</button>
+          <button onClick={()=>setWorld("revision")} style={{background:"rgba(129,140,248,0.12)",border:"1px solid rgba(129,140,248,0.3)",color:"#818cf8",borderRadius:8,padding:"6px 12px",fontSize:11,fontWeight:700,cursor:"pointer"}}>📖 Revision</button>
+          <button onClick={()=>setWorld("search")} style={{background:"rgba(6,182,212,0.1)",border:"1px solid rgba(6,182,212,0.3)",color:"#06b6d4",borderRadius:8,padding:"6px 12px",fontSize:11,fontWeight:700,cursor:"pointer"}}>🔍 Search</button>
+        </div>
+      </div>
+
+      {/* Spaced repetition due */}
+      <div style={{background:"var(--surface)",border:"1px solid var(--border)",borderRadius:14,padding:"16px 18px"}}>
+        <div style={{color:"var(--text3)",fontSize:9,fontWeight:700,textTransform:"uppercase",letterSpacing:1.5,marginBottom:10}}>🧠 Due for Revision Today ({srDue.length})</div>
+        {srDue.length===0?<div style={{color:"var(--text3)",fontSize:12,padding:"12px 0"}}>All caught up! No chapters due for spaced revision today.</div>:(
+          <div style={{display:"flex",flexDirection:"column",gap:6,maxHeight:140,overflowY:"auto"}}>
+            {srDue.slice(0,5).map((c,i)=>(
+              <div key={i} style={{display:"flex",alignItems:"center",gap:8}}>
+                <span style={{background:`${c.color}20`,color:c.color,borderRadius:20,padding:"1px 7px",fontSize:10,fontWeight:700,flexShrink:0}}>{c.sub}</span>
+                <span style={{color:"var(--text2)",fontSize:12,flex:1,overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}}>{c.name}</span>
+              </div>
+            ))}
+            {srDue.length>5&&<div style={{color:"var(--text3)",fontSize:11}}>+{srDue.length-5} more</div>}
+          </div>
+        )}
+        <button onClick={()=>setWorld("revision")} style={{marginTop:10,background:"rgba(129,140,248,0.1)",border:"1px solid rgba(129,140,248,0.25)",color:"#818cf8",borderRadius:8,padding:"5px 12px",fontSize:11,fontWeight:700,cursor:"pointer",width:"100%"}}>Go to Revision →</button>
+      </div>
+
+      {/* Overdue revisions */}
+      {overdueChapters.length>0&&<div style={{background:"rgba(248,113,113,0.04)",border:"1px solid rgba(248,113,113,0.2)",borderRadius:14,padding:"16px 18px"}}>
+        <div style={{color:"#f87171",fontSize:9,fontWeight:700,textTransform:"uppercase",letterSpacing:1.5,marginBottom:10}}>⚠️ Overdue Revisions ({overdueChapters.length})</div>
+        <div style={{display:"flex",flexDirection:"column",gap:5,maxHeight:120,overflowY:"auto"}}>
+          {overdueChapters.slice(0,4).map((c,i)=>(
+            <div key={i} style={{display:"flex",alignItems:"center",gap:7}}>
+              <span style={{background:`${c.color}20`,color:c.color,borderRadius:20,padding:"1px 7px",fontSize:10,fontWeight:700,flexShrink:0}}>{c.sub}</span>
+              <span style={{color:"var(--text2)",fontSize:11,flex:1,overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}}>{c.name}</span>
+              <span style={{color:"#f87171",fontSize:10,fontWeight:700,flexShrink:0}}>{c.days}d</span>
+            </div>
+          ))}
+          {overdueChapters.length>4&&<div style={{color:"var(--text3)",fontSize:11}}>+{overdueChapters.length-4} more overdue</div>}
+        </div>
+      </div>}
+
+      {/* Today's tasks */}
+      {todayTasks.length>0&&<div style={{background:"var(--surface)",border:"1px solid var(--border)",borderRadius:14,padding:"16px 18px"}}>
+        <div style={{color:"var(--text3)",fontSize:9,fontWeight:700,textTransform:"uppercase",letterSpacing:1.5,marginBottom:10}}>📅 Today's Planned Tasks ({todayTasks.length})</div>
+        <div style={{display:"flex",flexDirection:"column",gap:5,maxHeight:120,overflowY:"auto"}}>
+          {todayTasks.slice(0,4).map((t,i)=>{
+            const s=SUBJECTS.find(x=>x.id===t.subject);
+            return <div key={i} style={{display:"flex",alignItems:"center",gap:7}}>
+              <span style={{background:s?.bg,color:s?.color,borderRadius:20,padding:"1px 7px",fontSize:10,fontWeight:700,flexShrink:0}}>{s?.short}</span>
+              <span style={{color:"var(--text2)",fontSize:12,flex:1,overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}}>{t.text}</span>
+            </div>;
+          })}
+        </div>
+        <button onClick={()=>setWorld("planner")} style={{marginTop:10,background:"rgba(167,139,250,0.1)",border:"1px solid rgba(167,139,250,0.25)",color:"#a78bfa",borderRadius:8,padding:"5px 12px",fontSize:11,fontWeight:700,cursor:"pointer",width:"100%"}}>Open Planner →</button>
+      </div>}
+
+    </div>
+  </div>;
+}
+
+/* ═══════════════════════════════════════
+   GLOBAL SEARCH
+═══════════════════════════════════════ */
+function GlobalSearch({lectures,revData,setWorld,setLectures,setRevData}){
+  const [q,setQ]=useState("");
+  const [focused,setFocused]=useState(false);
+  const inputRef=useRef(null);
+
+  useEffect(()=>{setTimeout(()=>inputRef.current?.focus(),100);},[]);
+
+  const results=useMemo(()=>{
+    if(q.trim().length<2)return[];
+    const ql=q.toLowerCase();
+    const out=[];
+    SUBJECTS.forEach(s=>{
+      const chs=allChapters(s);
+      chs.forEach((ch,i)=>{
+        if(ch.n.toLowerCase().includes(ql)||s.name.toLowerCase().includes(ql)||s.short.toLowerCase().includes(ql)){
+          const lk=chKey(s.id,i,"lec");const rk=chKey(s.id,i,"rev");
+          const lecStatus=lectures[lk]?.status||"Not Started";
+          const revStatus=revData[rk]?.status||"Not Started";
+          const conf=revData[rk]?.confidence||0;
+          const lr=revData[rk]?.revDates?.slice(-1)[0]||null;
+          out.push({s,ch,i,lecStatus,revStatus,conf,lr,lk,rk});
+        }
+      });
+    });
+    return out.slice(0,40);
+  },[q,lectures,revData]);
+
+  const quickMark=(rk,lk,type)=>{
+    if(type==="lec"){setLectures(p=>({...p,[lk]:{...p[lk]||defLec(),status:"Completed",progress:100,updated:today()}}));}
+    if(type==="rev"){setRevData(p=>({...p,[rk]:{...p[rk]||defRev(),status:"Completed",updated:today(),revDates:[...(p[rk]?.revDates||[]),today()]}}));}
+  };
+
+  const lcColors={"Completed":"#34d399","In Progress":"#fbbf24","Not Started":"var(--text3)"};
+  const rcColors={"Completed":"#34d399","In Progress":"#fbbf24","Not Started":"var(--text3)","Stuck":"#f87171"};
+  const confColors=["","#f87171","#fb923c","#fbbf24","#a3e635","#34d399"];
+
+  return <div style={{animation:"slideUp 0.2s ease"}}>
+    {/* Search bar */}
+    <div style={{position:"relative",marginBottom:20}}>
+      <div style={{position:"absolute",left:16,top:"50%",transform:"translateY(-50%)",color:"var(--text3)",fontSize:18,pointerEvents:"none"}}>🔍</div>
+      <input
+        ref={inputRef}
+        value={q}
+        onChange={e=>setQ(e.target.value)}
+        placeholder="Search any chapter, topic, Ind AS, section number, keyword..."
+        style={{width:"100%",background:"var(--surface)",border:"2px solid #06b6d4",borderRadius:14,padding:"14px 16px 14px 48px",fontSize:16,color:"var(--text)",outline:"none",boxShadow:"0 0 0 4px rgba(6,182,212,0.08)"}}
+      />
+      {q&&<button onClick={()=>setQ("")} style={{position:"absolute",right:14,top:"50%",transform:"translateY(-50%)",background:"var(--surface2)",border:"none",borderRadius:6,padding:"4px 9px",color:"var(--text3)",cursor:"pointer",fontSize:13}}>✕</button>}
+    </div>
+
+    {/* Hint when empty */}
+    {!q&&<div style={{textAlign:"center",padding:"48px 20px"}}>
+      <div style={{fontSize:48,marginBottom:12}}>🔍</div>
+      <div style={{color:"var(--text2)",fontSize:16,fontWeight:600,marginBottom:8}}>Search your entire syllabus</div>
+      <div style={{color:"var(--text3)",fontSize:13,lineHeight:1.8}}>
+        Try: "Transfer Pricing" · "Ind AS 116" · "Blocked Credits" · "SA 540" · "Section 80C"<br/>
+        Find any chapter instantly and update its status right here.
+      </div>
+    </div>}
+
+    {/* Results */}
+    {q.trim().length>=2&&results.length===0&&<div style={{textAlign:"center",padding:"48px",color:"var(--text3)",fontSize:14}}>No chapters found for "{q}"</div>}
+
+    {results.length>0&&<>
+      <div style={{color:"var(--text3)",fontSize:11,marginBottom:12}}>{results.length} result{results.length!==1?"s":""} for "{q}"</div>
+      <div style={{display:"flex",flexDirection:"column",gap:8}}>
+        {results.map(({s,ch,i,lecStatus,revStatus,conf,lr,lk,rk},ri)=>(
+          <div key={ri} style={{background:"var(--surface)",border:"1px solid var(--border)",borderRadius:12,padding:"14px 16px",display:"flex",gap:12,alignItems:"center",flexWrap:"wrap"}}>
+            <div style={{fontSize:22,flexShrink:0}}>{s.emoji}</div>
+            <div style={{flex:1,minWidth:200}}>
+              <div style={{display:"flex",gap:6,alignItems:"center",flexWrap:"wrap",marginBottom:4}}>
+                <span style={{background:s.bg,color:s.color,borderRadius:20,padding:"2px 9px",fontSize:11,fontWeight:700}}>{s.short}</span>
+                <span style={{background:`${ch.w==="High"?"#fbbf24":ch.w==="Medium"?"#a78bfa":"#34d399"}20`,color:ch.w==="High"?"#fbbf24":ch.w==="Medium"?"#a78bfa":"#34d399",borderRadius:20,padding:"2px 8px",fontSize:10,fontWeight:700}}>{ch.w}</span>
+              </div>
+              <div style={{color:"var(--text)",fontSize:13,fontWeight:600,lineHeight:1.4}}>{ch.n}</div>
+              <div style={{display:"flex",gap:10,marginTop:5,flexWrap:"wrap"}}>
+                <span style={{color:lcColors[lecStatus],fontSize:11}}>🎬 {lecStatus}</span>
+                <span style={{color:rcColors[revStatus],fontSize:11}}>📖 {revStatus}</span>
+                {conf>0&&<span style={{color:confColors[conf],fontSize:11}}>Conf {conf}/5</span>}
+                {lr&&<span style={{color:"var(--text3)",fontSize:11}}>Last rev: {fmtDate(lr)}</span>}
+              </div>
+            </div>
+            <div style={{display:"flex",gap:6,flexShrink:0,flexWrap:"wrap"}}>
+              {lecStatus!=="Completed"&&<button onClick={()=>quickMark(rk,lk,"lec")} style={{background:"rgba(244,114,182,0.1)",border:"1px solid rgba(244,114,182,0.3)",color:"#f472b6",borderRadius:8,padding:"5px 11px",fontSize:11,fontWeight:700,cursor:"pointer"}}>✓ Lec Done</button>}
+              {revStatus!=="Completed"&&<button onClick={()=>quickMark(rk,lk,"rev")} style={{background:"rgba(129,140,248,0.1)",border:"1px solid rgba(129,140,248,0.3)",color:"#818cf8",borderRadius:8,padding:"5px 11px",fontSize:11,fontWeight:700,cursor:"pointer"}}>✓ Rev Done</button>}
+            </div>
+          </div>
+        ))}
+      </div>
+    </>}
+  </div>;
+}
+
+/* ═══════════════════════════════════════
+   FORMULA BANK
+═══════════════════════════════════════ */
+const FORMULA_CATEGORIES={
+  fr:["Ind AS 116 – Lease Liability (PV)","Ind AS 33 – Basic EPS","Ind AS 33 – Diluted EPS","Ind AS 36 – Value in Use","Ind AS 109 – EIR Method","Ind AS 19 – Net Interest on DBO","Ind AS 23 – Capitalisation Rate"],
+  afm:["CAPM: E(R) = Rf + β(Rm-Rf)","Sharpe Ratio = (Rp-Rf)/σp","Treynor Ratio = (Rp-Rf)/βp","Jensen's Alpha = Rp-[Rf+β(Rm-Rf)]","Black-Scholes: d1, d2, C, P","Duration (Macaulay)","Convexity","Forward Rate from Spot Rates","Interest Rate Swap – NCA"],
+  aaa:["Sampling: Sample Size formula","Risk: IR × CR × DR = AR","Materiality thresholds (% of base)"],
+  dt:["MAT = 15% of Book Profit","Sec 44AD: 8%/6% of Turnover","Advance Tax Instalments (%)","Interest u/s 234A/B/C","WDV Depreciation formula","EIR / Cost of Acquisition (Sec 55)"],
+  idt:["GST: IGST = CGST + SGST","Refund – Inverted Duty: (Adj TO × Net ITC / Adj Total TO) – Tax payable","Customs: AV = TV + Freight + Insurance","Composition: 1% / 5% / 6% of TO","Time of Supply – Change in Rate (all 6 cases)"],
+  ibs:["Strategic Score = WT × RT","NPV with Perpetuity","WACC formula","EVA = NOPAT – (WACC × Capital)"],
+};
+function FormulaBank({formulas,setFormulas}){
+  const [activeSub,setActiveSub]=useState("fr");
+  const [adding,setAdding]=useState(false);
+  const [newTitle,setNewTitle]=useState("");
+  const [newBody,setNewBody]=useState("");
+  const [editKey,setEditKey]=useState(null);
+
+  const getFormulas=(sid)=>{
+    const defaults=(FORMULA_CATEGORIES[sid]||[]).map((t,i)=>({id:"default_"+i,title:t,body:formulas[sid+"_default_"+i]||"",isDefault:true}));
+    const custom=(formulas[sid+"_custom"]||[]);
+    return{defaults,custom};
+  };
+
+  const saveDefaultNote=(sid,id,body)=>{
+    setFormulas(p=>({...p,[sid+"_"+id]:body}));
+  };
+  const addCustom=(sid)=>{
+    if(!newTitle.trim())return;
+    const custom=formulas[sid+"_custom"]||[];
+    setFormulas(p=>({...p,[sid+"_custom"]:[...custom,{id:Date.now(),title:newTitle.trim(),body:newBody.trim()}]}));
+    setNewTitle("");setNewBody("");setAdding(false);
+  };
+  const deleteCustom=(sid,id)=>{
+    const custom=(formulas[sid+"_custom"]||[]).filter(f=>f.id!==id);
+    setFormulas(p=>({...p,[sid+"_custom"]:custom}));
+  };
+  const updateCustom=(sid,id,body)=>{
+    const custom=(formulas[sid+"_custom"]||[]).map(f=>f.id===id?{...f,body}:f);
+    setFormulas(p=>({...p,[sid+"_custom"]:custom}));
+  };
+
+  const s=SUBJECTS.find(x=>x.id===activeSub);
+  const {defaults,custom}=getFormulas(activeSub);
+
+  return <div style={{animation:"slideUp 0.2s ease"}}>
+    <div style={{background:"linear-gradient(135deg,rgba(16,185,129,0.1),transparent)",border:"1px solid rgba(16,185,129,0.2)",borderRadius:14,padding:"16px 20px",marginBottom:16}}>
+      <div style={{color:"#10b981",fontSize:10,fontWeight:700,textTransform:"uppercase",letterSpacing:2,marginBottom:4}}>🧮 Formula Bank</div>
+      <div style={{color:"var(--text)",fontSize:18,fontWeight:800}}>Formulas, Section Numbers & Mnemonics</div>
+      <div style={{color:"var(--text2)",fontSize:12,marginTop:4}}>Pre-loaded with key formulas per subject. Add your own notes, mnemonics, shortcuts.</div>
+    </div>
+
+    {/* Subject tabs */}
+    <div style={{display:"flex",gap:6,flexWrap:"wrap",marginBottom:16}}>
+      {SUBJECTS.map(sub=>{
+        const totalNotes=Object.entries(formulas).filter(([k])=>k.startsWith(sub.id)).length;
+        const active=activeSub===sub.id;
+        return <button key={sub.id} onClick={()=>setActiveSub(sub.id)} style={{background:active?`${sub.color}18`:"var(--surface2)",border:`${active?2:1}px solid ${active?sub.color:sub.color+"30"}`,borderRadius:10,padding:"8px 14px",cursor:"pointer"}}>
+          <div style={{color:active?sub.color:"var(--text2)",fontSize:12,fontWeight:700}}>{sub.emoji} {sub.short}</div>
+          <div style={{color:"var(--text3)",fontSize:10}}>{(FORMULA_CATEGORIES[sub.id]||[]).length} formulas</div>
+        </button>;
+      })}
+    </div>
+
+    <div className="card" style={{padding:0,overflow:"hidden",marginBottom:12}}>
+      <div style={{padding:"11px 16px",background:"var(--surface2)",borderBottom:"1px solid var(--border)",display:"flex",justifyContent:"space-between",alignItems:"center"}}>
+        <span style={{color:s?.color,fontSize:12,fontWeight:700}}>{s?.name} — Formulas & Notes</span>
+        <button onClick={()=>setAdding(p=>!p)} style={{background:`${s?.color}18`,border:`1px solid ${s?.color}44`,color:s?.color,borderRadius:8,padding:"4px 12px",fontSize:11,fontWeight:700,cursor:"pointer"}}>{adding?"✕":"+ Add Custom"}</button>
+      </div>
+      {adding&&<div style={{padding:"14px 16px",borderBottom:"1px solid var(--border)",background:"rgba(16,185,129,0.03)"}}>
+        <input value={newTitle} onChange={e=>setNewTitle(e.target.value)} placeholder="Formula / rule title..." style={{width:"100%",background:"var(--surface2)",border:"1px solid var(--border)",borderRadius:8,padding:"8px 10px",fontSize:13,color:"var(--text)",marginBottom:8}}/>
+        <textarea value={newBody} onChange={e=>setNewBody(e.target.value)} placeholder="Formula, notes, example, exam trick..." style={{width:"100%",background:"var(--surface2)",border:"1px solid var(--border)",borderRadius:8,padding:"8px 10px",fontSize:13,color:"var(--text)",minHeight:72,resize:"vertical",marginBottom:8}}/>
+        <div style={{display:"flex",gap:8}}>
+          <button onClick={()=>setAdding(false)} style={{background:"var(--surface2)",border:"1px solid var(--border)",borderRadius:8,padding:"6px 14px",fontSize:12,cursor:"pointer",color:"var(--text2)"}}>Cancel</button>
+          <button onClick={()=>addCustom(activeSub)} style={{background:"#10b981",color:"#fff",border:"none",borderRadius:8,padding:"6px 18px",fontSize:12,fontWeight:700,cursor:"pointer"}}>Save</button>
+        </div>
+      </div>}
+      {/* Default formulas */}
+      {defaults.map((f,fi)=>(
+        <div key={f.id} style={{padding:"12px 16px",borderBottom:"1px solid var(--border)"}}>
+          <div style={{color:"var(--text)",fontSize:13,fontWeight:600,marginBottom:6,fontFamily:"'JetBrains Mono',monospace"}}>{f.title}</div>
+          <textarea
+            defaultValue={formulas[activeSub+"_"+f.id]||""}
+            onBlur={e=>saveDefaultNote(activeSub,f.id,e.target.value)}
+            placeholder="Add your working, example, memory trick..."
+            style={{width:"100%",background:"var(--surface2)",border:"1px solid var(--border)",borderRadius:7,padding:"6px 10px",fontSize:12,color:"var(--text)",minHeight:formulas[activeSub+"_"+f.id]?48:28,resize:"vertical",lineHeight:1.5}}
+          />
+        </div>
+      ))}
+      {/* Custom formulas */}
+      {custom.map((f)=>(
+        <div key={f.id} style={{padding:"12px 16px",borderBottom:"1px solid var(--border)",background:"rgba(16,185,129,0.02)"}}>
+          <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",marginBottom:6}}>
+            <div style={{color:"#10b981",fontSize:13,fontWeight:600}}>{f.title} <span style={{color:"var(--text3)",fontSize:10,fontWeight:400}}>(custom)</span></div>
+            <button onClick={()=>deleteCustom(activeSub,f.id)} style={{background:"transparent",border:"none",color:"var(--text3)",cursor:"pointer",fontSize:13}}>✕</button>
+          </div>
+          <textarea
+            defaultValue={f.body}
+            onBlur={e=>updateCustom(activeSub,f.id,e.target.value)}
+            style={{width:"100%",background:"var(--surface2)",border:"1px solid var(--border)",borderRadius:7,padding:"6px 10px",fontSize:12,color:"var(--text)",minHeight:48,resize:"vertical"}}
+          />
+        </div>
+      ))}
+      {defaults.length===0&&custom.length===0&&<div style={{padding:"32px",textAlign:"center",color:"var(--text3)"}}>No formulas yet — add a custom one above.</div>}
+    </div>
+  </div>;
+}
+
+/* ═══════════════════════════════════════
+   DOUBT LOG
+═══════════════════════════════════════ */
+function DoubtLog({doubts,setDoubts}){
+  const [form,setForm]=useState({subject:SUBJECTS[0].id,doubt:"",context:""});
+  const [filter,setFilter]=useState("open");
+  const [adding,setAdding]=useState(false);
+
+  const add=()=>{
+    if(!form.doubt.trim())return;
+    setDoubts(p=>[{id:Date.now(),date:today(),subject:form.subject,doubt:form.doubt.trim(),context:form.context.trim(),resolved:false,resolution:""},...p]);
+    setForm({subject:SUBJECTS[0].id,doubt:"",context:""});setAdding(false);
+  };
+  const resolve=(id,resolution)=>{
+    setDoubts(p=>p.map(d=>d.id===id?{...d,resolved:true,resolution,resolvedDate:today()}:d));
+  };
+  const remove=(id)=>setDoubts(p=>p.filter(d=>d.id!==id));
+  const reopen=(id)=>setDoubts(p=>p.map(d=>d.id===id?{...d,resolved:false,resolution:"",resolvedDate:null}:d));
+
+  const filtered=doubts.filter(d=>filter==="all"?true:filter==="open"?!d.resolved:d.resolved);
+  const openCount=doubts.filter(d=>!d.resolved).length;
+
+  return <div style={{animation:"slideUp 0.2s ease"}}>
+    <div style={{background:"linear-gradient(135deg,rgba(245,158,11,0.1),transparent)",border:"1px solid rgba(245,158,11,0.2)",borderRadius:14,padding:"16px 20px",marginBottom:16}}>
+      <div style={{color:"#f59e0b",fontSize:10,fontWeight:700,textTransform:"uppercase",letterSpacing:2,marginBottom:4}}>❓ Doubt Log</div>
+      <div style={{color:"var(--text)",fontSize:18,fontWeight:800}}>Track & Resolve Your Doubts</div>
+      <div style={{color:"var(--text2)",fontSize:12,marginTop:4}}>Log every doubt instantly. Mark resolved when cleared. Never let a doubt linger.</div>
+    </div>
+
+    <div style={{display:"flex",gap:10,marginBottom:16,flexWrap:"wrap",alignItems:"center"}}>
+      <div style={{display:"flex",background:"var(--surface2)",border:"1px solid var(--border)",borderRadius:9,overflow:"hidden"}}>
+        {[["open",`Open (${openCount})`],["resolved","Resolved"],["all","All"]].map(([v,l])=>(
+          <button key={v} onClick={()=>setFilter(v)} style={{background:filter===v?"var(--border2)":"transparent",border:"none",color:filter===v?"var(--text)":"var(--text3)",padding:"6px 14px",fontSize:12,fontWeight:700,cursor:"pointer"}}>{l}</button>
+        ))}
+      </div>
+      <button onClick={()=>setAdding(p=>!p)} style={{background:"rgba(245,158,11,0.12)",border:"1px solid rgba(245,158,11,0.35)",color:"#f59e0b",borderRadius:9,padding:"7px 16px",fontSize:12,fontWeight:700,cursor:"pointer"}}>{adding?"✕ Cancel":"+ Log Doubt"}</button>
+    </div>
+
+    {adding&&<div className="card" style={{padding:"16px 18px",marginBottom:14,border:"1px solid rgba(245,158,11,0.3)"}}>
+      <div style={{display:"grid",gridTemplateColumns:"auto 1fr",gap:10,marginBottom:10,alignItems:"end"}}>
+        <div>
+          <div style={{color:"var(--text3)",fontSize:10,marginBottom:4}}>Subject</div>
+          <select value={form.subject} onChange={e=>setForm(f=>({...f,subject:e.target.value}))} style={{background:"var(--surface2)",border:"1px solid var(--border)",borderRadius:8,padding:"8px 10px",fontSize:12,color:"var(--text)"}}>
+            {SUBJECTS.map(s=><option key={s.id} value={s.id}>{s.emoji} {s.short}</option>)}
+          </select>
+        </div>
+        <div>
+          <div style={{color:"var(--text3)",fontSize:10,marginBottom:4}}>Doubt / Question *</div>
+          <input value={form.doubt} onChange={e=>setForm(f=>({...f,doubt:e.target.value}))} onKeyDown={e=>e.key==="Enter"&&!e.shiftKey&&add()} placeholder="What don't you understand? Be specific..." style={{width:"100%",background:"var(--surface2)",border:"1px solid var(--border)",borderRadius:8,padding:"8px 10px",fontSize:13,color:"var(--text)"}}/>
+        </div>
+      </div>
+      <div style={{marginBottom:10}}>
+        <div style={{color:"var(--text3)",fontSize:10,marginBottom:4}}>Context (optional)</div>
+        <input value={form.context} onChange={e=>setForm(f=>({...f,context:e.target.value}))} placeholder="e.g. Rule 42 reversal formula — SM page 4.32, confused about denominator" style={{width:"100%",background:"var(--surface2)",border:"1px solid var(--border)",borderRadius:8,padding:"8px 10px",fontSize:12,color:"var(--text)"}}/>
+      </div>
+      <div style={{display:"flex",gap:8}}>
+        <button onClick={()=>setAdding(false)} style={{background:"var(--surface2)",border:"1px solid var(--border)",borderRadius:8,padding:"7px 14px",fontSize:12,cursor:"pointer",color:"var(--text2)"}}>Cancel</button>
+        <button onClick={add} style={{background:"#f59e0b",color:"#fff",border:"none",borderRadius:8,padding:"7px 20px",fontSize:12,fontWeight:700,cursor:"pointer"}}>Log Doubt</button>
+      </div>
+    </div>}
+
+    {filtered.length===0?<div style={{textAlign:"center",padding:"52px",border:"2px dashed var(--border)",borderRadius:14}}>
+      <div style={{fontSize:36,marginBottom:8}}>{filter==="open"?"🎉":"❓"}</div>
+      <div style={{color:"var(--text3)",fontSize:14}}>{filter==="open"?"No open doubts — great clarity!":"No doubts logged yet."}</div>
+    </div>:(
+      <div style={{display:"flex",flexDirection:"column",gap:10}}>
+        {filtered.map(d=>{
+          const s=SUBJECTS.find(x=>x.id===d.subject);
+          const [resText,setResText]=useState(d.resolution||"");
+          return <div key={d.id} style={{background:"var(--surface)",border:`1px solid ${d.resolved?"rgba(52,211,153,0.2)":"rgba(245,158,11,0.2)"}`,borderRadius:12,padding:"14px 16px",borderLeft:`3px solid ${d.resolved?"#34d399":"#f59e0b"}`}}>
+            <div style={{display:"flex",gap:8,alignItems:"flex-start",flexWrap:"wrap"}}>
+              <div style={{flex:1,minWidth:200}}>
+                <div style={{display:"flex",gap:6,marginBottom:5,flexWrap:"wrap"}}>
+                  <span style={{background:s?.bg,color:s?.color,borderRadius:20,padding:"1px 8px",fontSize:10,fontWeight:700}}>{s?.short}</span>
+                  <span style={{color:"var(--text3)",fontSize:10}}>{d.date}</span>
+                  {d.resolved&&<span style={{background:"rgba(52,211,153,0.15)",color:"#34d399",borderRadius:20,padding:"1px 8px",fontSize:10,fontWeight:700}}>✓ Resolved {d.resolvedDate||""}</span>}
+                </div>
+                <div style={{color:"var(--text)",fontSize:13,fontWeight:600,marginBottom:4}}>{d.doubt}</div>
+                {d.context&&<div style={{color:"var(--text3)",fontSize:12,marginBottom:6,fontStyle:"italic"}}>{d.context}</div>}
+                {!d.resolved&&<div style={{marginTop:8}}>
+                  <div style={{color:"var(--text3)",fontSize:10,marginBottom:4}}>Resolution / Answer</div>
+                  <textarea value={resText} onChange={e=>setResText(e.target.value)} placeholder="Write the answer/explanation here once you understand it..." style={{width:"100%",background:"var(--surface2)",border:"1px solid var(--border)",borderRadius:8,padding:"7px 10px",fontSize:12,color:"var(--text)",minHeight:52,resize:"vertical"}}/>
+                  <button onClick={()=>resolve(d.id,resText)} style={{marginTop:6,background:"rgba(52,211,153,0.15)",border:"1px solid rgba(52,211,153,0.35)",color:"#34d399",borderRadius:8,padding:"5px 14px",fontSize:11,fontWeight:700,cursor:"pointer"}}>✓ Mark Resolved</button>
+                </div>}
+                {d.resolved&&d.resolution&&<div style={{background:"rgba(52,211,153,0.06)",border:"1px solid rgba(52,211,153,0.2)",borderRadius:8,padding:"8px 12px",marginTop:6}}>
+                  <div style={{color:"#34d399",fontSize:10,fontWeight:700,marginBottom:3}}>RESOLUTION</div>
+                  <div style={{color:"var(--text2)",fontSize:12}}>{d.resolution}</div>
+                </div>}
+              </div>
+              <div style={{display:"flex",flexDirection:"column",gap:5}}>
+                {d.resolved&&<button onClick={()=>reopen(d.id)} style={{background:"rgba(245,158,11,0.1)",border:"1px solid rgba(245,158,11,0.3)",color:"#f59e0b",borderRadius:7,padding:"4px 10px",fontSize:10,fontWeight:700,cursor:"pointer"}}>Reopen</button>}
+                <button onClick={()=>remove(d.id)} style={{background:"transparent",border:"1px solid var(--border)",color:"var(--text3)",borderRadius:7,padding:"4px 10px",fontSize:10,cursor:"pointer"}}>Delete</button>
+              </div>
+            </div>
+          </div>;
+        })}
+      </div>
+    )}
+  </div>;
+}
+
+/* ═══════════════════════════════════════
+   WEEKLY REVIEW MODAL
+═══════════════════════════════════════ */
+function WeeklyReview({studyLog,revData,tests,weeklyTarget,onClose,weeklyReviewDone,setWeeklyReviewDone}){
+  const weekKey=()=>{const d=new Date();const s=new Date(d);s.setDate(d.getDate()-d.getDay());return s.toISOString().slice(0,10);};
+  const wk=weekKey();
+  const [step,setStep]=useState(0);
+  const [answers,setAnswers]=useState({});
+
+  // Week stats
+  const weekHrs=Array.from({length:7},(_,i)=>{const d=new Date();d.setDate(d.getDate()-i);return studyLog[d.toISOString().slice(0,10)]||0;}).reduce((a,b)=>a+b,0);
+  const weekChaps=SUBJECTS.reduce((a,s)=>a+allChapters(s).filter((_,i)=>{
+    const k=chKey(s.id,i,"rev");const e=revData[k];
+    return e?.updated&&daysSince(e.updated)<=7&&e.status==="Completed";
+  }).length,0);
+  const weekTests=tests.filter(t=>{const d=new Date(t.date);return(new Date()-d)/86400000<=7;});
+  const hitTarget=weekHrs>=weeklyTarget;
+
+  const questions=[
+    {key:"highlight",label:"What was your biggest win this week?",placeholder:"e.g. Completed Ind AS 116, scored 72 in DT mock..."},
+    {key:"struggle",label:"What did you struggle with most?",placeholder:"e.g. Transfer Pricing methods, Rule 42 reversal..."},
+    {key:"nextweek",label:"What is your #1 priority for next week?",placeholder:"e.g. Complete GST ITC chapter, attempt IDT RTP..."},
+    {key:"hours",label:"Did you hit your hour target? Any reason if not?",placeholder:"e.g. Hit 68/70h, missed 2h due to travel..."},
+  ];
+
+  const save=()=>{
+    setWeeklyReviewDone(p=>({...p,[wk]:{...answers,weekHrs,weekChaps,completedAt:new Date().toISOString()}}));
+    onClose();
+  };
+
+  const alreadyDone=weeklyReviewDone[wk];
+
+  return <div onClick={onClose} style={{position:"fixed",inset:0,background:"rgba(0,0,0,0.8)",zIndex:3000,display:"flex",alignItems:"center",justifyContent:"center",padding:16,backdropFilter:"blur(12px)"}}>
+    <div onClick={e=>e.stopPropagation()} style={{background:"var(--surface)",border:"1px solid var(--border2)",borderRadius:20,padding:28,maxWidth:540,width:"100%",maxHeight:"90vh",overflowY:"auto",boxShadow:"var(--shadow-lg)",animation:"slideUp 0.2s ease"}}>
+      <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:20}}>
+        <div><div style={{color:"#fbbf24",fontSize:10,textTransform:"uppercase",letterSpacing:2,fontWeight:700}}>📊 Weekly Review</div>
+        <div style={{color:"var(--text)",fontSize:18,fontWeight:800,marginTop:2}}>Week of {new Date(wk+"T00:00:00").toLocaleDateString("en-IN",{day:"numeric",month:"short"})}</div></div>
+        <button onClick={onClose} style={{background:"var(--surface2)",border:"none",borderRadius:8,width:30,height:30,cursor:"pointer",color:"var(--text2)",fontSize:16}}>×</button>
+      </div>
+
+      {/* Stats row */}
+      <div style={{display:"grid",gridTemplateColumns:"repeat(3,1fr)",gap:8,marginBottom:20}}>
+        {[{l:"Hours this week",v:`${weekHrs.toFixed(0)}h`,c:hitTarget?"#34d399":"#f87171"},{l:"Chapters done",v:weekChaps,c:"#818cf8"},{l:"Tests taken",v:weekTests.length,c:"#38bdf8"}].map(({l,v,c})=>(
+          <div key={l} style={{background:"var(--surface2)",borderRadius:10,padding:"12px",textAlign:"center"}}>
+            <div style={{color:c,fontSize:24,fontWeight:900,fontFamily:"'JetBrains Mono',monospace"}}>{v}</div>
+            <div style={{color:"var(--text3)",fontSize:10,marginTop:2}}>{l}</div>
+          </div>
+        ))}
+      </div>
+
+      {alreadyDone?<div style={{textAlign:"center",padding:"20px",background:"rgba(52,211,153,0.06)",border:"1px solid rgba(52,211,153,0.2)",borderRadius:12,marginBottom:16}}>
+        <div style={{fontSize:28,marginBottom:6}}>✅</div>
+        <div style={{color:"#34d399",fontWeight:700}}>This week's review already done!</div>
+        <div style={{color:"var(--text3)",fontSize:12,marginTop:4}}>Come back next Sunday for your next review.</div>
+        {alreadyDone.highlight&&<div style={{marginTop:12,textAlign:"left"}}>
+          <div style={{color:"var(--text3)",fontSize:10,marginBottom:3}}>Your highlight:</div>
+          <div style={{color:"var(--text2)",fontSize:13,fontStyle:"italic"}}>"{alreadyDone.highlight}"</div>
+        </div>}
+      </div>:(
+        <div style={{display:"flex",flexDirection:"column",gap:12,marginBottom:20}}>
+          {questions.map(({key,label,placeholder})=>(
+            <div key={key}>
+              <div style={{color:"var(--text2)",fontSize:13,fontWeight:600,marginBottom:5}}>{label}</div>
+              <textarea value={answers[key]||""} onChange={e=>setAnswers(p=>({...p,[key]:e.target.value}))} placeholder={placeholder} style={{width:"100%",background:"var(--surface2)",border:"1px solid var(--border)",borderRadius:9,padding:"9px 12px",fontSize:13,color:"var(--text)",minHeight:60,resize:"vertical",lineHeight:1.5}}/>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {!alreadyDone&&<button onClick={save} style={{width:"100%",background:"linear-gradient(135deg,#fbbf24,#f59e0b)",color:"#fff",border:"none",borderRadius:12,padding:"12px",fontSize:14,fontWeight:800,cursor:"pointer",boxShadow:"0 4px 14px rgba(251,191,36,0.3)"}}>Save Weekly Review ✓</button>}
+
+      {/* Past reviews */}
+      {Object.keys(weeklyReviewDone).length>0&&<div style={{marginTop:20}}>
+        <div style={{color:"var(--text3)",fontSize:10,fontWeight:700,textTransform:"uppercase",letterSpacing:1.5,marginBottom:10}}>Past Reviews</div>
+        <div style={{display:"flex",flexDirection:"column",gap:6,maxHeight:140,overflowY:"auto"}}>
+          {Object.entries(weeklyReviewDone).reverse().slice(0,6).map(([wkk,rv])=>(
+            <div key={wkk} style={{background:"var(--surface2)",borderRadius:8,padding:"8px 12px",display:"flex",gap:10,alignItems:"center"}}>
+              <div style={{color:"var(--text3)",fontSize:11,flexShrink:0,fontFamily:"'JetBrains Mono',monospace"}}>{new Date(wkk+"T00:00:00").toLocaleDateString("en-IN",{day:"numeric",month:"short"})}</div>
+              <div style={{color:"#818cf8",fontSize:11,fontWeight:700}}>{rv.weekHrs?.toFixed(0)||"?"}h</div>
+              <div style={{color:"var(--text2)",fontSize:11,flex:1,overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}}>{rv.highlight||"—"}</div>
+            </div>
+          ))}
+        </div>
+      </div>}
+    </div>
+  </div>;
+}
+
+
+/* ═══════════════════════════════════════
+   3. SUBJECT EXAM COUNTDOWN CARDS
+═══════════════════════════════════════ */
+function ExamCountdowns({revData}){
+  const papers=SUBJECTS.map(s=>{
+    const info=EXAM_DATES[s.id];
+    const days=info?daysUntil(info.date):null;
+    const chs=allChapters(s);
+    const revLeft=chs.filter((_,i)=>revData[chKey(s.id,i,"rev")]?.status!=="Completed").length;
+    const daysPerChap=days&&revLeft>0?(days/revLeft).toFixed(1):null;
+    return{s,days,revLeft,total:chs.length,daysPerChap,label:info?.label||s.name};
+  });
+  return <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(180px,1fr))",gap:10,marginBottom:20}}>
+    {papers.map(({s,days,revLeft,total,daysPerChap})=>{
+      const pct=Math.round((total-revLeft)/total*100);
+      const urgency=days<=30?"#f87171":days<=90?"#fbbf24":"#34d399";
+      return <div key={s.id} className="card" style={{padding:"14px 16px",borderTop:`3px solid ${s.color}`}}>
+        <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",marginBottom:8}}>
+          <div>
+            <div style={{fontSize:18}}>{s.emoji}</div>
+            <div style={{color:s.color,fontSize:12,fontWeight:800,marginTop:2}}>{s.short}</div>
+          </div>
+          <div style={{textAlign:"right"}}>
+            <div style={{color:urgency,fontSize:26,fontWeight:900,fontFamily:"'JetBrains Mono',monospace",lineHeight:1}}>{days??"-"}</div>
+            <div style={{color:"var(--text3)",fontSize:9,fontWeight:700,textTransform:"uppercase"}}>days</div>
+          </div>
+        </div>
+        <div style={{marginBottom:6}}>
+          <div style={{display:"flex",justifyContent:"space-between",marginBottom:3}}>
+            <span style={{color:"var(--text3)",fontSize:10}}>Revision</span>
+            <span style={{color:s.color,fontSize:10,fontWeight:700}}>{pct}%</span>
+          </div>
+          <div style={{width:"100%",height:4,background:"var(--surface3)",borderRadius:99,overflow:"hidden"}}>
+            <div style={{width:`${pct}%`,height:"100%",background:s.color,borderRadius:99}}/>
+          </div>
+        </div>
+        <div style={{color:"var(--text3)",fontSize:10}}>{revLeft} chapters left</div>
+        {daysPerChap&&<div style={{color:parseFloat(daysPerChap)<7?"#f87171":parseFloat(daysPerChap)<14?"#fbbf24":"#34d399",fontSize:10,fontWeight:700,marginTop:2}}>{daysPerChap} days/chapter</div>}
+      </div>;
+    })}
+  </div>;
+}
+
+/* ═══════════════════════════════════════
+   4. ANSWER WRITING TRACKER
+═══════════════════════════════════════ */
+function AnswerWriting({answerLog,setAnswerLog}){
+  const [adding,setAdding]=useState(false);
+  const [form,setForm]=useState({date:today(),subject:SUBJECTS[0].id,topic:"",timeTaken:15,quality:3,notes:""});
+  const add=()=>{
+    if(!form.topic.trim())return;
+    setAnswerLog(p=>[{id:Date.now(),...form},...p]);
+    setForm(f=>({...f,topic:"",notes:""}));setAdding(false);
+  };
+  const remove=id=>setAnswerLog(p=>p.filter(x=>x.id!==id));
+  const qColors=["","#f87171","#fb923c","#fbbf24","#a3e635","#34d399"];
+  const subStats=SUBJECTS.map(s=>{
+    const entries=answerLog.filter(a=>a.subject===s.id);
+    const avgQ=entries.length?entries.reduce((a,b)=>a+b.quality,0)/entries.length:0;
+    const avgT=entries.length?entries.reduce((a,b)=>a+b.timeTaken,0)/entries.length:0;
+    return{s,count:entries.length,avgQ:avgQ.toFixed(1),avgT:Math.round(avgT)};
+  });
+  return <div style={{animation:"slideUp 0.2s ease"}}>
+    <div style={{background:"linear-gradient(135deg,rgba(16,185,129,0.1),transparent)",border:"1px solid rgba(16,185,129,0.2)",borderRadius:14,padding:"16px 20px",marginBottom:16}}>
+      <div style={{color:"#10b981",fontSize:10,fontWeight:700,textTransform:"uppercase",letterSpacing:2,marginBottom:4}}>✍️ Answer Writing Tracker</div>
+      <div style={{color:"var(--text)",fontSize:18,fontWeight:800}}>Track Written Answer Practice</div>
+      <div style={{color:"var(--text2)",fontSize:12,marginTop:4}}>Log every answer you write. Track speed and quality separately. This is what rank marks are made of.</div>
+    </div>
+    {/* Per-subject stats */}
+    <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(140px,1fr))",gap:8,marginBottom:16}}>
+      {subStats.map(({s,count,avgQ,avgT})=>(
+        <div key={s.id} className="card" style={{padding:"12px 14px",borderLeft:`3px solid ${s.color}`}}>
+          <div style={{color:s.color,fontSize:11,fontWeight:700,marginBottom:4}}>{s.emoji} {s.short}</div>
+          <div style={{color:"var(--text)",fontSize:20,fontWeight:900,fontFamily:"'JetBrains Mono',monospace"}}>{count}</div>
+          <div style={{color:"var(--text3)",fontSize:10}}>answers written</div>
+          {count>0&&<><div style={{color:qColors[Math.round(parseFloat(avgQ))],fontSize:10,marginTop:4}}>Avg quality: {avgQ}/5</div>
+          <div style={{color:"var(--text3)",fontSize:10}}>Avg time: {avgT}m</div></>}
+        </div>
+      ))}
+    </div>
+    <div style={{marginBottom:12}}><button onClick={()=>setAdding(p=>!p)} style={{background:"rgba(16,185,129,0.12)",border:"1px solid rgba(16,185,129,0.35)",color:"#10b981",borderRadius:9,padding:"7px 16px",fontSize:12,fontWeight:700,cursor:"pointer"}}>{adding?"✕ Cancel":"+ Log Answer"}</button></div>
+    {adding&&<div className="card" style={{padding:"16px",marginBottom:14,border:"1px solid rgba(16,185,129,0.3)"}}>
+      <div style={{display:"flex",gap:8,flexWrap:"wrap",marginBottom:10}}>
+        <div style={{flex:1,minWidth:180}}>
+          <div style={{color:"var(--text3)",fontSize:10,marginBottom:3}}>Topic / Question</div>
+          <input value={form.topic} onChange={e=>setForm(f=>({...f,topic:e.target.value}))} placeholder="e.g. Transfer Pricing – TNMM Method" style={{width:"100%",background:"var(--surface2)",border:"1px solid var(--border)",borderRadius:8,padding:"8px",fontSize:12,color:"var(--text)"}}/>
+        </div>
+        <div>
+          <div style={{color:"var(--text3)",fontSize:10,marginBottom:3}}>Subject</div>
+          <select value={form.subject} onChange={e=>setForm(f=>({...f,subject:e.target.value}))} style={{background:"var(--surface2)",border:"1px solid var(--border)",borderRadius:8,padding:"8px",fontSize:12,color:"var(--text)"}}>{SUBJECTS.map(s=><option key={s.id} value={s.id}>{s.emoji}{s.short}</option>)}</select>
+        </div>
+        <div>
+          <div style={{color:"var(--text3)",fontSize:10,marginBottom:3}}>Time (min)</div>
+          <input type="number" value={form.timeTaken} onChange={e=>setForm(f=>({...f,timeTaken:parseInt(e.target.value)||15}))} style={{width:64,background:"var(--surface2)",border:"1px solid var(--border)",borderRadius:8,padding:"8px",fontSize:12,color:"var(--text)"}}/>
+        </div>
+        <div>
+          <div style={{color:"var(--text3)",fontSize:10,marginBottom:3}}>Quality (1-5)</div>
+          <div style={{display:"flex",gap:3}}>
+            {[1,2,3,4,5].map(q=><button key={q} onClick={()=>setForm(f=>({...f,quality:q}))} style={{width:28,height:28,borderRadius:6,border:`2px solid ${form.quality>=q?qColors[q]:"var(--border)"}`,background:form.quality>=q?qColors[q]+"20":"transparent",color:form.quality>=q?qColors[q]:"var(--text3)",fontSize:11,fontWeight:700,cursor:"pointer"}}>{q}</button>)}
+          </div>
+        </div>
+        <div style={{flex:1,minWidth:140}}>
+          <div style={{color:"var(--text3)",fontSize:10,marginBottom:3}}>Notes</div>
+          <input value={form.notes} onChange={e=>setForm(f=>({...f,notes:e.target.value}))} placeholder="What could improve?" style={{width:"100%",background:"var(--surface2)",border:"1px solid var(--border)",borderRadius:8,padding:"8px",fontSize:12,color:"var(--text)"}}/>
+        </div>
+      </div>
+      <button onClick={add} style={{background:"#10b981",color:"#fff",border:"none",borderRadius:8,padding:"7px 20px",fontSize:12,fontWeight:700,cursor:"pointer"}}>Save</button>
+    </div>}
+    {answerLog.length===0?<div style={{textAlign:"center",padding:"52px",border:"2px dashed var(--border)",borderRadius:14,color:"var(--text3)"}}>✍️ No answers logged yet — start writing and tracking from Phase 5 (April 2027)</div>:(
+      <div style={{display:"flex",flexDirection:"column",gap:7}}>
+        {answerLog.map(a=>{
+          const s=SUBJECTS.find(x=>x.id===a.subject);
+          return <div key={a.id} className="card" style={{padding:"12px 16px",display:"flex",gap:12,alignItems:"center",flexWrap:"wrap",borderLeft:`3px solid ${qColors[a.quality]}`}}>
+            <div style={{flexShrink:0,textAlign:"center",minWidth:44}}>
+              <div style={{color:qColors[a.quality],fontSize:20,fontWeight:900,fontFamily:"'JetBrains Mono',monospace"}}>{a.quality}/5</div>
+              <div style={{color:"var(--text3)",fontSize:9}}>quality</div>
+            </div>
+            <div style={{flex:1}}>
+              <div style={{display:"flex",gap:6,marginBottom:3,flexWrap:"wrap"}}>
+                <span style={{background:s?.bg,color:s?.color,borderRadius:20,padding:"1px 7px",fontSize:10,fontWeight:700}}>{s?.short}</span>
+                <span style={{color:"var(--text3)",fontSize:10}}>{a.date}</span>
+                <span style={{color:"#a78bfa",fontSize:10}}>⏱ {a.timeTaken}m</span>
+              </div>
+              <div style={{color:"var(--text)",fontSize:13,fontWeight:600}}>{a.topic}</div>
+              {a.notes&&<div style={{color:"var(--text3)",fontSize:11,marginTop:2}}>{a.notes}</div>}
+            </div>
+            <button onClick={()=>remove(a.id)} style={{background:"transparent",border:"none",color:"var(--text3)",cursor:"pointer",fontSize:13}}>✕</button>
+          </div>;
+        })}
+      </div>
+    )}
+  </div>;
+}
+
+/* ═══════════════════════════════════════
+   5. CHAPTER NOTES (full-screen per chapter)
+═══════════════════════════════════════ */
+function ChapterNotes({chapterNotes,setChapterNotes}){
+  const [activeSub,setActiveSub]=useState(SUBJECTS[0].id);
+  const [activeChIdx,setActiveChIdx]=useState(0);
+  const [viewMode,setViewMode]=useState("edit");
+  const subj=SUBJECTS.find(s=>s.id===activeSub);
+  const chs=allChapters(subj);
+  const ch=chs[activeChIdx];
+  const noteKey=activeSub+"_"+activeChIdx;
+  const note=chapterNotes[noteKey]||{content:"",lastSaved:""};
+  const [draft,setDraft]=useState(note.content);
+  useEffect(()=>{
+    const k=activeSub+"_"+activeChIdx;
+    setDraft(chapterNotes[k]?.content||"");
+  },[activeSub,activeChIdx,chapterNotes]);
+  const save=()=>{setChapterNotes(p=>({...p,[noteKey]:{content:draft,lastSaved:today()}}));};
+  const wordCount=draft.trim().split(/\s+/).filter(Boolean).length;
+  const hasNote=note.content.trim().length>0;
+  const subjectsWithNotes=SUBJECTS.map(s=>{
+    const count=allChapters(s).filter((_,i)=>chapterNotes[s.id+"_"+i]?.content?.trim()).length;
+    return{s,count};
+  });
+  return <div style={{animation:"slideUp 0.2s ease",display:"grid",gridTemplateColumns:"240px 1fr",gap:14,height:"calc(100vh - 120px)"}}>
+    {/* Sidebar */}
+    <div style={{display:"flex",flexDirection:"column",gap:0,overflowY:"auto",background:"var(--surface)",border:"1px solid var(--border)",borderRadius:14}}>
+      {SUBJECTS.map(s=>{
+        const sw=subjectsWithNotes.find(x=>x.s.id===s.id);
+        const isActiveSub=activeSub===s.id;
+        return <div key={s.id}>
+          <button onClick={()=>{setActiveSub(s.id);setActiveChIdx(0);}} style={{width:"100%",background:isActiveSub?`${s.color}15`:"transparent",border:"none",borderBottom:"1px solid var(--border)",padding:"10px 14px",cursor:"pointer",textAlign:"left",display:"flex",alignItems:"center",gap:8}}>
+            <span>{s.emoji}</span>
+            <span style={{color:isActiveSub?s.color:"var(--text2)",fontSize:12,fontWeight:700,flex:1}}>{s.short}</span>
+            {sw?.count>0&&<span style={{background:`${s.color}20`,color:s.color,borderRadius:20,padding:"1px 6px",fontSize:9,fontWeight:800}}>{sw.count}</span>}
+          </button>
+          {isActiveSub&&allChapters(s).map((c,i)=>{
+            const hasN=chapterNotes[s.id+"_"+i]?.content?.trim();
+            return <button key={i} onClick={()=>setActiveChIdx(i)} style={{width:"100%",background:activeChIdx===i?"rgba(129,140,248,0.1)":"transparent",border:"none",borderBottom:"1px solid var(--border)",padding:"7px 14px 7px 28px",cursor:"pointer",textAlign:"left",display:"flex",alignItems:"center",gap:6}}>
+              <span style={{color:hasN?"#818cf8":"var(--surface3)",fontSize:10,flexShrink:0}}>●</span>
+              <span style={{color:activeChIdx===i?"var(--text)":"var(--text3)",fontSize:11,lineHeight:1.3}}>{c.n.slice(0,38)}{c.n.length>38?"…":""}</span>
+            </button>;
+          })}
+        </div>;
+      })}
+    </div>
+    {/* Editor */}
+    <div style={{display:"flex",flexDirection:"column",background:"var(--surface)",border:"1px solid var(--border)",borderRadius:14,overflow:"hidden"}}>
+      <div style={{padding:"12px 16px",borderBottom:"1px solid var(--border)",display:"flex",alignItems:"center",gap:10,flexWrap:"wrap"}}>
+        <div style={{flex:1}}>
+          <div style={{color:subj?.color,fontSize:11,fontWeight:700}}>{subj?.short}</div>
+          <div style={{color:"var(--text)",fontSize:13,fontWeight:700}}>{ch?.n}</div>
+        </div>
+        <div style={{display:"flex",background:"var(--surface2)",border:"1px solid var(--border)",borderRadius:8,overflow:"hidden"}}>
+          {[["edit","✏️ Edit"],["view","👁 View"]].map(([m,l])=><button key={m} onClick={()=>setViewMode(m)} style={{background:viewMode===m?"var(--border2)":"transparent",border:"none",padding:"5px 12px",fontSize:11,fontWeight:700,cursor:"pointer",color:viewMode===m?"var(--text)":"var(--text3)"}}>{l}</button>)}
+        </div>
+        {note.lastSaved&&<span style={{color:"var(--text3)",fontSize:10}}>Saved {note.lastSaved}</span>}
+        <span style={{color:"var(--text3)",fontSize:10}}>{wordCount} words</span>
+        <button onClick={save} style={{background:"#818cf8",color:"#fff",border:"none",borderRadius:8,padding:"6px 16px",fontSize:11,fontWeight:700,cursor:"pointer"}}>Save</button>
+      </div>
+      {viewMode==="edit"?<textarea value={draft} onChange={e=>setDraft(e.target.value)} onBlur={save} placeholder={`Write your summary notes for "${ch?.n}"...\n\nIdeas:\n• Key definitions and conditions\n• Important section numbers\n• Formulas with worked examples\n• Exam-relevant distinctions\n• Memory tricks / mnemonics\n• Common mistakes to avoid`} style={{flex:1,background:"transparent",border:"none",padding:"18px 20px",fontSize:13,color:"var(--text)",lineHeight:1.8,resize:"none",outline:"none",fontFamily:"'Inter',sans-serif"}}/>:
+      <div style={{flex:1,overflowY:"auto",padding:"18px 20px"}}>
+        {draft?<pre style={{whiteSpace:"pre-wrap",fontFamily:"'Inter',sans-serif",fontSize:13,color:"var(--text)",lineHeight:1.8}}>{draft}</pre>:<div style={{color:"var(--text3)",fontSize:13,textAlign:"center",paddingTop:60}}>No notes yet — switch to Edit mode to start writing.</div>}
+      </div>}
+    </div>
+  </div>;
+}
+
+/* ═══════════════════════════════════════
+   7. PERFORMANCE PREDICTOR
+═══════════════════════════════════════ */
+function PerformancePredictor({lectures,revData,tests,studyLog}){
+  const totalHrs=Object.values(studyLog).reduce((a,b)=>a+b,0);
+  const lecTotal=totalChapterCount();
+  const lecComp=SUBJECTS.reduce((a,s)=>a+allChapters(s).filter((_,i)=>lectures[chKey(s.id,i,"lec")]?.status==="Completed").length,0);
+  const revComp=SUBJECTS.reduce((a,s)=>a+allChapters(s).filter((_,i)=>revData[chKey(s.id,i,"rev")]?.status==="Completed").length,0);
+  const avgConf=SUBJECTS.reduce((a,s)=>{
+    const vals=allChapters(s).map((_,i)=>revData[chKey(s.id,i,"rev")]?.confidence||0).filter(c=>c>0);
+    return a+(vals.length?vals.reduce((x,y)=>x+y,0)/vals.length:0);
+  },0)/SUBJECTS.length;
+  const scored=tests.filter(t=>t.score!=null);
+  const avgScore=scored.length?scored.reduce((a,t)=>a+t.score,0)/scored.length:0;
+  const overdueCount=SUBJECTS.reduce((a,s)=>a+allChapters(s).filter((_,i)=>{const e=revData[chKey(s.id,i,"rev")];const lr=e?.revDates?.slice(-1)[0];return lr&&daysSince(lr)>14;}).length,0);
+  const daysLeft=daysUntil("2027-05-03");
+
+  // Score each factor
+  const factors=[
+    {name:"Study Hours",score:Math.min(totalHrs/1400*100,100),weight:0.2,tip:`${totalHrs.toFixed(0)}h of ~1,400h target`},
+    {name:"Lecture Coverage",score:lecComp/lecTotal*100,weight:0.15,tip:`${lecComp}/${lecTotal} chapters`},
+    {name:"Revision Coverage",score:revComp/lecTotal*100,weight:0.25,tip:`${revComp}/${lecTotal} chapters revised`},
+    {name:"Avg Confidence",score:avgConf/5*100,weight:0.2,tip:`${avgConf.toFixed(1)}/5 across all chapters`},
+    {name:"Test Performance",score:avgScore,weight:0.15,tip:scored.length?`${avgScore.toFixed(0)}% avg over ${scored.length} tests`:"No tests logged yet"},
+    {name:"Revision Currency",score:Math.max(0,100-overdueCount*5),weight:0.05,tip:`${overdueCount} chapters overdue`},
+  ];
+  const composite=factors.reduce((a,f)=>a+f.score*f.weight,0);
+  const band=composite>=80?"Distinction (75%+)":composite>=65?"First Class (60–74%)":composite>=50?"Pass (50–59%)":composite>=35?"At Risk (35–49%)":"High Risk (<35%)";
+  const bandColor=composite>=80?"#34d399":composite>=65?"#a3e635":composite>=50?"#fbbf24":composite>=35?"#fb923c":"#f87171";
+  const projectedScore=Math.min(95,Math.max(20,composite*0.85+15));
+
+  // Per-subject prediction
+  const subPredictions=SUBJECTS.map(s=>{
+    const chs=allChapters(s);
+    const lp=chs.filter((_,i)=>lectures[chKey(s.id,i,"lec")]?.status==="Completed").length/chs.length;
+    const rp=chs.filter((_,i)=>revData[chKey(s.id,i,"rev")]?.status==="Completed").length/chs.length;
+    const conf=chs.map((_,i)=>revData[chKey(s.id,i,"rev")]?.confidence||0).filter(c=>c>0);
+    const ac=conf.length?conf.reduce((a,b)=>a+b,0)/conf.length:0;
+    const sTests=tests.filter(t=>t.subject===s.id&&t.score!=null);
+    const st=sTests.length?sTests.reduce((a,t)=>a+t.score,0)/sTests.length:0;
+    const sc=Math.min(95,Math.max(20,(lp*15+rp*35+ac/5*30+(st||50)*0.2)));
+    return{s,sc:sc.toFixed(0),lp:Math.round(lp*100),rp:Math.round(rp*100),ac:ac.toFixed(1)};
+  });
+
+  const c=composite;
+  const r=70,circ=2*Math.PI*r,off=circ-(c/100)*circ;
+
+  return <div style={{animation:"slideUp 0.2s ease"}}>
+    <div style={{background:"linear-gradient(135deg,rgba(99,102,241,0.12),transparent)",border:"1px solid rgba(99,102,241,0.25)",borderRadius:14,padding:"20px 24px",marginBottom:16,display:"flex",gap:24,flexWrap:"wrap",alignItems:"center"}}>
+      <div style={{position:"relative",width:160,height:160,flexShrink:0}}>
+        <svg width="160" height="160" style={{transform:"rotate(-90deg)"}}>
+          <circle cx="80" cy="80" r={r} fill="none" stroke="rgba(255,255,255,0.06)" strokeWidth="12"/>
+          <circle cx="80" cy="80" r={r} fill="none" stroke={bandColor} strokeWidth="12" strokeDasharray={circ} strokeDashoffset={off} strokeLinecap="round" style={{transition:"stroke-dashoffset 1s ease",filter:`drop-shadow(0 0 12px ${bandColor}66)`}}/>
+        </svg>
+        <div style={{position:"absolute",inset:0,display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center"}}>
+          <div style={{color:bandColor,fontSize:36,fontWeight:900,fontFamily:"'JetBrains Mono',monospace",lineHeight:1}}>{c.toFixed(0)}</div>
+          <div style={{color:"var(--text3)",fontSize:10}}>readiness score</div>
+        </div>
+      </div>
+      <div style={{flex:1,minWidth:200}}>
+        <div style={{color:"var(--text3)",fontSize:10,textTransform:"uppercase",letterSpacing:2,marginBottom:6}}>Performance Prediction — May 2027</div>
+        <div style={{color:bandColor,fontSize:26,fontWeight:900,marginBottom:6}}>{band}</div>
+        <div style={{color:"var(--text2)",fontSize:13,marginBottom:10}}>Projected score: ~{projectedScore.toFixed(0)}% · {daysLeft} days remaining</div>
+        <div style={{color:"var(--text3)",fontSize:11,lineHeight:1.7}}>
+          {composite<40?"⚠️ Preparation is behind. Focus on completing lectures and starting revision immediately."
+          :composite<55?"📚 Good start but need to accelerate revision. Prioritise high-weightage chapters."
+          :composite<70?"🎯 On track. Keep going — ensure all subjects get equal attention in revision months."
+          :composite<80?"💪 Strong preparation. Focus on weak chapters and RTP/MTP practice from here."
+          :"🌟 Excellent readiness. Maintain consistency and simulate exam conditions daily."}
+        </div>
+      </div>
+    </div>
+    {/* Factor breakdown */}
+    <div className="card" style={{padding:"18px",marginBottom:14}}>
+      <div style={{color:"var(--text3)",fontSize:9,fontWeight:700,textTransform:"uppercase",letterSpacing:1.5,marginBottom:14}}>Score Breakdown</div>
+      <div style={{display:"flex",flexDirection:"column",gap:10}}>
+        {factors.map(f=>{
+          const fc=f.score>=80?"#34d399":f.score>=60?"#fbbf24":"#f87171";
+          return <div key={f.name}>
+            <div style={{display:"flex",justifyContent:"space-between",marginBottom:4}}>
+              <span style={{color:"var(--text2)",fontSize:12,fontWeight:600}}>{f.name} <span style={{color:"var(--text3)",fontWeight:400,fontSize:10}}>({Math.round(f.weight*100)}% weight)</span></span>
+              <div style={{textAlign:"right"}}>
+                <span style={{color:fc,fontSize:12,fontWeight:800,fontFamily:"'JetBrains Mono',monospace"}}>{f.score.toFixed(0)}%</span>
+                <span style={{color:"var(--text3)",fontSize:10,marginLeft:8}}>{f.tip}</span>
+              </div>
+            </div>
+            <div style={{width:"100%",height:5,background:"var(--surface3)",borderRadius:99,overflow:"hidden"}}>
+              <div style={{width:`${f.score}%`,height:"100%",background:fc,borderRadius:99,transition:"width 0.8s ease"}}/>
+            </div>
+          </div>;
+        })}
+      </div>
+    </div>
+    {/* Per-subject */}
+    <div className="card" style={{padding:0,overflow:"hidden"}}>
+      <div style={{padding:"12px 16px",borderBottom:"1px solid var(--border)",color:"var(--text3)",fontSize:9,fontWeight:700,textTransform:"uppercase",letterSpacing:1.5}}>Per-Subject Prediction</div>
+      <div style={{display:"grid",gridTemplateColumns:"28px 1fr 70px 60px 60px 60px",padding:"7px 16px",fontSize:9,fontWeight:700,textTransform:"uppercase",letterSpacing:1,color:"var(--text3)",borderBottom:"1px solid var(--border)"}}>
+        <div/><div>Subject</div><div style={{textAlign:"center"}}>Predicted</div><div style={{textAlign:"center"}}>Lec%</div><div style={{textAlign:"center"}}>Rev%</div><div style={{textAlign:"center"}}>Conf</div>
+      </div>
+      {subPredictions.map(({s,sc,lp,rp,ac})=>{
+        const pc=parseInt(sc)>=70?"#34d399":parseInt(sc)>=55?"#fbbf24":"#f87171";
+        return <div key={s.id} style={{display:"grid",gridTemplateColumns:"28px 1fr 70px 60px 60px 60px",padding:"10px 16px",borderBottom:"1px solid var(--border)",alignItems:"center"}}>
+          <span style={{fontSize:15}}>{s.emoji}</span>
+          <div><div style={{color:"var(--text)",fontSize:12,fontWeight:700}}>{s.short}</div><div style={{color:"var(--text3)",fontSize:10}}>{s.name}</div></div>
+          <div style={{textAlign:"center",color:pc,fontSize:14,fontWeight:900,fontFamily:"'JetBrains Mono',monospace"}}>{sc}%</div>
+          <div style={{textAlign:"center",color:"#f472b6",fontSize:12,fontWeight:700}}>{lp}%</div>
+          <div style={{textAlign:"center",color:"#818cf8",fontSize:12,fontWeight:700}}>{rp}%</div>
+          <div style={{textAlign:"center",color:parseFloat(ac)>=4?"#34d399":parseFloat(ac)>=3?"#fbbf24":parseFloat(ac)>0?"#f87171":"var(--text3)",fontSize:12,fontWeight:700}}>{parseFloat(ac)>0?ac+"/5":"—"}</div>
+        </div>;
+      })}
+    </div>
+  </div>;
+}
+
+/* ═══════════════════════════════════════
+   8. EXAM DAY SIMULATOR
+═══════════════════════════════════════ */
+const PAPER_STRUCTURES={
+  fr:{name:"Financial Reporting",totalMarks:100,time:180,sections:[{name:"Q1 — Compulsory",marks:40,questions:1,note:"Must attempt — usually Consolidated FS or complex Ind AS"},{name:"Q2–Q6 — Optional (Any 4 of 5)",marks:60,questions:5,choose:4,note:"15 marks each"}]},
+  afm:{name:"Advanced Financial Management",totalMarks:100,time:180,sections:[{name:"Q1 — Compulsory",marks:40,questions:1,note:"Must attempt — usually derivatives or portfolio"},{name:"Q2–Q6 — Optional (Any 4 of 5)",marks:60,questions:5,choose:4,note:"15 marks each"}]},
+  aaa:{name:"Advanced Auditing & Assurance",totalMarks:100,time:180,sections:[{name:"Q1 — Compulsory",marks:30,questions:1,note:"Practical/case-based — must attempt"},{name:"Q2–Q7 — Optional (Any 5 of 6)",marks:70,questions:6,choose:5,note:"14 marks each"}]},
+  dt:{name:"Direct Tax Laws",totalMarks:100,time:180,sections:[{name:"Q1 — Compulsory (Part A: MCQs)",marks:30,questions:30,note:"30 MCQs × 1 mark — must attempt all"},{name:"Q2–Q7 — Optional (Any 5 of 6)",marks:70,questions:6,choose:5,note:"14 marks each — descriptive"}]},
+  idt:{name:"Indirect Tax Laws",totalMarks:100,time:180,sections:[{name:"Q1 — Compulsory (Part A: MCQs)",marks:30,questions:30,note:"30 MCQs × 1 mark — must attempt all"},{name:"Q2–Q7 — Optional (Any 5 of 6)",marks:70,questions:6,choose:5,note:"14 marks each — descriptive"}]},
+  ibs:{name:"Integrated Business Solutions",totalMarks:100,time:180,sections:[{name:"Case Study — Compulsory",marks:100,questions:1,note:"One comprehensive case study — attempt all parts"}]},
+};
+function ExamSimulator(){
+  const [selPaper,setSelPaper]=useState("fr");
+  const [running,setRunning]=useState(false);
+  const [elapsed,setElapsed]=useState(0);
+  const [attempts,setAttempts]=useState({});
+  const [showSummary,setShowSummary]=useState(false);
+  const timerRef=useRef();
+  const paper=PAPER_STRUCTURES[selPaper];
+
+  useEffect(()=>{
+    if(running){timerRef.current=setInterval(()=>setElapsed(p=>p+1),1000);}
+    return()=>clearInterval(timerRef.current);
+  },[running]);
+
+  const start=()=>{setElapsed(0);setAttempts({});setRunning(true);setShowSummary(false);};
+  const finish=()=>{clearInterval(timerRef.current);setRunning(false);setShowSummary(true);};
+  const mm=String(Math.floor(elapsed/60)).padStart(2,"0"),ss=String(elapsed%60).padStart(2,"0");
+  const timeLeft=paper.time*60-elapsed;
+  const tlMm=String(Math.floor(Math.max(0,timeLeft)/60)).padStart(2,"0"),tlSs=String(Math.max(0,timeLeft)%60).padStart(2,"0");
+  const pct=Math.min(elapsed/(paper.time*60)*100,100);
+  const urgent=timeLeft<900;
+  const totalAttempted=Object.values(attempts).filter(a=>a==="attempted").length;
+
+  return <div style={{animation:"slideUp 0.2s ease"}}>
+    <div style={{background:"linear-gradient(135deg,rgba(99,102,241,0.1),transparent)",border:"1px solid rgba(99,102,241,0.25)",borderRadius:14,padding:"16px 20px",marginBottom:16}}>
+      <div style={{color:"#6366f1",fontSize:10,fontWeight:700,textTransform:"uppercase",letterSpacing:2,marginBottom:4}}>📋 Exam Day Simulator</div>
+      <div style={{color:"var(--text)",fontSize:18,fontWeight:800}}>Simulate Real Exam Conditions</div>
+      <div style={{color:"var(--text2)",fontSize:12,marginTop:4}}>No phone. No notes. 3-hour clock. Attempt questions in order. This is how rank marks are won.</div>
+    </div>
+    {/* Paper selector */}
+    {!running&&!showSummary&&<>
+      <div style={{display:"flex",gap:6,flexWrap:"wrap",marginBottom:14}}>
+        {SUBJECTS.map(s=><button key={s.id} onClick={()=>setSelPaper(s.id)} style={{background:selPaper===s.id?`${s.color}18`:"var(--surface2)",border:`${selPaper===s.id?2:1}px solid ${selPaper===s.id?s.color:s.color+"30"}`,borderRadius:10,padding:"8px 14px",cursor:"pointer",color:selPaper===s.id?s.color:"var(--text2)",fontSize:12,fontWeight:700}}>{s.emoji} {s.short}</button>)}
+      </div>
+      <div className="card" style={{padding:"18px",marginBottom:14}}>
+        <div style={{color:"var(--text)",fontSize:15,fontWeight:800,marginBottom:10}}>{paper.name}</div>
+        {paper.sections.map((sec,i)=>(
+          <div key={i} style={{background:"var(--surface2)",border:"1px solid var(--border)",borderRadius:10,padding:"12px 14px",marginBottom:8}}>
+            <div style={{display:"flex",justifyContent:"space-between",marginBottom:4}}>
+              <span style={{color:"var(--text)",fontSize:13,fontWeight:700}}>{sec.name}</span>
+              <span style={{color:"#818cf8",fontSize:13,fontWeight:900,fontFamily:"'JetBrains Mono',monospace"}}>{sec.marks} marks</span>
+            </div>
+            <div style={{color:"var(--text3)",fontSize:11}}>{sec.note}</div>
+            {sec.choose&&<div style={{color:"#fbbf24",fontSize:11,marginTop:3}}>Attempt {sec.choose} out of {sec.questions} — choose wisely!</div>}
+          </div>
+        ))}
+        <div style={{display:"flex",gap:10,marginTop:6}}>
+          <div style={{background:"rgba(99,102,241,0.1)",border:"1px solid rgba(99,102,241,0.2)",borderRadius:8,padding:"8px 14px",fontSize:12,color:"#6366f1",fontWeight:700}}>⏱ {paper.time} minutes</div>
+          <div style={{background:"rgba(52,211,153,0.1)",border:"1px solid rgba(52,211,153,0.2)",borderRadius:8,padding:"8px 14px",fontSize:12,color:"#34d399",fontWeight:700}}>📊 {paper.totalMarks} marks</div>
+        </div>
+      </div>
+      <button onClick={start} style={{background:"linear-gradient(135deg,#6366f1,#4f46e5)",color:"#fff",border:"none",borderRadius:12,padding:"14px 32px",fontSize:15,fontWeight:800,cursor:"pointer",boxShadow:"0 6px 20px rgba(99,102,241,0.4)"}}>▶ Start Simulation</button>
+    </>}
+    {/* Running */}
+    {running&&<>
+      <div style={{background:urgent?"rgba(248,113,113,0.08)":"var(--surface)",border:`1px solid ${urgent?"rgba(248,113,113,0.3)":"var(--border)"}`,borderRadius:14,padding:"20px 24px",marginBottom:14}}>
+        <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",flexWrap:"wrap",gap:10,marginBottom:12}}>
+          <div>
+            <div style={{color:"var(--text3)",fontSize:10,textTransform:"uppercase",letterSpacing:1.5}}>Time Elapsed</div>
+            <div style={{color:"var(--text)",fontSize:40,fontWeight:900,fontFamily:"'JetBrains Mono',monospace",lineHeight:1}}>{mm}:{ss}</div>
+          </div>
+          <div style={{textAlign:"right"}}>
+            <div style={{color:"var(--text3)",fontSize:10,textTransform:"uppercase",letterSpacing:1.5}}>Time Remaining</div>
+            <div style={{color:urgent?"#f87171":"#34d399",fontSize:40,fontWeight:900,fontFamily:"'JetBrains Mono',monospace",lineHeight:1,filter:urgent?"drop-shadow(0 0 8px #f87171)":"none"}}>{tlMm}:{tlSs}</div>
+          </div>
+        </div>
+        <div style={{width:"100%",height:8,background:"var(--surface3)",borderRadius:99,overflow:"hidden",marginBottom:8}}>
+          <div style={{width:`${pct}%`,height:"100%",background:urgent?"#f87171":"#6366f1",borderRadius:99,transition:"width 1s linear"}}/>
+        </div>
+        {urgent&&<div style={{color:"#f87171",fontSize:12,fontWeight:700,textAlign:"center"}}>⚠️ Under 15 minutes remaining — wrap up and review!</div>}
+      </div>
+      <div className="card" style={{padding:"16px",marginBottom:14}}>
+        <div style={{color:"var(--text3)",fontSize:10,fontWeight:700,textTransform:"uppercase",letterSpacing:1.5,marginBottom:10}}>Mark Questions</div>
+        {paper.sections.map((sec,si)=>(
+          <div key={si} style={{marginBottom:12}}>
+            <div style={{color:"var(--text2)",fontSize:11,fontWeight:700,marginBottom:6}}>{sec.name} ({sec.marks} marks)</div>
+            <div style={{display:"flex",gap:6,flexWrap:"wrap"}}>
+              {Array.from({length:sec.questions||1},(_,qi)=>{
+                const k=si+"_"+qi;
+                const st=attempts[k];
+                return <button key={qi} onClick={()=>setAttempts(p=>({...p,[k]:p[k]==="attempted"?"skipped":p[k]==="skipped"?"attempted":"attempted"}))} style={{background:st==="attempted"?"rgba(52,211,153,0.15)":st==="skipped"?"rgba(248,113,113,0.1)":"var(--surface2)",border:`1px solid ${st==="attempted"?"rgba(52,211,153,0.4)":st==="skipped"?"rgba(248,113,113,0.3)":"var(--border)"}`,borderRadius:8,padding:"6px 12px",fontSize:11,fontWeight:700,cursor:"pointer",color:st==="attempted"?"#34d399":st==="skipped"?"#f87171":"var(--text3)"}}>
+                  Q{qi+1} {st==="attempted"?"✓":st==="skipped"?"✗":"—"}
+                </button>;
+              })}
+            </div>
+          </div>
+        ))}
+      </div>
+      <div style={{display:"flex",gap:8}}>
+        <button onClick={finish} style={{background:"linear-gradient(135deg,#34d399,#059669)",color:"#fff",border:"none",borderRadius:10,padding:"11px 24px",fontSize:13,fontWeight:800,cursor:"pointer"}}>✓ Finish Exam</button>
+        <button onClick={()=>{clearInterval(timerRef.current);setRunning(false);}} style={{background:"var(--surface2)",border:"1px solid var(--border)",borderRadius:10,padding:"11px 20px",fontSize:13,cursor:"pointer",color:"var(--text2)"}}>Abandon</button>
+      </div>
+    </>}
+    {/* Summary */}
+    {showSummary&&<div className="card" style={{padding:"24px"}}>
+      <div style={{color:"#34d399",fontSize:16,fontWeight:800,marginBottom:12}}>✓ Simulation Complete!</div>
+      <div style={{display:"grid",gridTemplateColumns:"repeat(3,1fr)",gap:10,marginBottom:16}}>
+        {[{l:"Time Used",v:`${mm}:${ss}`},{l:"Questions Attempted",v:totalAttempted},{l:"Paper",v:paper.name.split(" ")[0]}].map(({l,v})=>(
+          <div key={l} style={{background:"var(--surface2)",borderRadius:10,padding:"12px",textAlign:"center"}}>
+            <div style={{color:"var(--text)",fontSize:20,fontWeight:900,fontFamily:"'JetBrains Mono',monospace"}}>{v}</div>
+            <div style={{color:"var(--text3)",fontSize:10,marginTop:2}}>{l}</div>
+          </div>
+        ))}
+      </div>
+      <div style={{background:"rgba(52,211,153,0.06)",border:"1px solid rgba(52,211,153,0.2)",borderRadius:10,padding:"12px 14px",marginBottom:14}}>
+        <div style={{color:"#34d399",fontSize:12,fontWeight:700,marginBottom:4}}>Reflection Checklist</div>
+        {["Did I read all questions before starting?","Did I attempt compulsory questions first?","Did I manage time properly per question?","Did I leave time to review answers?","Was my answer writing structured and legible?"].map((q,i)=>(
+          <div key={i} style={{color:"var(--text2)",fontSize:12,padding:"4px 0",borderBottom:"1px solid var(--border)"}}>{i+1}. {q}</div>
+        ))}
+      </div>
+      <button onClick={()=>{setShowSummary(false);setElapsed(0);}} style={{background:"linear-gradient(135deg,#6366f1,#4f46e5)",color:"#fff",border:"none",borderRadius:10,padding:"10px 22px",fontSize:13,fontWeight:800,cursor:"pointer"}}>Try Again</button>
+    </div>}
+  </div>;
+}
+
+/* ═══════════════════════════════════════
+   9. MOBILE NAV (bottom bar)
+═══════════════════════════════════════ */
+function MobileNav({world,setWorld,lecPct,revPct}){
+  const items=[
+    {id:"dashboard",emoji:"🏠",label:"Home"},
+    {id:"lectures",emoji:"🎬",label:"Lec",pct:lecPct},
+    {id:"revision",emoji:"📖",label:"Rev",pct:revPct},
+    {id:"search",emoji:"🔍",label:"Search"},
+    {id:"planner",emoji:"📅",label:"Plan"},
+  ];
+  return <div style={{position:"fixed",bottom:0,left:0,right:0,background:"rgba(10,11,20,0.98)",backdropFilter:"blur(16px)",borderTop:"1px solid var(--border)",display:"flex",zIndex:300,paddingBottom:"env(safe-area-inset-bottom,0px)"}}>
+    {items.map(t=>{
+      const active=world===t.id;
+      return <button key={t.id} onClick={()=>setWorld(t.id)} style={{flex:1,background:"transparent",border:"none",padding:"8px 4px 6px",cursor:"pointer",display:"flex",flexDirection:"column",alignItems:"center",gap:2}}>
+        <span style={{fontSize:18,filter:active?"none":"grayscale(0.5) opacity(0.6)"}}>{t.emoji}</span>
+        <span style={{color:active?"#818cf8":"#475569",fontSize:9,fontWeight:active?800:500}}>{t.label}{t.pct!=null?` ${t.pct}%`:""}</span>
+        {active&&<div style={{width:16,height:2,background:"#818cf8",borderRadius:99}}/>}
+      </button>;
+    })}
+  </div>;
+}
+
+/* ═══════════════════════════════════════
+   10. SMART INSIGHT CARD (dashboard)
+═══════════════════════════════════════ */
+function SmartInsights({studyLog,revData,tests,lectures}){
+  const insights=[];
+  const todayStr=today();
+
+  // Haven't studied a subject in 6+ days
+  SUBJECTS.forEach(s=>{
+    const lastEntry=Object.entries(studyLog).filter(([d,h])=>h>0).sort(([a],[b])=>b.localeCompare(a));
+    // Check revData for subject-specific last update
+    const lastRev=allChapters(s).map((_,i)=>revData[chKey(s.id,i,"rev")]?.updated||"").filter(Boolean).sort().reverse()[0];
+    if(lastRev&&daysSince(lastRev)>6){
+      insights.push({type:"warning",icon:"⚠️",color:"#f87171",msg:`You haven't touched ${s.short} in ${daysSince(lastRev)} days. Subject rotation needed.`});
+    }
+  });
+
+  // Dropping test scores
+  const scored=tests.filter(t=>t.score!=null).slice(0,6);
+  if(scored.length>=3){
+    const recent3=scored.slice(0,3).map(t=>t.score);
+    const prev3=scored.slice(3).map(t=>t.score);
+    if(prev3.length>0){
+      const recentAvg=recent3.reduce((a,b)=>a+b)/recent3.length;
+      const prevAvg=prev3.reduce((a,b)=>a+b)/prev3.length;
+      if(recentAvg<prevAvg-5)insights.push({type:"warning",icon:"📉",color:"#fb923c",msg:`Test scores dropped ${(prevAvg-recentAvg).toFixed(0)} points in last 3 tests. Review strategy.`});
+    }
+  }
+
+  // Low hours this week
+  const weekHrs=Array.from({length:7},(_,i)=>{const d=new Date();d.setDate(d.getDate()-i);return studyLog[d.toISOString().slice(0,10)]||0;}).reduce((a,b)=>a+b,0);
+  if(weekHrs<20)insights.push({type:"warning",icon:"🕐",color:"#fbbf24",msg:`Only ${weekHrs.toFixed(1)}h logged this week. Below recommended pace for rank attempt.`});
+
+  // Overdue revisions spike
+  const overdueCount=SUBJECTS.reduce((a,s)=>a+allChapters(s).filter((_,i)=>{const e=revData[chKey(s.id,i,"rev")];const lr=e?.revDates?.slice(-1)[0];return lr&&daysSince(lr)>14;}).length,0);
+  if(overdueCount>10)insights.push({type:"warning",icon:"📚",color:"#f87171",msg:`${overdueCount} chapters are overdue for revision. Dedicate next 3 days to revision catch-up.`});
+
+  // Positive insights
+  if(weekHrs>=60)insights.push({type:"success",icon:"🔥",color:"#34d399",msg:`Strong week — ${weekHrs.toFixed(1)}h logged. Keep this momentum.`});
+  const recentDone=SUBJECTS.reduce((a,s)=>a+allChapters(s).filter((_,i)=>{const e=revData[chKey(s.id,i,"rev")];return e?.status==="Completed"&&e.updated&&daysSince(e.updated)<=3;}).length,0);
+  if(recentDone>=5)insights.push({type:"success",icon:"✅",color:"#34d399",msg:`${recentDone} chapters completed in the last 3 days. Excellent velocity!`});
+
+  if(insights.length===0)return null;
+  return <div className="card" style={{padding:"16px 18px",marginBottom:16}}>
+    <div style={{color:"var(--text3)",fontSize:9,fontWeight:700,textTransform:"uppercase",letterSpacing:1.5,marginBottom:10}}>💡 Smart Insights</div>
+    <div style={{display:"flex",flexDirection:"column",gap:8}}>
+      {insights.slice(0,4).map((ins,i)=>(
+        <div key={i} style={{display:"flex",gap:10,alignItems:"flex-start",background:`${ins.color}08`,border:`1px solid ${ins.color}22`,borderRadius:9,padding:"8px 12px"}}>
+          <span style={{fontSize:15,flexShrink:0}}>{ins.icon}</span>
+          <span style={{color:"var(--text2)",fontSize:12,lineHeight:1.5}}>{ins.msg}</span>
+        </div>
+      ))}
+    </div>
+  </div>;
+}
+
+/* ═══════════════════════════════════════
+   11. ENERGY LOG
+═══════════════════════════════════════ */
+function EnergyLog({energyLog,setEnergyLog,studyLog,setStudyLog}){
+  const todayStr=today();
+  const todayEntry=energyLog[todayStr]||{energy:0,hours:0,notes:""};
+  const [energy,setEnergy]=useState(todayEntry.energy||0);
+  const [notes,setNotes]=useState(todayEntry.notes||"");
+
+  const save=()=>{
+    setEnergyLog(p=>({...p,[todayStr]:{energy,notes,saved:new Date().toTimeString().slice(0,5)}}));
+  };
+
+  // Analyse best days
+  const last30=Array.from({length:30},(_,i)=>{const d=new Date();d.setDate(d.getDate()-i);const k=d.toISOString().slice(0,10);return{date:k,dow:d.getDay(),energy:energyLog[k]?.energy||0,hours:studyLog[k]||0};});
+  const byDow=Array.from({length:7},(_,dow)=>{
+    const entries=last30.filter(d=>d.dow===dow&&d.energy>0);
+    const avgE=entries.length?entries.reduce((a,b)=>a+b.energy,0)/entries.length:0;
+    const avgH=entries.length?entries.reduce((a,b)=>a+b.hours,0)/entries.length:0;
+    return{dow,label:["Sun","Mon","Tue","Wed","Thu","Fri","Sat"][dow],avgE:avgE.toFixed(1),avgH:avgH.toFixed(1)};
+  });
+  const bestDow=byDow.reduce((best,d)=>parseFloat(d.avgE)>parseFloat(best.avgE)?d:best,byDow[0]);
+  const eColors=["","#f87171","#fb923c","#fbbf24","#a3e635","#34d399"];
+
+  return <div style={{animation:"slideUp 0.2s ease"}}>
+    <div style={{background:"linear-gradient(135deg,rgba(251,191,36,0.1),transparent)",border:"1px solid rgba(251,191,36,0.2)",borderRadius:14,padding:"16px 20px",marginBottom:16}}>
+      <div style={{color:"#fbbf24",fontSize:10,fontWeight:700,textTransform:"uppercase",letterSpacing:2,marginBottom:4}}>⚡ Energy Log</div>
+      <div style={{color:"var(--text)",fontSize:18,fontWeight:800}}>Track Your Mental Energy</div>
+      <div style={{color:"var(--text2)",fontSize:12,marginTop:4}}>Log daily energy (1–5). Over time, discover your best study days and times. Schedule hard subjects at peak energy.</div>
+    </div>
+    {/* Today's log */}
+    <div className="card" style={{padding:"18px",marginBottom:14}}>
+      <div style={{color:"var(--text3)",fontSize:10,fontWeight:700,textTransform:"uppercase",letterSpacing:1.5,marginBottom:12}}>Today's Energy — {new Date().toLocaleDateString("en-IN",{weekday:"long",day:"numeric",month:"short"})}</div>
+      <div style={{display:"flex",gap:8,marginBottom:12}}>
+        {[1,2,3,4,5].map(e=><button key={e} onClick={()=>setEnergy(e)} style={{flex:1,background:energy>=e?eColors[e]+"20":"var(--surface2)",border:`2px solid ${energy>=e?eColors[e]:"var(--border)"}`,borderRadius:10,padding:"12px 6px",cursor:"pointer",display:"flex",flexDirection:"column",alignItems:"center",gap:4}}>
+          <span style={{fontSize:20}}>{["","😴","😕","😐","😊","🚀"][e]}</span>
+          <span style={{color:energy>=e?eColors[e]:"var(--text3)",fontSize:10,fontWeight:700}}>{["","Drained","Low","Okay","Good","Peak"][e]}</span>
+        </button>)}
+      </div>
+      <input value={notes} onChange={e=>setNotes(e.target.value)} placeholder="Any reason? (e.g. slept late, had a heavy meal, feeling great today...)" style={{width:"100%",background:"var(--surface2)",border:"1px solid var(--border)",borderRadius:8,padding:"8px 12px",fontSize:12,color:"var(--text)",marginBottom:10}}/>
+      <button onClick={save} style={{background:"#fbbf24",color:"#000",border:"none",borderRadius:8,padding:"7px 20px",fontSize:12,fontWeight:800,cursor:"pointer"}}>Save Energy Log</button>
+    </div>
+    {/* Insights */}
+    <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:12,marginBottom:14}}>
+      <div className="card" style={{padding:"16px"}}>
+        <div style={{color:"var(--text3)",fontSize:9,fontWeight:700,textTransform:"uppercase",letterSpacing:1.5,marginBottom:10}}>Best Day to Study Hard</div>
+        <div style={{color:"#fbbf24",fontSize:28,fontWeight:900,marginBottom:4}}>{bestDow.label}</div>
+        <div style={{color:"var(--text3)",fontSize:11}}>Avg energy {bestDow.avgE}/5 · Avg {bestDow.avgH}h studied</div>
+        <div style={{color:"var(--text2)",fontSize:11,marginTop:6}}>📌 Schedule DT, FR on this day</div>
+      </div>
+      <div className="card" style={{padding:"16px"}}>
+        <div style={{color:"var(--text3)",fontSize:9,fontWeight:700,textTransform:"uppercase",letterSpacing:1.5,marginBottom:10}}>Day-of-Week Energy Pattern</div>
+        <div style={{display:"flex",gap:3,alignItems:"flex-end",height:50}}>
+          {byDow.map(d=>{const h=Math.max((parseFloat(d.avgE)/5)*50,3);const c=eColors[Math.round(parseFloat(d.avgE))]||"var(--surface3)";return(<div key={d.dow} style={{flex:1,display:"flex",flexDirection:"column",alignItems:"center",gap:2}}><div style={{width:"100%",background:c,height:h,borderRadius:"3px 3px 0 0",opacity:0.8}}/><div style={{fontSize:8,color:"var(--text3)"}}>{d.label}</div></div>);})}
+        </div>
+      </div>
+    </div>
+    {/* Recent log */}
+    <div className="card" style={{padding:0,overflow:"hidden"}}>
+      <div style={{padding:"11px 16px",borderBottom:"1px solid var(--border)",color:"var(--text3)",fontSize:9,fontWeight:700,textTransform:"uppercase",letterSpacing:1.5}}>Last 7 Days</div>
+      {Array.from({length:7},(_,i)=>{const d=new Date();d.setDate(d.getDate()-i);const k=d.toISOString().slice(0,10);const e=energyLog[k];const h=studyLog[k]||0;return(
+        <div key={k} style={{display:"flex",alignItems:"center",gap:12,padding:"10px 16px",borderBottom:"1px solid var(--border)"}}>
+          <div style={{width:60,flexShrink:0,color:"var(--text3)",fontSize:11}}>{d.toLocaleDateString("en-IN",{weekday:"short",day:"numeric"})}</div>
+          <div style={{display:"flex",gap:3,flex:1}}>
+            {[1,2,3,4,5].map(lv=><div key={lv} style={{width:16,height:16,borderRadius:4,background:e?.energy>=lv?eColors[e.energy]+"60":"var(--surface3)"}}/>)}
+          </div>
+          <div style={{color:e?.energy>0?eColors[e.energy]:"var(--text3)",fontSize:11,fontWeight:700,width:50,textAlign:"center"}}>{e?.energy>0?`${e.energy}/5`:"—"}</div>
+          <div style={{color:"var(--text3)",fontSize:11,width:36,textAlign:"right"}}>{h>0?`${h}h`:"—"}</div>
+          {e?.notes&&<div style={{color:"var(--text3)",fontSize:10,flex:1,overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}}>{e.notes}</div>}
+        </div>
+      );})}
+    </div>
+  </div>;
+}
+
+/* ═══════════════════════════════════════
+   12. SUBJECT ROTATION ALERT (dashboard card)
+═══════════════════════════════════════ */
+function SubjectRotationAlert({revData,setWorld}){
+  const alerts=SUBJECTS.map(s=>{
+    const lastUpdates=allChapters(s).map((_,i)=>revData[chKey(s.id,i,"rev")]?.updated||"").filter(Boolean).sort().reverse();
+    const lastTouched=lastUpdates[0]||null;
+    const daysSinceLast=lastTouched?daysSince(lastTouched):null;
+    return{s,daysSinceLast,lastTouched};
+  }).filter(x=>x.daysSinceLast!==null&&x.daysSinceLast>5).sort((a,b)=>b.daysSinceLast-a.daysSinceLast);
+  if(alerts.length===0)return null;
+  return <div style={{background:"rgba(251,146,60,0.06)",border:"1px solid rgba(251,146,60,0.2)",borderRadius:12,padding:"14px 16px",marginBottom:14}}>
+    <div style={{color:"#fb923c",fontSize:9,fontWeight:700,textTransform:"uppercase",letterSpacing:1.5,marginBottom:10}}>🔄 Subject Rotation Alert</div>
+    <div style={{display:"flex",flexDirection:"column",gap:6}}>
+      {alerts.map(({s,daysSinceLast})=>(
+        <div key={s.id} style={{display:"flex",alignItems:"center",gap:10}}>
+          <span style={{fontSize:16}}>{s.emoji}</span>
+          <span style={{color:s.color,fontSize:12,fontWeight:700,width:40}}>{s.short}</span>
+          <span style={{color:"var(--text2)",fontSize:12,flex:1}}>Not touched for <span style={{color:"#fb923c",fontWeight:700}}>{daysSinceLast} days</span></span>
+          <button onClick={()=>setWorld("revision")} style={{background:`${s.color}15`,border:`1px solid ${s.color}33`,color:s.color,borderRadius:7,padding:"3px 10px",fontSize:10,fontWeight:700,cursor:"pointer"}}>Revise →</button>
+        </div>
+      ))}
+    </div>
+  </div>;
+}
+
+/* ═══════════════════════════════════════
+   13. CHAPTER DIFFICULTY RATING
+   (Added inside RevisionWorld chapter rows)
+   Stored as revData difficulty field
+═══════════════════════════════════════ */
+// Difficulty is stored per-chapter in revData as .difficulty (1-5)
+// UI enhancement applied inside RevisionWorld via patch
+
+/* ═══════════════════════════════════════
+   14. PRE-EXAM CHECKLIST
+═══════════════════════════════════════ */
+const CHECKLIST_ITEMS={
+  fr:["ICAI Study Material read fully","ICAI Practice Manual — all problems attempted","RTP attempted (latest)","MTP attempted (latest)","Past Year Papers (3+ years)","Ind AS amendments covered","Consolidation problems drilled","Financial Instruments (109) mastered","Revenue (115) and Leases (116) — fully revised"],
+  afm:["ICAI Study Material read fully","ICAI Practice Manual — all problems attempted","RTP attempted","MTP attempted","Past Year Papers (3+ years)","AFM formula sheet prepared","Derivatives — all types practiced","Portfolio theory — numerical mastery","Forex hedging — all instruments"],
+  aaa:["ICAI Study Material read fully","ICAI Practice Manual — all SA-based problems attempted","RTP attempted","MTP attempted","Past Year Papers (3+ years)","All SA series revised","CARO 2020 covered","Ethics — Independence & threats memorised","Bank & NBFC audit covered"],
+  dt:["ICAI Study Material read fully (AY 2027-28)","ICAI Practice Manual — all problems","RTP attempted","MTP attempted","Past Year Papers (3+ years)","Finance Act 2026 amendments covered","Transfer Pricing — all 6 methods","DTAA + BEPS covered","Black Money Act + Benami covered","TDS — all sections revised"],
+  idt:["ICAI Study Material read fully","ICAI Practice Manual — all problems","RTP attempted","MTP attempted","Past Year Papers (3+ years)","GST Council notifications 2026 covered","ITC Sec 17(5) — all 13 items","Place of Supply — all scenarios","Customs — valuation + procedures","Refund formula memorised"],
+  ibs:["ICAI Study Material read fully","All previous IBS case studies attempted under exam conditions","RTP case study attempted","MTP case study attempted","Answer writing structure mastered","Time management per question drilled","Cross-subject integration points identified"],
+};
+function PreExamChecklist({preExamChecklist,setPreExamChecklist}){
+  const [activeSub,setActiveSub]=useState("fr");
+  const s=SUBJECTS.find(x=>x.id===activeSub);
+  const items=CHECKLIST_ITEMS[activeSub]||[];
+  const getCheck=(sid,i)=>preExamChecklist[sid+"_"+i]||false;
+  const toggle=(sid,i)=>setPreExamChecklist(p=>({...p,[sid+"_"+i]:!getCheck(sid,i)}));
+  const subComp=SUBJECTS.map(sub=>{
+    const its=CHECKLIST_ITEMS[sub.id]||[];
+    const done=its.filter((_,i)=>getCheck(sub.id,i)).length;
+    return{sub,done,total:its.length,pct:Math.round(done/its.length*100)};
+  });
+  const doneCount=items.filter((_,i)=>getCheck(activeSub,i)).length;
+  const pct=Math.round(doneCount/items.length*100);
+  return <div style={{animation:"slideUp 0.2s ease"}}>
+    <div style={{background:"linear-gradient(135deg,rgba(52,211,153,0.1),transparent)",border:"1px solid rgba(52,211,153,0.2)",borderRadius:14,padding:"16px 20px",marginBottom:16}}>
+      <div style={{color:"#34d399",fontSize:10,fontWeight:700,textTransform:"uppercase",letterSpacing:2,marginBottom:4}}>✅ Pre-Exam Checklist</div>
+      <div style={{color:"var(--text)",fontSize:18,fontWeight:800}}>Exam Readiness per Paper</div>
+      <div style={{color:"var(--text2)",fontSize:12,marginTop:4}}>Tick off every item before your exam. If any box is unticked on exam week — that's your priority.</div>
+    </div>
+    {/* Subject overview */}
+    <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(140px,1fr))",gap:8,marginBottom:16}}>
+      {subComp.map(({sub,done,total,pct:p})=>(
+        <button key={sub.id} onClick={()=>setActiveSub(sub.id)} style={{background:activeSub===sub.id?`${sub.color}18`:"var(--surface2)",border:`${activeSub===sub.id?2:1}px solid ${activeSub===sub.id?sub.color:sub.color+"30"}`,borderRadius:10,padding:"12px 14px",cursor:"pointer",textAlign:"left"}}>
+          <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:6}}>
+            <span style={{fontSize:18}}>{sub.emoji}</span>
+            <span style={{color:p===100?"#34d399":p>50?"#fbbf24":sub.color,fontSize:14,fontWeight:900,fontFamily:"'JetBrains Mono',monospace"}}>{p}%</span>
+          </div>
+          <div style={{color:activeSub===sub.id?sub.color:"var(--text2)",fontSize:12,fontWeight:700,marginBottom:4}}>{sub.short}</div>
+          <div style={{width:"100%",height:3,background:"var(--surface3)",borderRadius:99,overflow:"hidden"}}><div style={{width:`${p}%`,height:"100%",background:p===100?"#34d399":sub.color}}/></div>
+          <div style={{color:"var(--text3)",fontSize:10,marginTop:3}}>{done}/{total} done</div>
+        </button>
+      ))}
+    </div>
+    {/* Checklist */}
+    <div className="card" style={{overflow:"hidden"}}>
+      <div style={{padding:"12px 16px",background:"var(--surface2)",borderBottom:"1px solid var(--border)",display:"flex",alignItems:"center",gap:10}}>
+        <span style={{fontSize:18}}>{s?.emoji}</span>
+        <span style={{color:s?.color,fontSize:13,fontWeight:700}}>{s?.name}</span>
+        <span style={{color:"var(--text3)",fontSize:11,marginLeft:"auto"}}>{doneCount}/{items.length} · {pct}%</span>
+        <div style={{width:80}}><div style={{width:"100%",height:4,background:"var(--surface3)",borderRadius:99,overflow:"hidden"}}><div style={{width:`${pct}%`,height:"100%",background:pct===100?"#34d399":s?.color}}/></div></div>
+      </div>
+      {items.map((item,i)=>{
+        const done=getCheck(activeSub,i);
+        return <div key={i} onClick={()=>toggle(activeSub,i)} style={{display:"flex",alignItems:"flex-start",gap:12,padding:"12px 16px",borderBottom:"1px solid var(--border)",cursor:"pointer",background:done?"rgba(52,211,153,0.03)":"transparent",transition:"background 0.1s"}}>
+          <div style={{width:20,height:20,borderRadius:6,border:`2px solid ${done?"#34d399":"rgba(255,255,255,0.2)"}`,background:done?"#34d399":"transparent",display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0,marginTop:1}}>
+            {done&&<span style={{color:"#fff",fontSize:12,fontWeight:900}}>✓</span>}
+          </div>
+          <div style={{color:done?"var(--text3)":"var(--text)",fontSize:13,fontWeight:500,textDecoration:done?"line-through":"none",lineHeight:1.4}}>{item}</div>
+        </div>;
+      })}
+    </div>
+  </div>;
+}
+
+/* ═══════════════════════════════════════
+   15. EXAMINER PATTERN TRACKER
+═══════════════════════════════════════ */
+const EXAM_YEARS=["2019","2020","2021","2022","2023","2024"];
+function ExaminerPatterns({patterns,setPatterns}){
+  const [activeSub,setActiveSub]=useState("fr");
+  const [adding,setAdding]=useState(false);
+  const [form,setForm]=useState({year:"2024",topic:"",marks:"",compulsory:false});
+  const subj=SUBJECTS.find(s=>s.id===activeSub);
+  const subPatterns=(patterns[activeSub]||[]).sort((a,b)=>b.year.localeCompare(a.year));
+  const addPattern=()=>{
+    if(!form.topic.trim())return;
+    setPatterns(p=>({...p,[activeSub]:[...(p[activeSub]||[]),{id:Date.now(),...form}]}));
+    setForm(f=>({...f,topic:"",marks:""}));setAdding(false);
+  };
+  const remove=(id)=>setPatterns(p=>({...p,[activeSub]:(p[activeSub]||[]).filter(x=>x.id!==id)}));
+  // Topic frequency
+  const topicFreq={};
+  (patterns[activeSub]||[]).forEach(p=>{const t=p.topic.toLowerCase();topicFreq[t]=(topicFreq[t]||0)+1;});
+  const hotTopics=Object.entries(topicFreq).sort((a,b)=>b[1]-a[1]).slice(0,5);
+  return <div style={{animation:"slideUp 0.2s ease"}}>
+    <div style={{background:"linear-gradient(135deg,rgba(99,102,241,0.1),transparent)",border:"1px solid rgba(99,102,241,0.25)",borderRadius:14,padding:"16px 20px",marginBottom:16}}>
+      <div style={{color:"#6366f1",fontSize:10,fontWeight:700,textTransform:"uppercase",letterSpacing:2,marginBottom:4}}>📊 Examiner Pattern Tracker</div>
+      <div style={{color:"var(--text)",fontSize:18,fontWeight:800}}>Track What Examiners Ask</div>
+      <div style={{color:"var(--text2)",fontSize:12,marginTop:4}}>Log topics from past ICAI papers. See which topics repeat — those are your priority chapters.</div>
+    </div>
+    <div style={{display:"flex",gap:6,flexWrap:"wrap",marginBottom:14}}>
+      {SUBJECTS.map(s=>{const cnt=(patterns[s.id]||[]).length;return(<button key={s.id} onClick={()=>setActiveSub(s.id)} style={{background:activeSub===s.id?`${s.color}18`:"var(--surface2)",border:`${activeSub===s.id?2:1}px solid ${activeSub===s.id?s.color:s.color+"30"}`,borderRadius:9,padding:"7px 13px",cursor:"pointer",color:activeSub===s.id?s.color:"var(--text2)",fontSize:12,fontWeight:700}}>{s.emoji} {s.short} {cnt>0&&`(${cnt})`}</button>);})};
+    </div>
+    {hotTopics.length>0&&<div style={{background:"rgba(251,191,36,0.06)",border:"1px solid rgba(251,191,36,0.2)",borderRadius:12,padding:"12px 16px",marginBottom:12}}>
+      <div style={{color:"#fbbf24",fontSize:10,fontWeight:700,textTransform:"uppercase",letterSpacing:1.5,marginBottom:8}}>🔥 Hot Topics — Appeared Most Often</div>
+      <div style={{display:"flex",gap:6,flexWrap:"wrap"}}>
+        {hotTopics.map(([topic,count])=>(
+          <div key={topic} style={{background:"rgba(251,191,36,0.1)",border:"1px solid rgba(251,191,36,0.25)",borderRadius:20,padding:"3px 12px",display:"flex",gap:6,alignItems:"center"}}>
+            <span style={{color:"#fbbf24",fontSize:11,fontWeight:700,textTransform:"capitalize"}}>{topic}</span>
+            <span style={{background:"#fbbf24",color:"#000",borderRadius:99,padding:"0px 6px",fontSize:10,fontWeight:900}}>{count}×</span>
+          </div>
+        ))}
+      </div>
+    </div>}
+    <div style={{marginBottom:10,display:"flex",gap:8,alignItems:"center"}}>
+      <button onClick={()=>setAdding(p=>!p)} style={{background:`${subj?.color}15`,border:`1px solid ${subj?.color}44`,color:subj?.color,borderRadius:9,padding:"7px 16px",fontSize:12,fontWeight:700,cursor:"pointer"}}>{adding?"✕ Cancel":"+ Log Topic"}</button>
+    </div>
+    {adding&&<div className="card" style={{padding:"14px 16px",marginBottom:12,border:"1px solid rgba(99,102,241,0.3)"}}>
+      <div style={{display:"flex",gap:8,flexWrap:"wrap",alignItems:"flex-end"}}>
+        <div>
+          <div style={{color:"var(--text3)",fontSize:10,marginBottom:3}}>Year</div>
+          <select value={form.year} onChange={e=>setForm(f=>({...f,year:e.target.value}))} style={{background:"var(--surface2)",border:"1px solid var(--border)",borderRadius:8,padding:"7px 10px",fontSize:12,color:"var(--text)"}}>{EXAM_YEARS.map(y=><option key={y} value={y}>{y}</option>)}</select>
+        </div>
+        <div style={{flex:2,minWidth:160}}>
+          <div style={{color:"var(--text3)",fontSize:10,marginBottom:3}}>Topic / Chapter</div>
+          <input value={form.topic} onChange={e=>setForm(f=>({...f,topic:e.target.value}))} placeholder="e.g. Transfer Pricing – TNMM Method" style={{width:"100%",background:"var(--surface2)",border:"1px solid var(--border)",borderRadius:8,padding:"7px 10px",fontSize:12,color:"var(--text)"}}/>
+        </div>
+        <div>
+          <div style={{color:"var(--text3)",fontSize:10,marginBottom:3}}>Marks</div>
+          <input type="number" value={form.marks} onChange={e=>setForm(f=>({...f,marks:e.target.value}))} style={{width:60,background:"var(--surface2)",border:"1px solid var(--border)",borderRadius:8,padding:"7px",fontSize:12,color:"var(--text)"}}/>
+        </div>
+        <label style={{display:"flex",alignItems:"center",gap:5,cursor:"pointer",fontSize:12,color:"var(--text2)"}}>
+          <input type="checkbox" checked={form.compulsory} onChange={e=>setForm(f=>({...f,compulsory:e.target.checked}))}/> Compulsory
+        </label>
+        <button onClick={addPattern} style={{background:"#6366f1",color:"#fff",border:"none",borderRadius:8,padding:"7px 18px",fontSize:12,fontWeight:700,cursor:"pointer"}}>Add</button>
+      </div>
+    </div>}
+    {subPatterns.length===0?<div style={{textAlign:"center",padding:"40px",border:"2px dashed var(--border)",borderRadius:14,color:"var(--text3)"}}>No patterns logged yet — go through past 5 years of {subj?.short} papers and log every topic asked.</div>:(
+      <div className="card" style={{overflow:"hidden"}}>
+        <div style={{display:"grid",gridTemplateColumns:"60px 1fr 60px 80px 30px",padding:"7px 14px",fontSize:9,fontWeight:700,textTransform:"uppercase",letterSpacing:1,color:"var(--text3)",borderBottom:"1px solid var(--border)"}}>
+          <div>Year</div><div>Topic</div><div style={{textAlign:"center"}}>Marks</div><div style={{textAlign:"center"}}>Type</div><div/>
+        </div>
+        {subPatterns.map(p=>(
+          <div key={p.id} style={{display:"grid",gridTemplateColumns:"60px 1fr 60px 80px 30px",padding:"9px 14px",borderBottom:"1px solid var(--border)",alignItems:"center"}}>
+            <span style={{color:"#6366f1",fontSize:12,fontWeight:800,fontFamily:"'JetBrains Mono',monospace"}}>{p.year}</span>
+            <span style={{color:"var(--text)",fontSize:12}}>{p.topic}</span>
+            <span style={{textAlign:"center",color:"var(--text2)",fontSize:12,fontFamily:"'JetBrains Mono',monospace"}}>{p.marks||"—"}</span>
+            <span style={{textAlign:"center"}}>{p.compulsory?<span style={{background:"rgba(248,113,113,0.15)",color:"#f87171",borderRadius:20,padding:"1px 8px",fontSize:10,fontWeight:700}}>Compulsory</span>:<span style={{background:"rgba(52,211,153,0.1)",color:"#34d399",borderRadius:20,padding:"1px 8px",fontSize:10,fontWeight:700}}>Optional</span>}</span>
+            <button onClick={()=>remove(p.id)} style={{background:"transparent",border:"none",color:"var(--text3)",cursor:"pointer",fontSize:12}}>✕</button>
+          </div>
+        ))}
+      </div>
+    )}
+  </div>;
+}
+
+/* ═══════════════════════════════════════
+   16. MARKS DISTRIBUTION ANALYSER
+═══════════════════════════════════════ */
+function MarksAnalyser({tests}){
+  const [activeSub,setActiveSub]=useState("fr");
+  const subTests=tests.filter(t=>t.subject===activeSub&&t.score!=null);
+  const scored=tests.filter(t=>t.score!=null);
+  const bySubject=SUBJECTS.map(s=>{
+    const st=scored.filter(t=>t.subject===s.id);
+    const avg=st.length?Math.round(st.reduce((a,t)=>a+t.score,0)/st.length):null;
+    const best=st.length?Math.max(...st.map(t=>t.score)):null;
+    const worst=st.length?Math.min(...st.map(t=>t.score)):null;
+    const trend=st.length>=3?st.slice(0,3).reduce((a,t)=>a+t.score,0)/3-st.slice(-3).reduce((a,t)=>a+t.score,0)/3:null;
+    return{s,count:st.length,avg,best,worst,trend};
+  });
+  const sc=v=>v>=60?"#34d399":v>=50?"#fbbf24":"#f87171";
+  return <div style={{animation:"slideUp 0.2s ease"}}>
+    <div style={{background:"linear-gradient(135deg,rgba(56,189,248,0.1),transparent)",border:"1px solid rgba(56,189,248,0.2)",borderRadius:14,padding:"16px 20px",marginBottom:16}}>
+      <div style={{color:"#38bdf8",fontSize:10,fontWeight:700,textTransform:"uppercase",letterSpacing:2,marginBottom:4}}>📐 Marks Distribution Analyser</div>
+      <div style={{color:"var(--text)",fontSize:18,fontWeight:800}}>Test Score Analysis by Subject</div>
+      <div style={{color:"var(--text2)",fontSize:12,marginTop:4}}>Track performance trends across subjects. A falling trend needs immediate attention.</div>
+    </div>
+    {/* Subject grid */}
+    <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(160px,1fr))",gap:10,marginBottom:16}}>
+      {bySubject.map(({s,count,avg,best,worst,trend})=>(
+        <div key={s.id} className="card" style={{padding:"14px",borderTop:`3px solid ${s.color}`,cursor:"pointer"}} onClick={()=>setActiveSub(s.id)}>
+          <div style={{display:"flex",justifyContent:"space-between",marginBottom:6}}>
+            <span style={{fontSize:18}}>{s.emoji}</span>
+            {trend!==null&&<span style={{color:trend>0?"#34d399":trend<-5?"#f87171":"#fbbf24",fontSize:10,fontWeight:700}}>{trend>0?"↑":trend<0?"↓":"→"} {Math.abs(trend).toFixed(0)}pts</span>}
+          </div>
+          <div style={{color:s.color,fontSize:12,fontWeight:700,marginBottom:6}}>{s.short}</div>
+          {avg!==null?<>
+            <div style={{color:sc(avg),fontSize:26,fontWeight:900,fontFamily:"'JetBrains Mono',monospace",lineHeight:1}}>{avg}%</div>
+            <div style={{color:"var(--text3)",fontSize:10,marginTop:3}}>avg · {count} tests</div>
+            <div style={{display:"flex",gap:6,marginTop:4}}>
+              <span style={{color:"#34d399",fontSize:10}}>↑{best}%</span>
+              <span style={{color:"#f87171",fontSize:10}}>↓{worst}%</span>
+            </div>
+          </>:<div style={{color:"var(--text3)",fontSize:12}}>No tests yet</div>}
+        </div>
+      ))}
+    </div>
+    {/* Active subject detail */}
+    {subTests.length>0&&<div className="card" style={{padding:"16px"}}>
+      <div style={{color:"var(--text3)",fontSize:9,fontWeight:700,textTransform:"uppercase",letterSpacing:1.5,marginBottom:10}}>{SUBJECTS.find(s=>s.id===activeSub)?.short} — All Test Scores</div>
+      <div style={{display:"flex",gap:3,alignItems:"flex-end",height:80,marginBottom:10}}>
+        {subTests.slice().reverse().slice(-15).map((t,i)=>{const h=Math.max((t.score/100)*80,4);return(
+          <div key={i} style={{flex:1,display:"flex",flexDirection:"column",alignItems:"center",gap:2}}>
+            <div style={{fontSize:7,color:sc(t.score),fontFamily:"'JetBrains Mono',monospace"}}>{t.score}</div>
+            <div style={{width:"100%",background:sc(t.score),height:h,borderRadius:"3px 3px 0 0",opacity:0.8}} title={`${t.type}: ${t.score}% on ${t.date}`}/>
+            <div style={{fontSize:7,color:"var(--text3)",writingMode:"vertical-lr",transform:"rotate(180deg)",height:24}}>{t.type?.slice(0,3)}</div>
+          </div>
+        );})}
+      </div>
+      <div style={{display:"flex",gap:6}}>
+        {[["Pass (60%+)","#34d399"],["Borderline (50-59%)","#fbbf24"],["Fail (<50%)","#f87171"]].map(([l,c])=>(
+          <div key={l} style={{display:"flex",alignItems:"center",gap:4}}><div style={{width:10,height:10,borderRadius:2,background:c}}/><span style={{fontSize:10,color:"var(--text3)"}}>{l}</span></div>
+        ))}
+      </div>
+    </div>}
+  </div>;
+}
+
+/* ═══════════════════════════════════════
+   17. RTP/MTP LOG
+═══════════════════════════════════════ */
+const RTP_YEARS=["May 2024","Nov 2024","May 2025","Nov 2025","May 2026","Nov 2026"];
+function RTPLog({rtpLog,setRtpLog}){
+  const [activeSub,setActiveSub]=useState("fr");
+  const [adding,setAdding]=useState(false);
+  const [form,setForm]=useState({type:"RTP",attempt:RTP_YEARS[0],qAttempted:"",qSkipped:"",selfScore:"",notes:""});
+  const add=()=>{
+    setRtpLog(p=>[{id:Date.now(),subject:activeSub,date:today(),...form},...p]);
+    setForm(f=>({...f,qAttempted:"",qSkipped:"",selfScore:"",notes:""}));setAdding(false);
+  };
+  const remove=id=>setRtpLog(p=>p.filter(x=>x.id!==id));
+  const subLogs=rtpLog.filter(x=>x.subject===activeSub);
+  const overallCoverage=SUBJECTS.map(s=>{
+    const logs=rtpLog.filter(x=>x.subject===s.id);
+    const rtps=logs.filter(x=>x.type==="RTP").length;
+    const mtps=logs.filter(x=>x.type==="MTP").length;
+    return{s,rtps,mtps,total:rtps+mtps};
+  });
+  return <div style={{animation:"slideUp 0.2s ease"}}>
+    <div style={{background:"linear-gradient(135deg,rgba(167,139,250,0.1),transparent)",border:"1px solid rgba(167,139,250,0.2)",borderRadius:14,padding:"16px 20px",marginBottom:16}}>
+      <div style={{color:"#a78bfa",fontSize:10,fontWeight:700,textTransform:"uppercase",letterSpacing:2,marginBottom:4}}>📋 RTP / MTP Log</div>
+      <div style={{color:"var(--text)",fontSize:18,fontWeight:800}}>Track RTP & MTP Attempts</div>
+      <div style={{color:"var(--text2)",fontSize:12,marginTop:4}}>RTPs and MTPs are the most important material for rank. Log every attempt and track questions you skipped.</div>
+    </div>
+    {/* Coverage overview */}
+    <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(130px,1fr))",gap:8,marginBottom:14}}>
+      {overallCoverage.map(({s,rtps,mtps,total})=>(
+        <div key={s.id} className="card" style={{padding:"12px 14px",borderLeft:`3px solid ${s.color}`,cursor:"pointer"}} onClick={()=>setActiveSub(s.id)}>
+          <div style={{color:s.color,fontSize:12,fontWeight:700,marginBottom:4}}>{s.emoji} {s.short}</div>
+          <div style={{color:"var(--text)",fontSize:20,fontWeight:900,fontFamily:"'JetBrains Mono',monospace"}}>{total}</div>
+          <div style={{color:"var(--text3)",fontSize:10}}>attempts total</div>
+          <div style={{display:"flex",gap:8,marginTop:4}}>
+            <span style={{color:"#818cf8",fontSize:10}}>RTP: {rtps}</span>
+            <span style={{color:"#34d399",fontSize:10}}>MTP: {mtps}</span>
+          </div>
+        </div>
+      ))}
+    </div>
+    <div style={{marginBottom:10,display:"flex",gap:8}}>
+      <button onClick={()=>setAdding(p=>!p)} style={{background:"rgba(167,139,250,0.12)",border:"1px solid rgba(167,139,250,0.35)",color:"#a78bfa",borderRadius:9,padding:"7px 16px",fontSize:12,fontWeight:700,cursor:"pointer"}}>{adding?"✕":"+ Log RTP/MTP"}</button>
+      <div style={{display:"flex",gap:4}}>
+        {SUBJECTS.map(s=><button key={s.id} onClick={()=>setActiveSub(s.id)} style={{background:activeSub===s.id?`${s.color}18`:"var(--surface2)",border:`1px solid ${activeSub===s.id?s.color:s.color+"30"}`,borderRadius:8,padding:"5px 10px",fontSize:11,fontWeight:700,cursor:"pointer",color:activeSub===s.id?s.color:"var(--text2)"}}>{s.short}</button>)}
+      </div>
+    </div>
+    {adding&&<div className="card" style={{padding:"14px",marginBottom:12,border:"1px solid rgba(167,139,250,0.3)"}}>
+      <div style={{display:"flex",gap:8,flexWrap:"wrap",alignItems:"flex-end"}}>
+        <div>
+          <div style={{color:"var(--text3)",fontSize:10,marginBottom:3}}>Type</div>
+          <select value={form.type} onChange={e=>setForm(f=>({...f,type:e.target.value}))} style={{background:"var(--surface2)",border:"1px solid var(--border)",borderRadius:8,padding:"7px",fontSize:12,color:"var(--text)"}}>
+            {["RTP","MTP"].map(t=><option key={t}>{t}</option>)}
+          </select>
+        </div>
+        <div>
+          <div style={{color:"var(--text3)",fontSize:10,marginBottom:3}}>Attempt</div>
+          <select value={form.attempt} onChange={e=>setForm(f=>({...f,attempt:e.target.value}))} style={{background:"var(--surface2)",border:"1px solid var(--border)",borderRadius:8,padding:"7px",fontSize:12,color:"var(--text)"}}>{RTP_YEARS.map(y=><option key={y}>{y}</option>)}</select>
+        </div>
+        <div>
+          <div style={{color:"var(--text3)",fontSize:10,marginBottom:3}}>Qs Attempted</div>
+          <input value={form.qAttempted} onChange={e=>setForm(f=>({...f,qAttempted:e.target.value}))} placeholder="e.g. 5/6" style={{width:70,background:"var(--surface2)",border:"1px solid var(--border)",borderRadius:8,padding:"7px",fontSize:12,color:"var(--text)"}}/>
+        </div>
+        <div>
+          <div style={{color:"var(--text3)",fontSize:10,marginBottom:3}}>Self Score</div>
+          <input type="number" value={form.selfScore} onChange={e=>setForm(f=>({...f,selfScore:e.target.value}))} placeholder="%" style={{width:56,background:"var(--surface2)",border:"1px solid var(--border)",borderRadius:8,padding:"7px",fontSize:12,color:"var(--text)"}}/>
+        </div>
+        <div style={{flex:1,minWidth:140}}>
+          <div style={{color:"var(--text3)",fontSize:10,marginBottom:3}}>Notes / Weak areas</div>
+          <input value={form.notes} onChange={e=>setForm(f=>({...f,notes:e.target.value}))} placeholder="Topics to revisit..." style={{width:"100%",background:"var(--surface2)",border:"1px solid var(--border)",borderRadius:8,padding:"7px",fontSize:12,color:"var(--text)"}}/>
+        </div>
+        <button onClick={add} style={{background:"#a78bfa",color:"#fff",border:"none",borderRadius:8,padding:"7px 16px",fontSize:12,fontWeight:700,cursor:"pointer"}}>Save</button>
+      </div>
+    </div>}
+    {subLogs.length===0?<div style={{textAlign:"center",padding:"40px",border:"2px dashed var(--border)",borderRadius:14,color:"var(--text3)"}}>No {activeSub.toUpperCase()} RTP/MTP logged yet</div>:(
+      <div style={{display:"flex",flexDirection:"column",gap:7}}>
+        {subLogs.map(l=>{const s=SUBJECTS.find(x=>x.id===l.subject);return(
+          <div key={l.id} className="card" style={{padding:"12px 16px",display:"flex",gap:12,alignItems:"center",flexWrap:"wrap",borderLeft:`3px solid ${l.type==="RTP"?"#818cf8":"#34d399"}`}}>
+            <div style={{flexShrink:0}}>
+              <div style={{background:l.type==="RTP"?"rgba(129,140,248,0.15)":"rgba(52,211,153,0.15)",color:l.type==="RTP"?"#818cf8":"#34d399",borderRadius:8,padding:"4px 10px",fontSize:11,fontWeight:800,textAlign:"center"}}>{l.type}</div>
+            </div>
+            <div style={{flex:1}}>
+              <div style={{display:"flex",gap:6,marginBottom:3,flexWrap:"wrap"}}>
+                <span style={{background:s?.bg,color:s?.color,borderRadius:20,padding:"1px 7px",fontSize:10,fontWeight:700}}>{s?.short}</span>
+                <span style={{color:"var(--text2)",fontSize:11,fontWeight:700}}>{l.attempt}</span>
+                <span style={{color:"var(--text3)",fontSize:10}}>{l.date}</span>
+              </div>
+              <div style={{display:"flex",gap:10,flexWrap:"wrap"}}>
+                {l.qAttempted&&<span style={{color:"var(--text2)",fontSize:11}}>Attempted: {l.qAttempted}</span>}
+                {l.selfScore&&<span style={{color:parseInt(l.selfScore)>=60?"#34d399":parseInt(l.selfScore)>=50?"#fbbf24":"#f87171",fontSize:11,fontWeight:700}}>{l.selfScore}%</span>}
+                {l.notes&&<span style={{color:"var(--text3)",fontSize:11}}>{l.notes}</span>}
+              </div>
+            </div>
+            <button onClick={()=>remove(l.id)} style={{background:"transparent",border:"none",color:"var(--text3)",cursor:"pointer",fontSize:13}}>✕</button>
+          </div>
+        );})}
+      </div>
+    )}
+  </div>;
+}
+
+/* ═══════════════════════════════════════
+   18. STUDY SESSION JOURNAL
+═══════════════════════════════════════ */
+function StudyJournal({journal,setJournal}){
+  const [selDate,setSelDate]=useState(today());
+  const entry=journal[selDate]||{covered:"",reflections:"",tomorrow:""};
+  const [draft,setDraft]=useState(entry);
+  useEffect(()=>{
+    const e=journal[selDate]||{covered:"",reflections:"",tomorrow:""};
+    setDraft(e);
+  },[selDate,journal]);
+  const save=()=>setJournal(p=>({...p,[selDate]:{...draft,savedAt:new Date().toTimeString().slice(0,5)}}));
+  const past=Object.entries(journal).sort(([a],[b])=>b.localeCompare(a)).slice(0,14);
+  const week=Array.from({length:7},(_,i)=>{const d=new Date();d.setDate(d.getDate()-i);return d.toISOString().slice(0,10);});
+  return <div style={{animation:"slideUp 0.2s ease"}}>
+    <div style={{background:"linear-gradient(135deg,rgba(244,114,182,0.08),transparent)",border:"1px solid rgba(244,114,182,0.2)",borderRadius:14,padding:"16px 20px",marginBottom:16}}>
+      <div style={{color:"#f472b6",fontSize:10,fontWeight:700,textTransform:"uppercase",letterSpacing:2,marginBottom:4}}>📓 Study Journal</div>
+      <div style={{color:"var(--text)",fontSize:18,fontWeight:800}}>Daily Reflection Log</div>
+      <div style={{color:"var(--text2)",fontSize:12,marginTop:4}}>A 5-minute end-of-day ritual. What you covered, how it went, what's next. Over months this becomes your preparation story.</div>
+    </div>
+    {/* Week selector */}
+    <div style={{display:"flex",gap:5,marginBottom:14,overflowX:"auto",paddingBottom:3}}>
+      {week.map(d=>{const dt=new Date(d+"T00:00:00");const hasEntry=journal[d]&&(journal[d].covered||journal[d].reflections);const isSel=selDate===d;return(
+        <button key={d} onClick={()=>setSelDate(d)} style={{flexShrink:0,background:isSel?"rgba(244,114,182,0.15)":"var(--surface2)",border:`${isSel?2:1}px solid ${isSel?"#f472b6":hasEntry?"rgba(244,114,182,0.3)":"var(--border)"}`,borderRadius:10,padding:"8px 12px",cursor:"pointer",textAlign:"center",minWidth:60}}>
+          <div style={{color:isSel?"#f472b6":"var(--text3)",fontSize:9,fontWeight:700,textTransform:"uppercase"}}>{dt.toLocaleDateString("en",{weekday:"short"})}</div>
+          <div style={{color:isSel?"#f472b6":"var(--text)",fontSize:15,fontWeight:900,fontFamily:"'JetBrains Mono',monospace"}}>{dt.getDate()}</div>
+          <div style={{width:6,height:6,borderRadius:"50%",background:hasEntry?"#f472b6":"transparent",margin:"2px auto 0"}}/>
+        </button>
+      );})}
+      <input type="date" value={selDate} onChange={e=>setSelDate(e.target.value)} style={{background:"var(--surface2)",border:"1px solid var(--border)",borderRadius:9,padding:"6px 10px",fontSize:11,color:"var(--text)",flexShrink:0,alignSelf:"center"}}/>
+    </div>
+    {/* Journal entry */}
+    <div className="card" style={{padding:"20px",marginBottom:14}}>
+      <div style={{color:"var(--text)",fontSize:14,fontWeight:700,marginBottom:14}}>{new Date(selDate+"T00:00:00").toLocaleDateString("en-IN",{weekday:"long",day:"numeric",month:"long",year:"numeric"})}</div>
+      {[{key:"covered",label:"📚 What I covered today",ph:"Chapters, topics, problems solved, videos watched..."},{key:"reflections",label:"💭 How it went & what I struggled with",ph:"Energy level, tough topics, what clicked, what didn't..."},{key:"tomorrow",label:"🎯 Tomorrow's priority",ph:"The one most important thing to do tomorrow..."}].map(({key,label,ph})=>(
+        <div key={key} style={{marginBottom:14}}>
+          <div style={{color:"var(--text2)",fontSize:12,fontWeight:600,marginBottom:5}}>{label}</div>
+          <textarea value={draft[key]||""} onChange={e=>setDraft(f=>({...f,[key]:e.target.value}))} onBlur={save} placeholder={ph} style={{width:"100%",background:"var(--surface2)",border:"1px solid var(--border)",borderRadius:9,padding:"10px 12px",fontSize:13,color:"var(--text)",minHeight:68,resize:"vertical",lineHeight:1.6}}/>
+        </div>
+      ))}
+      <div style={{display:"flex",gap:8,alignItems:"center"}}>
+        <button onClick={save} style={{background:"#f472b6",color:"#fff",border:"none",borderRadius:9,padding:"8px 22px",fontSize:12,fontWeight:800,cursor:"pointer"}}>Save Entry</button>
+        {entry.savedAt&&<span style={{color:"var(--text3)",fontSize:11}}>Auto-saved · {entry.savedAt}</span>}
+      </div>
+    </div>
+    {/* Past entries */}
+    {past.length>0&&<div className="card" style={{padding:0,overflow:"hidden"}}>
+      <div style={{padding:"11px 16px",borderBottom:"1px solid var(--border)",color:"var(--text3)",fontSize:9,fontWeight:700,textTransform:"uppercase",letterSpacing:1.5}}>Past Entries</div>
+      {past.slice(0,7).map(([d,e])=>(
+        <div key={d} onClick={()=>setSelDate(d)} style={{padding:"10px 16px",borderBottom:"1px solid var(--border)",cursor:"pointer",display:"flex",gap:10,alignItems:"flex-start"}} onMouseEnter={ev=>ev.currentTarget.style.background="var(--surface2)"} onMouseLeave={ev=>ev.currentTarget.style.background="transparent"}>
+          <div style={{color:"#f472b6",fontSize:11,fontWeight:700,fontFamily:"'JetBrains Mono',monospace",flexShrink:0,width:52}}>{new Date(d+"T00:00:00").toLocaleDateString("en-IN",{day:"numeric",month:"short"})}</div>
+          <div style={{flex:1,overflow:"hidden"}}>
+            {e.covered&&<div style={{color:"var(--text2)",fontSize:12,overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}}>{e.covered}</div>}
+            {e.tomorrow&&<div style={{color:"var(--text3)",fontSize:11,marginTop:2}}>🎯 {e.tomorrow}</div>}
+          </div>
+        </div>
+      ))}
+    </div>}
+  </div>;
+}
+
+/* ═══════════════════════════════════════
+   21. PRINT/SYLLABUS COVERAGE REPORT
+═══════════════════════════════════════ */
+function CoverageReport({lectures,revData}){
+  const [filter,setFilter]=useState("all");
+  const printReport=()=>{
+    const printWin=window.open("","_blank");
+    const rows=SUBJECTS.map(s=>{
+      const chs=allChapters(s);
+      return chs.map((ch,i)=>{
+        const lk=chKey(s.id,i,"lec");const rk=chKey(s.id,i,"rev");
+        const lec=lectures[lk]?.status||"Not Started";
+        const rev=revData[rk]?.status||"Not Started";
+        const conf=revData[rk]?.confidence||0;
+        return`<tr><td>${s.short}</td><td>${ch.n}</td><td>${ch.w}</td><td style="color:${lec==="Completed"?"green":"orange"}">${lec}</td><td style="color:${rev==="Completed"?"green":rev==="Stuck"?"red":"orange"}">${rev}</td><td>${conf>0?conf+"/5":"—"}</td></tr>`;
+      }).join("");
+    }).join("");
+    printWin.document.write(`<html><head><title>CA Finals Coverage Report</title><style>body{font-family:Arial,sans-serif;font-size:11px}table{width:100%;border-collapse:collapse}th,td{border:1px solid #ddd;padding:4px 6px;text-align:left}th{background:#1a1a2e;color:white}tr:nth-child(even){background:#f5f5f5}h1{font-size:16px;margin-bottom:4px}p{color:#666;font-size:11px;margin-bottom:12px}</style></head><body><h1>CA Finals May 2027 — Syllabus Coverage Report</h1><p>Generated: ${new Date().toLocaleDateString("en-IN",{day:"numeric",month:"long",year:"numeric",hour:"2-digit",minute:"2-digit"})}</p><table><thead><tr><th>Subject</th><th>Chapter</th><th>Weight</th><th>Lecture</th><th>Revision</th><th>Confidence</th></tr></thead><tbody>${rows}</tbody></table></body></html>`);
+    printWin.document.close();printWin.print();
+  };
+  const allRows=[];
+  SUBJECTS.forEach(s=>{
+    allChapters(s).forEach((ch,i)=>{
+      const lk=chKey(s.id,i,"lec");const rk=chKey(s.id,i,"rev");
+      const lec=lectures[lk]?.status||"Not Started";const rev=revData[rk]?.status||"Not Started";
+      const conf=revData[rk]?.confidence||0;
+      allRows.push({s,ch,lec,rev,conf});
+    });
+  });
+  const filtered=allRows.filter(r=>{
+    if(filter==="all")return true;
+    if(filter==="pending")return r.lec!=="Completed"||r.rev!=="Completed";
+    if(filter==="stuck")return r.rev==="Stuck";
+    if(filter==="weak")return r.conf>0&&r.conf<=2;
+    if(filter==="done")return r.lec==="Completed"&&r.rev==="Completed";
+    return true;
+  });
+  const lc=allRows.filter(r=>r.lec==="Completed").length;
+  const rc=allRows.filter(r=>r.rev==="Completed").length;
+  const total=allRows.length;
+  return <div style={{animation:"slideUp 0.2s ease"}}>
+    <div style={{background:"linear-gradient(135deg,rgba(99,102,241,0.1),transparent)",border:"1px solid rgba(99,102,241,0.25)",borderRadius:14,padding:"16px 20px",marginBottom:16,display:"flex",alignItems:"center",justifyContent:"space-between",flexWrap:"wrap",gap:10}}>
+      <div>
+        <div style={{color:"#6366f1",fontSize:10,fontWeight:700,textTransform:"uppercase",letterSpacing:2,marginBottom:4}}>📄 Coverage Report</div>
+        <div style={{color:"var(--text)",fontSize:18,fontWeight:800}}>Full Syllabus Coverage View</div>
+        <div style={{color:"var(--text2)",fontSize:12,marginTop:4}}>{lc}/{total} lectures · {rc}/{total} revision · All 180+ chapters</div>
+      </div>
+      <button onClick={printReport} style={{background:"linear-gradient(135deg,#6366f1,#4f46e5)",color:"#fff",border:"none",borderRadius:10,padding:"10px 22px",fontSize:13,fontWeight:800,cursor:"pointer",boxShadow:"0 4px 14px rgba(99,102,241,0.4)"}}>🖨️ Print Report</button>
+    </div>
+    <div style={{display:"flex",gap:6,marginBottom:12,flexWrap:"wrap"}}>
+      {[["all","All"],["pending","Pending"],["done","Completed"],["stuck","Stuck"],["weak","Weak (Conf 1-2)"]].map(([v,l])=>(
+        <button key={v} onClick={()=>setFilter(v)} style={{background:filter===v?"rgba(99,102,241,0.15)":"var(--surface2)",border:`1px solid ${filter===v?"rgba(99,102,241,0.4)":"var(--border)"}`,borderRadius:8,padding:"5px 12px",fontSize:11,fontWeight:700,cursor:"pointer",color:filter===v?"#6366f1":"var(--text2)"}}>{l} {filter===v?`(${filtered.length})`:""}</button>
+      ))}
+    </div>
+    <div className="card" style={{overflow:"hidden"}}>
+      <div style={{display:"grid",gridTemplateColumns:"56px 1fr 60px 90px 90px 56px",padding:"7px 14px",fontSize:9,fontWeight:700,textTransform:"uppercase",letterSpacing:1,color:"var(--text3)",borderBottom:"1px solid var(--border)"}}>
+        <div>Sub</div><div>Chapter</div><div>Weight</div><div>Lecture</div><div>Revision</div><div>Conf</div>
+      </div>
+      <div style={{maxHeight:520,overflowY:"auto"}}>
+        {filtered.map(({s,ch,lec,rev,conf},i)=>{
+          const lc2=lec==="Completed"?"#34d399":lec==="In Progress"?"#fbbf24":"var(--text3)";
+          const rc2=rev==="Completed"?"#34d399":rev==="Stuck"?"#f87171":rev==="In Progress"?"#fbbf24":"var(--text3)";
+          return <div key={i} style={{display:"grid",gridTemplateColumns:"56px 1fr 60px 90px 90px 56px",padding:"8px 14px",borderBottom:"1px solid var(--border)",background:i%2===0?"transparent":"rgba(255,255,255,0.01)"}}>
+            <span style={{color:s.color,fontSize:10,fontWeight:700}}>{s.short}</span>
+            <span style={{color:"var(--text)",fontSize:11,overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap",paddingRight:8}}>{ch.n}</span>
+            <span style={{color:ch.w==="High"?"#fbbf24":ch.w==="Medium"?"#a78bfa":"#34d399",fontSize:10,fontWeight:700}}>{ch.w}</span>
+            <span style={{color:lc2,fontSize:10,fontWeight:600}}>{lec}</span>
+            <span style={{color:rc2,fontSize:10,fontWeight:600}}>{rev}</span>
+            <span style={{color:conf>0?["","#f87171","#fb923c","#fbbf24","#a3e635","#34d399"][conf]:"var(--text3)",fontSize:10,fontWeight:700,textAlign:"center"}}>{conf>0?conf+"/5":"—"}</span>
+          </div>;
+        })}
+      </div>
+    </div>
+  </div>;
+}
+
+/* ═══════════════════════════════════════
+   22. FOCUS MODE
+═══════════════════════════════════════ */
+function FocusMode({activeSub,lectures,revData,setLectures,setRevData,onExit}){
+  const [sub,setSub]=useState(activeSub||SUBJECTS[0].id);
+  const subj=SUBJECTS.find(s=>s.id===sub);
+  const chs=allChapters(subj);
+  const [showOnly,setShowOnly]=useState("all");
+  const filtered=chs.map((ch,i)=>({ch,i})).filter(({ch,i})=>{
+    if(showOnly==="lec_pending")return lectures[chKey(sub,i,"lec")]?.status!=="Completed";
+    if(showOnly==="rev_pending")return revData[chKey(sub,i,"rev")]?.status!=="Completed";
+    if(showOnly==="high")return ch.w==="High";
+    return true;
+  });
+  const markLec=(i)=>{const k=chKey(sub,i,"lec");setLectures(p=>({...p,[k]:{...p[k]||defLec(),status:"Completed",progress:100,updated:today()}}));};
+  const markRev=(i)=>{const k=chKey(sub,i,"rev");const cur=revData[k]||defRev();setRevData(p=>({...p,[k]:{...cur,status:"Completed",updated:today(),revDates:[...(cur.revDates||[]),today()]}}));};
+  return <div style={{position:"fixed",inset:0,background:"var(--bg)",zIndex:1000,display:"flex",flexDirection:"column",animation:"slideUp 0.2s ease"}}>
+    {/* Focus header */}
+    <div style={{background:"rgba(10,11,20,0.98)",borderBottom:"1px solid var(--border)",padding:"12px 20px",display:"flex",alignItems:"center",gap:12,flexWrap:"wrap"}}>
+      <div style={{width:8,height:8,borderRadius:"50%",background:"#34d399",animation:"pulseOpacity 2s infinite"}}/>
+      <span style={{color:"#34d399",fontSize:12,fontWeight:800}}>FOCUS MODE</span>
+      <span style={{color:"var(--text3)",fontSize:12}}>—</span>
+      <select value={sub} onChange={e=>setSub(e.target.value)} style={{background:"var(--surface2)",border:"1px solid var(--border)",borderRadius:8,padding:"5px 10px",fontSize:12,color:"var(--text)"}}>
+        {SUBJECTS.map(s=><option key={s.id} value={s.id}>{s.emoji} {s.name}</option>)}
+      </select>
+      <div style={{display:"flex",background:"var(--surface2)",border:"1px solid var(--border)",borderRadius:8,overflow:"hidden"}}>
+        {[["all","All"],["high","High only"],["lec_pending","Lec pending"],["rev_pending","Rev pending"]].map(([v,l])=>(
+          <button key={v} onClick={()=>setShowOnly(v)} style={{background:showOnly===v?"var(--border2)":"transparent",border:"none",padding:"5px 10px",fontSize:10,fontWeight:700,cursor:"pointer",color:showOnly===v?"var(--text)":"var(--text3)"}}>{l}</button>
+        ))}
+      </div>
+      <button onClick={onExit} style={{marginLeft:"auto",background:"rgba(248,113,113,0.1)",border:"1px solid rgba(248,113,113,0.3)",color:"#f87171",borderRadius:8,padding:"5px 14px",fontSize:12,fontWeight:700,cursor:"pointer"}}>✕ Exit Focus</button>
+    </div>
+    {/* Chapter list */}
+    <div style={{flex:1,overflowY:"auto",padding:"16px 20px",maxWidth:900,margin:"0 auto",width:"100%"}}>
+      {filtered.map(({ch,i})=>{
+        const lk=chKey(sub,i,"lec");const rk=chKey(sub,i,"rev");
+        const lecDone=lectures[lk]?.status==="Completed";const revDone=revData[rk]?.status==="Completed";
+        if(lecDone&&revDone&&showOnly==="all")return null;
+        return <div key={i} style={{display:"flex",alignItems:"center",gap:12,padding:"12px 16px",marginBottom:6,background:"var(--surface)",border:`1px solid var(--border)`,borderRadius:11,borderLeft:`3px solid ${lecDone&&revDone?"#34d399":lecDone?"#818cf8":subj?.color}`}}>
+          <div style={{flex:1}}>
+            <div style={{color:lecDone&&revDone?"var(--text3)":"var(--text)",fontSize:13,fontWeight:500}}>{ch.n}</div>
+            <div style={{display:"flex",gap:6,marginTop:3}}>
+              <span style={{color:ch.w==="High"?"#fbbf24":"var(--text3)",fontSize:10}}>{'★'.repeat(ch.w==="High"?3:ch.w==="Medium"?2:1)} {ch.w}</span>
+              {lecDone&&<span style={{color:"#f472b6",fontSize:10}}>🎬 Done</span>}
+              {revDone&&<span style={{color:"#818cf8",fontSize:10}}>📖 Done</span>}
+            </div>
+          </div>
+          {!lecDone&&<button onClick={()=>markLec(i)} style={{background:"rgba(244,114,182,0.12)",border:"1px solid rgba(244,114,182,0.3)",color:"#f472b6",borderRadius:8,padding:"6px 12px",fontSize:11,fontWeight:700,cursor:"pointer",flexShrink:0}}>✓ Lec</button>}
+          {!revDone&&<button onClick={()=>markRev(i)} style={{background:"rgba(129,140,248,0.12)",border:"1px solid rgba(129,140,248,0.3)",color:"#818cf8",borderRadius:8,padding:"6px 12px",fontSize:11,fontWeight:700,cursor:"pointer",flexShrink:0}}>✓ Rev</button>}
+        </div>;
+      })}
+    </div>
+  </div>;
+}
+
+
+/* ═══════════════════════════════════════
+   GITHUB GIST CLOUD SYNC
+═══════════════════════════════════════ */
+function CloudSync({onClose,revData,studyLog,tests,weeklyTarget,lectures,amendments,tasks,doubts,formulas,weeklyReviewDone,answerLog,chapterNotes,energyLog,preExamChecklist,patterns,rtpLog,journal,onImport}){
+  const [token,setToken]=useState(()=>localStorage.getItem("ca_gh_token")||"");
+  const [gistId,setGistId]=useState(()=>localStorage.getItem("ca_gh_gist")||"");
+  const [status,setStatus]=useState("");
+  const [loading,setLoading]=useState(false);
+
+  const allData=()=>({revData,studyLog,tests,weeklyTarget,amendments,tasks,doubts,formulas,weeklyReviewDone,answerLog,chapterNotes,energyLog,preExamChecklist,patterns,rtpLog,journal,lectures,syncedAt:new Date().toISOString(),version:8});
+
+  const saveToken=()=>{
+    localStorage.setItem("ca_gh_token",token);
+    localStorage.setItem("ca_gh_gist",gistId);
+    setStatus("Credentials saved locally.");
+  };
+
+  const syncUp=async()=>{
+    if(!token){setStatus("❌ Please enter your GitHub token first.");return;}
+    setLoading(true);setStatus("Syncing up...");
+    try{
+      const body={files:{"ca_finals_tracker.json":{content:JSON.stringify(allData(),null,2)}}};
+      let res;
+      if(gistId){
+        res=await fetch(`https://api.github.com/gists/${gistId}`,{method:"PATCH",headers:{"Authorization":`token ${token}`,"Content-Type":"application/json"},body:JSON.stringify(body)});
+      } else {
+        res=await fetch("https://api.github.com/gists",{method:"POST",headers:{"Authorization":`token ${token}`,"Content-Type":"application/json"},body:JSON.stringify({...body,description:"CA Finals Tracker — Nishanth",public:false})});
+      }
+      const data=await res.json();
+      if(data.id){
+        setGistId(data.id);localStorage.setItem("ca_gh_gist",data.id);
+        setStatus("✅ Synced to GitHub Gist! ID: "+data.id);
+      } else {
+        setStatus("❌ Sync failed: "+(data.message||"Unknown error"));
+      }
+    }catch(e){setStatus("❌ Error: "+e.message);}
+    setLoading(false);
+  };
+
+  const syncDown=async()=>{
+    if(!token||!gistId){setStatus("❌ Token and Gist ID required.");return;}
+    setLoading(true);setStatus("Downloading...");
+    try{
+      const res=await fetch(`https://api.github.com/gists/${gistId}`,{headers:{"Authorization":`token ${token}`}});
+      const data=await res.json();
+      const content=data.files?.["ca_finals_tracker.json"]?.content;
+      if(content){
+        const parsed=JSON.parse(content);
+        onImport(parsed);
+        setStatus("✅ Data restored from GitHub Gist! Synced at: "+(parsed.syncedAt||"unknown"));
+      } else {setStatus("❌ No tracker file found in Gist.");}
+    }catch(e){setStatus("❌ Error: "+e.message);}
+    setLoading(false);
+  };
+
+  return <div onClick={onClose} style={{position:"fixed",inset:0,background:"rgba(0,0,0,0.8)",zIndex:3000,display:"flex",alignItems:"center",justifyContent:"center",padding:16,backdropFilter:"blur(12px)"}}>
+    <div onClick={e=>e.stopPropagation()} style={{background:"var(--surface)",border:"1px solid var(--border2)",borderRadius:20,padding:28,maxWidth:480,width:"100%",boxShadow:"var(--shadow-lg)",animation:"slideUp 0.2s ease"}}>
+      <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:18}}>
+        <div>
+          <div style={{color:"#6366f1",fontSize:10,fontWeight:700,textTransform:"uppercase",letterSpacing:2}}>☁️ Cloud Sync</div>
+          <div style={{color:"var(--text)",fontSize:17,fontWeight:800,marginTop:2}}>GitHub Gist Sync</div>
+        </div>
+        <button onClick={onClose} style={{background:"var(--surface2)",border:"none",borderRadius:8,width:30,height:30,cursor:"pointer",color:"var(--text2)",fontSize:16}}>×</button>
+      </div>
+
+      <div style={{background:"rgba(99,102,241,0.06)",border:"1px solid rgba(99,102,241,0.2)",borderRadius:10,padding:"10px 14px",marginBottom:16,fontSize:12,color:"var(--text2)",lineHeight:1.6}}>
+        Your data syncs to a <strong style={{color:"#6366f1"}}>private GitHub Gist</strong> — free, secure, accessible from any device. Create a token at <span style={{color:"#6366f1",fontFamily:"'JetBrains Mono',monospace",fontSize:11}}>github.com/settings/tokens</span> with <strong>gist</strong> scope only.
+      </div>
+
+      <div style={{display:"flex",flexDirection:"column",gap:10,marginBottom:16}}>
+        <div>
+          <div style={{color:"var(--text3)",fontSize:11,marginBottom:4}}>GitHub Personal Access Token</div>
+          <input type="password" value={token} onChange={e=>setToken(e.target.value)} placeholder="ghp_xxxxxxxxxxxxxxxxxxxx" style={{width:"100%",background:"var(--surface2)",border:"1px solid var(--border)",borderRadius:9,padding:"9px 12px",fontSize:13,color:"var(--text)",fontFamily:"'JetBrains Mono',monospace"}}/>
+        </div>
+        <div>
+          <div style={{color:"var(--text3)",fontSize:11,marginBottom:4}}>Gist ID <span style={{color:"var(--text3)",fontWeight:400}}>(auto-filled after first sync)</span></div>
+          <input value={gistId} onChange={e=>setGistId(e.target.value)} placeholder="Leave blank to create new Gist" style={{width:"100%",background:"var(--surface2)",border:"1px solid var(--border)",borderRadius:9,padding:"9px 12px",fontSize:13,color:"var(--text)",fontFamily:"'JetBrains Mono',monospace"}}/>
+        </div>
+        <button onClick={saveToken} style={{background:"var(--surface2)",border:"1px solid var(--border)",borderRadius:8,padding:"7px",fontSize:12,cursor:"pointer",color:"var(--text2)",fontWeight:600}}>💾 Save Credentials</button>
+      </div>
+
+      <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:10,marginBottom:14}}>
+        <button onClick={syncUp} disabled={loading} style={{background:"linear-gradient(135deg,#6366f1,#4f46e5)",color:"#fff",border:"none",borderRadius:11,padding:"12px",fontSize:13,fontWeight:800,cursor:loading?"not-allowed":"pointer",opacity:loading?0.7:1}}>
+          {loading?"⏳ Syncing...":"⬆️ Sync Up"}
+        </button>
+        <button onClick={syncDown} disabled={loading} style={{background:"linear-gradient(135deg,#10b981,#059669)",color:"#fff",border:"none",borderRadius:11,padding:"12px",fontSize:13,fontWeight:800,cursor:loading?"not-allowed":"pointer",opacity:loading?0.7:1}}>
+          {loading?"⏳ Loading...":"⬇️ Sync Down"}
+        </button>
+      </div>
+
+      {status&&<div style={{background:status.startsWith("✅")?"rgba(52,211,153,0.08)":"rgba(248,113,113,0.08)",border:`1px solid ${status.startsWith("✅")?"rgba(52,211,153,0.3)":"rgba(248,113,113,0.3)"}`,borderRadius:9,padding:"10px 14px",fontSize:12,color:status.startsWith("✅")?"#34d399":"#f87171",fontFamily:"'JetBrains Mono',monospace",wordBreak:"break-all"}}>{status}</div>}
+
+      <div style={{marginTop:14,color:"var(--text3)",fontSize:11,lineHeight:1.6}}>
+        ⬆️ Sync Up = push your local data to Gist<br/>
+        ⬇️ Sync Down = restore from Gist to this device<br/>
+        🔒 Gist is private — only you can see it
+      </div>
+    </div>
+  </div>;
+}
+
+/* ═══════════════════════════════════════
+   ICAI QUICK LINKS
+═══════════════════════════════════════ */
+const ICAI_LINKS=[
+  {cat:"Study Material",color:"#818cf8",links:[
+    {name:"ICAI eLibrary (SM, PM)",url:"https://elearning.icai.org/",desc:"Download SM, Practice Manual for all subjects"},
+    {name:"CA Final Study Material",url:"https://www.icai.org/post/ca-final-study-material",desc:"Official SM downloads"},
+    {name:"Revision Test Papers (RTP)",url:"https://www.icai.org/post/revision-test-papers",desc:"Latest RTPs for all attempts"},
+    {name:"Mock Test Papers (MTP)",url:"https://www.icai.org/post/mock-test-papers-for-ca-final",desc:"ICAI official MTPs"},
+    {name:"Suggested Answers",url:"https://www.icai.org/post/suggested-answers",desc:"ICAI suggested answers to past papers"},
+    {name:"Past Question Papers",url:"https://www.icai.org/post/question-papers",desc:"Previous years exam papers"},
+  ]},
+  {cat:"Amendments & Notifications",color:"#fbbf24",links:[
+    {name:"Finance Act Amendments",url:"https://www.icai.org/post/finance-act-amendment",desc:"Latest Finance Act amendment material"},
+    {name:"CBDT Circulars",url:"https://www.incometaxindia.gov.in/Pages/communications/circulars.aspx",desc:"Income Tax circulars and notifications"},
+    {name:"CBIC GST Notifications",url:"https://cbic-gst.gov.in/gst-goods-services-rates.html",desc:"Latest GST rate and procedure notifications"},
+    {name:"MCA Ind AS Updates",url:"https://www.mca.gov.in/content/mca/global/en/acts-rules/ebooks/rules.html",desc:"Ministry of Corporate Affairs — Ind AS rules"},
+    {name:"SEBI Circulars",url:"https://www.sebi.gov.in/sebiweb/home/HomeAction.do?doListing=yes&sid=2&ssid=3",desc:"SEBI circulars relevant to FR and Audit"},
+  ]},
+  {cat:"Student Portal",color:"#34d399",links:[
+    {name:"ICAI Student Portal",url:"https://www.icai.org/students.html",desc:"Your student dashboard and registration"},
+    {name:"Admit Card",url:"https://icaiexam.icai.org/",desc:"Download exam admit card"},
+    {name:"Results",url:"https://icaiexam.icai.org/",desc:"CA Final exam results"},
+    {name:"Virtual Library",url:"https://resource.cdn.icai.org/",desc:"ICAI resource centre and e-publications"},
+    {name:"CA Final Registration",url:"https://www.icai.org/post/registration",desc:"Exam registration and fees"},
+  ]},
+  {cat:"Reference Portals",color:"#f472b6",links:[
+    {name:"Income Tax India",url:"https://www.incometaxindia.gov.in",desc:"Full IT Act, rules, forms"},
+    {name:"GST Portal",url:"https://www.gst.gov.in",desc:"GST law, rules, notifications, portal"},
+    {name:"MCA Portal",url:"https://www.mca.gov.in",desc:"Companies Act, LLP, ROC"},
+    {name:"FEMA / RBI",url:"https://www.rbi.org.in/Scripts/BS_FemaNotifications.aspx",desc:"FEMA notifications relevant to Int. Tax"},
+    {name:"OECD BEPS",url:"https://www.oecd.org/tax/beps/",desc:"BEPS action plans and Pillar 1/2 updates"},
+    {name:"Bare Act — IT Act 1961",url:"https://egazette.gov.in",desc:"Income Tax Act bare act"},
+  ]},
+];
+function ICAILinks({customLinks,setCustomLinks}){
+  const [adding,setAdding]=useState(false);
+  const [form,setForm]=useState({name:"",url:"",desc:"",cat:"My Links"});
+  const add=()=>{
+    if(!form.name.trim()||!form.url.trim())return;
+    setCustomLinks(p=>[...p,{id:Date.now(),...form}]);
+    setForm({name:"",url:"",desc:"",cat:"My Links"});setAdding(false);
+  };
+  const remove=id=>setCustomLinks(p=>p.filter(x=>x.id!==id));
+  return <div style={{animation:"slideUp 0.2s ease"}}>
+    <div style={{background:"linear-gradient(135deg,rgba(129,140,248,0.1),transparent)",border:"1px solid rgba(129,140,248,0.2)",borderRadius:14,padding:"16px 20px",marginBottom:16}}>
+      <div style={{color:"#818cf8",fontSize:10,fontWeight:700,textTransform:"uppercase",letterSpacing:2,marginBottom:4}}>🔗 ICAI Quick Links</div>
+      <div style={{color:"var(--text)",fontSize:18,fontWeight:800}}>All Important Links in One Place</div>
+      <div style={{color:"var(--text2)",fontSize:12,marginTop:4}}>SM, RTP, MTP, Suggested Answers, Amendment portals — one click access. Add your own links below.</div>
+    </div>
+    {ICAI_LINKS.map(cat=>(
+      <div key={cat.cat} style={{marginBottom:16}}>
+        <div style={{color:cat.color,fontSize:10,fontWeight:700,textTransform:"uppercase",letterSpacing:1.5,marginBottom:8}}>{cat.cat}</div>
+        <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fill,minmax(260px,1fr))",gap:8}}>
+          {cat.links.map((l,i)=>(
+            <a key={i} href={l.url} target="_blank" rel="noopener noreferrer" style={{display:"flex",gap:10,alignItems:"flex-start",background:"var(--surface)",border:`1px solid var(--border)`,borderRadius:10,padding:"11px 13px",textDecoration:"none",transition:"all 0.15s",borderLeft:`3px solid ${cat.color}`}} onMouseEnter={e=>e.currentTarget.style.background="var(--surface2)"} onMouseLeave={e=>e.currentTarget.style.background="var(--surface)"}>
+              <span style={{fontSize:16,flexShrink:0}}>🔗</span>
+              <div>
+                <div style={{color:cat.color,fontSize:12,fontWeight:700,marginBottom:2}}>{l.name}</div>
+                <div style={{color:"var(--text3)",fontSize:11,lineHeight:1.4}}>{l.desc}</div>
+              </div>
+            </a>
+          ))}
+        </div>
+      </div>
+    ))}
+    {customLinks.length>0&&<div style={{marginBottom:16}}>
+      <div style={{color:"#10b981",fontSize:10,fontWeight:700,textTransform:"uppercase",letterSpacing:1.5,marginBottom:8}}>My Custom Links</div>
+      <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fill,minmax(260px,1fr))",gap:8}}>
+        {customLinks.map(l=>(
+          <div key={l.id} style={{display:"flex",gap:10,alignItems:"flex-start",background:"var(--surface)",border:"1px solid rgba(16,185,129,0.3)",borderRadius:10,padding:"11px 13px",borderLeft:"3px solid #10b981",position:"relative"}}>
+            <div style={{flex:1}}>
+              <a href={l.url} target="_blank" rel="noopener noreferrer" style={{color:"#10b981",fontSize:12,fontWeight:700,textDecoration:"none"}}>{l.name}</a>
+              <div style={{color:"var(--text3)",fontSize:11,marginTop:2}}>{l.desc}</div>
+            </div>
+            <button onClick={()=>remove(l.id)} style={{background:"transparent",border:"none",color:"var(--text3)",cursor:"pointer",fontSize:13,flexShrink:0}}>✕</button>
+          </div>
+        ))}
+      </div>
+    </div>}
+    <button onClick={()=>setAdding(p=>!p)} style={{background:"rgba(16,185,129,0.1)",border:"1px solid rgba(16,185,129,0.3)",color:"#10b981",borderRadius:9,padding:"7px 16px",fontSize:12,fontWeight:700,cursor:"pointer",marginBottom:adding?12:0}}>{adding?"✕ Cancel":"+ Add Custom Link"}</button>
+    {adding&&<div className="card" style={{padding:"14px",marginTop:10,border:"1px solid rgba(16,185,129,0.3)"}}>
+      <div style={{display:"flex",gap:8,flexWrap:"wrap",alignItems:"flex-end"}}>
+        <div style={{flex:1,minWidth:140}}>
+          <div style={{color:"var(--text3)",fontSize:10,marginBottom:3}}>Link Name</div>
+          <input value={form.name} onChange={e=>setForm(f=>({...f,name:e.target.value}))} placeholder="e.g. ICAI Tax Audit Guidance" style={{width:"100%",background:"var(--surface2)",border:"1px solid var(--border)",borderRadius:8,padding:"7px 10px",fontSize:12,color:"var(--text)"}}/>
+        </div>
+        <div style={{flex:2,minWidth:200}}>
+          <div style={{color:"var(--text3)",fontSize:10,marginBottom:3}}>URL</div>
+          <input value={form.url} onChange={e=>setForm(f=>({...f,url:e.target.value}))} placeholder="https://..." style={{width:"100%",background:"var(--surface2)",border:"1px solid var(--border)",borderRadius:8,padding:"7px 10px",fontSize:12,color:"var(--text)"}}/>
+        </div>
+        <div style={{flex:1,minWidth:130}}>
+          <div style={{color:"var(--text3)",fontSize:10,marginBottom:3}}>Description</div>
+          <input value={form.desc} onChange={e=>setForm(f=>({...f,desc:e.target.value}))} placeholder="What is this?" style={{width:"100%",background:"var(--surface2)",border:"1px solid var(--border)",borderRadius:8,padding:"7px 10px",fontSize:12,color:"var(--text)"}}/>
+        </div>
+        <button onClick={add} style={{background:"#10b981",color:"#fff",border:"none",borderRadius:8,padding:"7px 18px",fontSize:12,fontWeight:700,cursor:"pointer"}}>Add</button>
+      </div>
+    </div>}
+  </div>;
+}
+
+/* ═══════════════════════════════════════
+   SM PAGE REFERENCE (patched into lectures)
+   Stored as lectures[key].smPage
+   Exposed via Settings panel
+═══════════════════════════════════════ */
+// SM page ref is stored as lectures[chKey].smPage
+// Rendered inline in LecturesWorld chapter rows
+// The patch below overrides the chapter row render in LecturesWorld
+// to add the SM page input field
+
+/* ═══════════════════════════════════════
+   SETTINGS PAGE (font size, colours,
+   auto-save indicator, tab groups,
+   SM page ref help, cloud sync trigger)
+═══════════════════════════════════════ */
+const DEFAULT_SUB_COLORS={
+  fr:"#818cf8",afm:"#38bdf8",aaa:"#a78bfa",dt:"#fbbf24",idt:"#34d399",ibs:"#f472b6"
+};
+
+function ProfileEditor({userProfile,saveProfile}){
+  const [editing,setEditing]=useState(false);
+  const [name,setName]=useState(userProfile?.name||"");
+  const attempts=["May 2026","Nov 2026","May 2027","Nov 2027","May 2028","Nov 2028","May 2029","Nov 2029","May 2030"];
+  const initIdx=Math.max(0,attempts.indexOf(userProfile?.attempt||"May 2027"));
+  const [attemptIdx,setAttemptIdx]=useState(initIdx);
+  const [customAttempt,setCustomAttempt]=useState(attempts.includes(userProfile?.attempt||"")?"":(userProfile?.attempt||""));
+  const selectAttempt=(idx)=>setAttemptIdx(Math.max(0,Math.min(attempts.length-1,idx)));
+  const finalAttempt=customAttempt.trim()||attempts[attemptIdx];
+  const save=()=>{saveProfile({...userProfile,name:name.trim()||userProfile.name,attempt:finalAttempt});setEditing(false);};
+
+  if(!editing) return <div style={{display:"flex",alignItems:"center",gap:14}}>
+    <div style={{width:44,height:44,borderRadius:"50%",background:"linear-gradient(135deg,#818cf8,#6366f1)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:20,fontWeight:900,color:"#fff",flexShrink:0}}>
+      {(userProfile?.name||"?")[0].toUpperCase()}
+    </div>
+    <div style={{flex:1}}>
+      <div style={{color:"var(--text)",fontSize:16,fontWeight:800}}>{userProfile?.name}</div>
+      <div style={{color:"var(--text3)",fontSize:12,marginTop:2}}>Target: <span style={{color:"#818cf8",fontWeight:700}}>{userProfile?.attempt}</span></div>
+    </div>
+    <button onClick={()=>setEditing(true)} style={{background:"var(--surface2)",border:"1px solid var(--border)",borderRadius:9,padding:"7px 14px",fontSize:12,cursor:"pointer",color:"var(--text2)",fontWeight:600}}>Edit</button>
+  </div>;
+
+  return <div style={{display:"flex",flexDirection:"column",gap:12}}>
+    <div>
+      <label style={{color:"var(--text3)",fontSize:11,fontWeight:700,textTransform:"uppercase",letterSpacing:1,display:"block",marginBottom:5}}>Name</label>
+      <input value={name} onChange={e=>setName(e.target.value)} onKeyDown={e=>e.key==="Enter"&&save()} style={{width:"100%",background:"var(--surface2)",border:"1px solid var(--border)",borderRadius:9,padding:"9px 12px",fontSize:13,color:"var(--text)",boxSizing:"border-box"}}/>
+    </div>
+    <div>
+      <label style={{color:"var(--text3)",fontSize:11,fontWeight:700,textTransform:"uppercase",letterSpacing:1,display:"block",marginBottom:6}}>Target Attempt</label>
+      {/* Compact scroll picker */}
+      <div style={{display:"flex",alignItems:"center",gap:8,marginBottom:8}}>
+        <button onClick={()=>selectAttempt(attemptIdx-1)} disabled={attemptIdx===0} style={{background:"var(--surface2)",border:"1px solid var(--border)",borderRadius:7,width:30,height:30,cursor:"pointer",color:"var(--text2)",fontSize:14,display:"flex",alignItems:"center",justifyContent:"center",opacity:attemptIdx===0?0.3:1}}>▲</button>
+        <div style={{flex:1,background:"var(--surface2)",border:"1px solid rgba(129,140,248,0.4)",borderRadius:9,overflow:"hidden",height:100,position:"relative"}}>
+          <div style={{position:"absolute",top:"50%",left:0,right:0,height:34,transform:"translateY(-50%)",background:"rgba(129,140,248,0.1)",borderTop:"1px solid rgba(129,140,248,0.3)",borderBottom:"1px solid rgba(129,140,248,0.3)",pointerEvents:"none",zIndex:1}}/>
+          <div style={{position:"absolute",top:0,left:0,right:0,height:30,background:"linear-gradient(to bottom,var(--surface2),transparent)",pointerEvents:"none",zIndex:2}}/>
+          <div style={{position:"absolute",bottom:0,left:0,right:0,height:30,background:"linear-gradient(to top,var(--surface2),transparent)",pointerEvents:"none",zIndex:2}}/>
+          <div style={{transition:"transform 0.2s",transform:`translateY(${(1-attemptIdx)*34}px)`}}>
+            {attempts.map((a,i)=>(
+              <div key={a} onClick={()=>selectAttempt(i)} style={{height:34,display:"flex",alignItems:"center",justifyContent:"center",cursor:"pointer",fontSize:i===attemptIdx?13:11,fontWeight:i===attemptIdx?800:400,color:i===attemptIdx?"#818cf8":"var(--text3)"}}>
+                {a}
+              </div>
+            ))}
+          </div>
+        </div>
+        <button onClick={()=>selectAttempt(attemptIdx+1)} disabled={attemptIdx===attempts.length-1} style={{background:"var(--surface2)",border:"1px solid var(--border)",borderRadius:7,width:30,height:30,cursor:"pointer",color:"var(--text2)",fontSize:14,display:"flex",alignItems:"center",justifyContent:"center",opacity:attemptIdx===attempts.length-1?0.3:1}}>▼</button>
+      </div>
+      <input value={customAttempt} onChange={e=>setCustomAttempt(e.target.value)} placeholder="Or type custom attempt…" style={{width:"100%",background:"var(--surface2)",border:"1px solid var(--border)",borderRadius:9,padding:"7px 12px",fontSize:12,color:"var(--text)",boxSizing:"border-box"}}/>
+      <div style={{color:"var(--text3)",fontSize:10,marginTop:4}}>Selected: <span style={{color:"#818cf8",fontWeight:700}}>{finalAttempt}</span></div>
+    </div>
+    <div style={{display:"flex",gap:8,marginTop:4}}>
+      <button onClick={()=>setEditing(false)} style={{flex:1,background:"var(--surface2)",border:"1px solid var(--border)",borderRadius:9,padding:"9px",cursor:"pointer",color:"var(--text3)",fontSize:12}}>Cancel</button>
+      <button onClick={save} style={{flex:2,background:"linear-gradient(135deg,#818cf8,#6366f1)",border:"none",borderRadius:9,padding:"9px",cursor:"pointer",color:"#fff",fontSize:13,fontWeight:800}}>Save Changes</button>
+    </div>
+  </div>;
+}
+
+
+function OnboardingModal({onSave}){
+  const [name,setName]=useState("");
+  const [attempt,setAttempt]=useState("May 2027");
+  const [groups,setGroups]=useState([1,2]);
+  const [err,setErr]=useState("");
+  const [nameMode,setNameMode]=useState("type"); // "type" | "scroll"
+
+  // Predefined name suggestions (scroll wheel)
+  const attempts=["May 2026","Nov 2026","May 2027","Nov 2027","May 2028","Nov 2028","May 2029","Nov 2029","May 2030"];
+  const [attemptIdx,setAttemptIdx]=useState(attempts.indexOf("May 2027"));
+
+  const selectAttempt=(idx)=>{
+    const clamped=Math.max(0,Math.min(attempts.length-1,idx));
+    setAttemptIdx(clamped);
+    setAttempt(attempts[clamped]);
+  };
+
+  const submit=()=>{
+    if(!name.trim()){setErr("Please enter your name to continue.");return;}
+    onSave({name:name.trim(),attempt:attempt.trim()||attempts[attemptIdx],groups});
+  };
+
+  return <div style={{position:"fixed",inset:0,background:"linear-gradient(135deg,#0f0f1a 0%,#1a1a2e 50%,#0f0f1a 100%)",zIndex:9999,display:"flex",alignItems:"center",justifyContent:"center",padding:20}}>
+    <div style={{maxWidth:460,width:"100%",animation:"slideUp 0.3s ease"}}>
+      <div style={{textAlign:"center",marginBottom:28}}>
+        <div style={{fontSize:48,marginBottom:10}}>📊</div>
+        <div style={{color:"#818cf8",fontSize:11,fontWeight:700,textTransform:"uppercase",letterSpacing:3,marginBottom:6}}>CA Finals Tracker</div>
+        <div style={{color:"#fff",fontSize:24,fontWeight:900,lineHeight:1.2,marginBottom:6}}>Welcome, Future CA 🎯</div>
+        <div style={{color:"rgba(255,255,255,0.4)",fontSize:12}}>Your personalised study command centre · ICAI 2023 Scheme</div><div style={{color:"rgba(255,255,255,0.65)",fontSize:11,marginTop:8}}>Developed by <strong style={{color:"#a5b4fc"}}>Nishanth</strong></div>
+      </div>
+
+      <div style={{background:"rgba(255,255,255,0.04)",border:"1px solid rgba(255,255,255,0.1)",borderRadius:20,padding:24,backdropFilter:"blur(20px)"}}>
+
+        {/* Name */}
+        <div style={{marginBottom:20}}>
+          <label style={{display:"block",color:"rgba(255,255,255,0.55)",fontSize:10,fontWeight:700,textTransform:"uppercase",letterSpacing:1.5,marginBottom:8}}>Your Name</label>
+          <input
+            autoFocus
+            value={name}
+            onChange={e=>{setName(e.target.value);setErr("");}}
+            onKeyDown={e=>e.key==="Enter"&&submit()}
+            placeholder="e.g. Nishanth"
+            style={{width:"100%",background:"rgba(255,255,255,0.07)",border:`1.5px solid ${err?"#f87171":"rgba(129,140,248,0.3)"}`,borderRadius:12,padding:"13px 16px",fontSize:15,color:"#fff",outline:"none",boxSizing:"border-box"}}
+          />
+          {err&&<div style={{color:"#f87171",fontSize:11,marginTop:5}}>{err}</div>}
+        </div>
+
+        {/* Attempt — scroll picker */}
+        <div style={{marginBottom:24}}>
+          <label style={{display:"block",color:"rgba(255,255,255,0.55)",fontSize:10,fontWeight:700,textTransform:"uppercase",letterSpacing:1.5,marginBottom:8}}>Target Attempt</label>
+
+          {/* Scroll drum */}
+          <div style={{position:"relative",height:140,overflow:"hidden",borderRadius:12,background:"rgba(255,255,255,0.04)",border:"1px solid rgba(255,255,255,0.1)"}}>
+            {/* Selection highlight */}
+            <div style={{position:"absolute",top:"50%",left:0,right:0,height:44,transform:"translateY(-50%)",background:"rgba(129,140,248,0.15)",borderTop:"1px solid rgba(129,140,248,0.4)",borderBottom:"1px solid rgba(129,140,248,0.4)",pointerEvents:"none",zIndex:1}}/>
+            {/* Top fade */}
+            <div style={{position:"absolute",top:0,left:0,right:0,height:48,background:"linear-gradient(to bottom,rgba(15,15,26,0.9),transparent)",pointerEvents:"none",zIndex:2}}/>
+            {/* Bottom fade */}
+            <div style={{position:"absolute",bottom:0,left:0,right:0,height:48,background:"linear-gradient(to top,rgba(15,15,26,0.9),transparent)",pointerEvents:"none",zIndex:2}}/>
+
+            {/* Items */}
+            <div style={{display:"flex",flexDirection:"column",transition:"transform 0.2s",transform:`translateY(${(2-attemptIdx)*44}px)`}}>
+              {attempts.map((a,i)=>(
+                <div key={a} onClick={()=>selectAttempt(i)} style={{height:44,display:"flex",alignItems:"center",justifyContent:"center",cursor:"pointer",fontSize:i===attemptIdx?16:13,fontWeight:i===attemptIdx?800:400,color:i===attemptIdx?"#fff":`rgba(255,255,255,${Math.max(0.15,0.6-Math.abs(i-attemptIdx)*0.2)})`,transition:"all 0.15s",letterSpacing:i===attemptIdx?0.5:0}}>
+                  {a}
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Up/Down buttons */}
+          <div style={{display:"flex",justifyContent:"center",gap:12,marginTop:10}}>
+            <button onClick={()=>selectAttempt(attemptIdx-1)} disabled={attemptIdx===0} style={{background:"rgba(255,255,255,0.06)",border:"1px solid rgba(255,255,255,0.1)",borderRadius:8,width:36,height:36,cursor:"pointer",color:"rgba(255,255,255,0.6)",fontSize:16,display:"flex",alignItems:"center",justifyContent:"center",opacity:attemptIdx===0?0.3:1}}>▲</button>
+            <div style={{display:"flex",alignItems:"center",color:"#818cf8",fontSize:13,fontWeight:700,letterSpacing:0.5}}>{attempts[attemptIdx]}</div>
+            <button onClick={()=>selectAttempt(attemptIdx+1)} disabled={attemptIdx===attempts.length-1} style={{background:"rgba(255,255,255,0.06)",border:"1px solid rgba(255,255,255,0.1)",borderRadius:8,width:36,height:36,cursor:"pointer",color:"rgba(255,255,255,0.6)",fontSize:16,display:"flex",alignItems:"center",justifyContent:"center",opacity:attemptIdx===attempts.length-1?0.3:1}}>▼</button>
+          </div>
+
+          {/* Or type custom */}
+          <div style={{marginTop:10,display:"flex",alignItems:"center",gap:8}}>
+            <div style={{flex:1,height:1,background:"rgba(255,255,255,0.08)"}}/>
+            <span style={{color:"rgba(255,255,255,0.3)",fontSize:10}}>or type custom</span>
+            <div style={{flex:1,height:1,background:"rgba(255,255,255,0.08)"}}/>
+          </div>
+          <input value={attempt} onChange={e=>setAttempt(e.target.value)} placeholder="e.g. May 2031" style={{width:"100%",background:"rgba(255,255,255,0.04)",border:"1px solid rgba(255,255,255,0.08)",borderRadius:9,padding:"9px 14px",fontSize:12,color:"rgba(255,255,255,0.7)",outline:"none",boxSizing:"border-box",marginTop:8}}/>
+        </div>
+
+        {/* Group selection */}
+        <div style={{marginBottom:22}}>
+          <label style={{display:"block",color:"rgba(255,255,255,0.55)",fontSize:10,fontWeight:700,textTransform:"uppercase",letterSpacing:1.5,marginBottom:9}}>CA Final Groups</label>
+          <div style={{display:"grid",gridTemplateColumns:"repeat(3,minmax(0,1fr))",gap:8}}>
+            {[{v:1,l:"Group 1"},{v:2,l:"Group 2"},{v:3,l:"Both"}].map(option=>{
+              const selected=option.v===3?groups.length===2:groups.length===1&&groups[0]===option.v;
+              return <button key={option.v} type="button" onClick={()=>setGroups(option.v===3?[1,2]:[option.v])} style={{padding:"11px 6px",borderRadius:10,border:`1.5px solid ${selected?"#818cf8":"rgba(255,255,255,0.12)"}`,background:selected?"rgba(129,140,248,0.18)":"rgba(255,255,255,0.04)",color:selected?"#fff":"rgba(255,255,255,0.65)",fontSize:12,fontWeight:selected?800:600,cursor:"pointer"}}>{option.l}{selected?" ✓":""}</button>;
+            })}
+          </div>
+          <div style={{color:"rgba(255,255,255,0.35)",fontSize:10,marginTop:7}}>Only papers from the selected group(s) will appear throughout your tracker.</div>
+        </div>
+
+        <button onClick={submit} style={{width:"100%",background:"linear-gradient(135deg,#818cf8,#6366f1)",border:"none",borderRadius:12,padding:"14px",fontSize:15,fontWeight:800,color:"#fff",cursor:"pointer",letterSpacing:0.5,boxShadow:"0 4px 20px rgba(99,102,241,0.35)"}}>
+          Start Tracking →
+        </button>
+        <div style={{textAlign:"center",color:"rgba(255,255,255,0.25)",fontSize:10,marginTop:12}}>Stored locally on your device · No account needed</div>
+      </div>
+    </div>
+  </div>;
+}
+
+function SettingsPage({fontSize,setFontSize,subColors,setSubColors,autoSaveInterval,setAutoSaveInterval,onOpenCloudSync,onOpenBackup,lastSaved,userProfile,saveProfile,resetProfile}){
+  const resetColors=()=>setSubColors({...DEFAULT_SUB_COLORS});
+  const sizes=[{l:"Small",v:12},{l:"Medium",v:14},{l:"Large",v:16},{l:"XL",v:18}];
+  return <div style={{animation:"slideUp 0.2s ease",maxWidth:800}}>
+    <div style={{color:"var(--text3)",fontSize:10,textTransform:"uppercase",letterSpacing:2,marginBottom:4}}>Settings</div>
+    <div style={{color:"var(--text)",fontSize:22,fontWeight:900,marginBottom:20}}>Preferences & Utilities</div>
+
+
+    {/* User Profile */}
+    <div className="card" style={{padding:"20px",marginBottom:14}}>
+      <div style={{color:"var(--text2)",fontSize:13,fontWeight:700,marginBottom:14}}>👤 Your Profile</div>
+      <ProfileEditor userProfile={userProfile} saveProfile={saveProfile}/>
+      <div style={{marginTop:12,padding:"10px 12px",borderRadius:9,background:"rgba(56,189,248,0.07)",border:"1px solid rgba(56,189,248,0.2)",color:"var(--text3)",fontSize:11,lineHeight:1.5}}>Syllabus completion, revision progress, mock scores and practice logs are stored separately for each exam attempt. Changing the attempt reloads the tracker into that attempt; your existing attempt data stays available when you switch back.</div>
+      <div style={{marginTop:14,paddingTop:14,borderTop:"1px solid var(--border)",display:"flex",alignItems:"center",justifyContent:"space-between"}}>
+        <div style={{color:"var(--text3)",fontSize:11}}>Reset profile to show onboarding screen again (e.g. to switch user)</div>
+        <button onClick={resetProfile} style={{background:"rgba(248,113,113,0.1)",border:"1px solid rgba(248,113,113,0.3)",borderRadius:8,padding:"6px 14px",fontSize:11,cursor:"pointer",color:"#f87171",fontWeight:700,flexShrink:0,marginLeft:12}}>Reset Profile</button>
+      </div>
+    </div>
+
+    {/* Font Size */}
+    <div className="card" style={{padding:"20px",marginBottom:14}}>
+      <div style={{color:"var(--text2)",fontSize:13,fontWeight:700,marginBottom:12}}>🔤 Font Size</div>
+      <div style={{display:"flex",gap:8}}>
+        {sizes.map(s=>(
+          <button key={s.v} onClick={()=>setFontSize(s.v)} style={{flex:1,background:fontSize===s.v?"rgba(129,140,248,0.15)":"var(--surface2)",border:`${fontSize===s.v?2:1}px solid ${fontSize===s.v?"#818cf8":"var(--border)"}`,borderRadius:10,padding:"12px 8px",cursor:"pointer",color:fontSize===s.v?"#818cf8":"var(--text2)",fontWeight:fontSize===s.v?800:500,fontSize:s.v}}>
+            {s.l}<div style={{fontSize:10,color:"var(--text3)",fontWeight:400,marginTop:2}}>{s.v}px</div>
+          </button>
+        ))}
+      </div>
+    </div>
+
+    {/* Subject Colours */}
+    <div className="card" style={{padding:"20px",marginBottom:14}}>
+      <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:12}}>
+        <div style={{color:"var(--text2)",fontSize:13,fontWeight:700}}>🎨 Subject Colours</div>
+        <button onClick={resetColors} style={{background:"var(--surface2)",border:"1px solid var(--border)",borderRadius:8,padding:"5px 12px",fontSize:11,cursor:"pointer",color:"var(--text3)"}}>Reset to Default</button>
+      </div>
+      <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(200px,1fr))",gap:10}}>
+        {SUBJECTS.map(s=>(
+          <div key={s.id} style={{display:"flex",alignItems:"center",gap:10,background:"var(--surface2)",borderRadius:10,padding:"10px 12px",border:`2px solid ${subColors[s.id]||s.color}33`}}>
+            <span style={{fontSize:20}}>{s.emoji}</span>
+            <div style={{flex:1}}>
+              <div style={{color:subColors[s.id]||s.color,fontSize:12,fontWeight:700}}>{s.short}</div>
+              <div style={{color:"var(--text3)",fontSize:10}}>{s.name}</div>
+            </div>
+            <input type="color" value={subColors[s.id]||s.color} onChange={e=>setSubColors(p=>({...p,[s.id]:e.target.value}))} style={{width:32,height:32,borderRadius:8,border:"2px solid var(--border)",cursor:"pointer",background:"transparent",padding:2}}/>
+          </div>
+        ))}
+      </div>
+    </div>
+
+    {/* Auto-save */}
+    <div className="card" style={{padding:"20px",marginBottom:14}}>
+      <div style={{color:"var(--text2)",fontSize:13,fontWeight:700,marginBottom:12}}>💾 Auto-Save</div>
+      <div style={{display:"flex",alignItems:"center",gap:14,flexWrap:"wrap"}}>
+        <div style={{display:"flex",gap:6}}>
+          {[0,1,2,5].map(m=>(
+            <button key={m} onClick={()=>setAutoSaveInterval(m)} style={{background:autoSaveInterval===m?"rgba(52,211,153,0.15)":"var(--surface2)",border:`${autoSaveInterval===m?2:1}px solid ${autoSaveInterval===m?"#34d399":"var(--border)"}`,borderRadius:9,padding:"8px 14px",cursor:"pointer",color:autoSaveInterval===m?"#34d399":"var(--text2)",fontSize:12,fontWeight:autoSaveInterval===m?800:500}}>
+              {m===0?"Off":`Every ${m}m`}
+            </button>
+          ))}
+        </div>
+        {lastSaved&&<div style={{color:"var(--text3)",fontSize:11}}>Last saved: <span style={{color:"#34d399",fontWeight:700}}>{lastSaved}</span></div>}
+      </div>
+      <div style={{color:"var(--text3)",fontSize:11,marginTop:8}}>Auto-save writes to localStorage automatically. Manual 💾 button always available in nav.</div>
+    </div>
+
+    {/* Data & Sync */}
+    <div className="card" style={{padding:"20px",marginBottom:14}}>
+      <div style={{color:"var(--text2)",fontSize:13,fontWeight:700,marginBottom:12}}>☁️ Data & Sync</div>
+      <div style={{display:"flex",gap:10,flexWrap:"wrap"}}>
+        <button onClick={onOpenCloudSync} style={{display:"flex",alignItems:"center",gap:8,background:"rgba(99,102,241,0.1)",border:"1px solid rgba(99,102,241,0.3)",borderRadius:10,padding:"11px 16px",cursor:"pointer",color:"#6366f1",fontWeight:700,fontSize:13}}>
+          <span style={{fontSize:18}}>☁️</span> GitHub Gist Sync
+        </button>
+        <button onClick={onOpenBackup} style={{display:"flex",alignItems:"center",gap:8,background:"rgba(52,211,153,0.08)",border:"1px solid rgba(52,211,153,0.3)",borderRadius:10,padding:"11px 16px",cursor:"pointer",color:"#34d399",fontWeight:700,fontSize:13}}>
+          <span style={{fontSize:18}}>📦</span> Export / Import JSON
+        </button>
+      </div>
+      <div style={{marginTop:10,background:"rgba(248,113,113,0.06)",border:"1px solid rgba(248,113,113,0.15)",borderRadius:9,padding:"10px 14px"}}>
+        <div style={{color:"#f87171",fontSize:11,fontWeight:700,marginBottom:2}}>⚠️ Data Safety Reminder</div>
+        <div style={{color:"var(--text3)",fontSize:11,lineHeight:1.6}}>All data is in your browser localStorage. Clearing browser data = losing everything. Set up GitHub Gist sync OR export JSON backup at least weekly. Before any exam, always export a fresh backup.</div>
+      </div>
+    </div>
+
+    {/* SM Page Reference guide */}
+    <div className="card" style={{padding:"20px",marginBottom:14}}>
+      <div style={{color:"var(--text2)",fontSize:13,fontWeight:700,marginBottom:8}}>📖 SM Page Reference</div>
+      <div style={{color:"var(--text3)",fontSize:12,lineHeight:1.7}}>
+        In the <strong style={{color:"var(--text)"}}>Lectures tab</strong>, each chapter row has a "Source" field where you can also enter the SM page range (e.g. "SM p.4.12–4.45"). This is editable and auto-saved. Use it to jump back to the exact ICAI SM page for any chapter without hunting.<br/><br/>
+        <strong style={{color:"var(--text)"}}>Tip:</strong> Use format like <span style={{color:"#818cf8",fontFamily:"'JetBrains Mono',monospace",fontSize:11}}>SM 4.12-45 / PM 3.8-22</span> to store both SM and PM references in the same field.
+      </div>
+    </div>
+
+    {/* Data health */}
+    <div className="card" style={{padding:"20px"}}>
+      <div style={{color:"var(--text2)",fontSize:13,fontWeight:700,marginBottom:12}}>🏥 Data Health</div>
+      <DataHealth/>
+    </div>
+  </div>;
+}
+
+function DataHealth(){
+  const [health,setHealth]=useState(null);
+  useEffect(()=>{
+    try{
+      let total=0;
+      const keys=[];
+      for(let i=0;i<localStorage.length;i++){
+        const k=localStorage.key(i);
+        const v=localStorage.getItem(k)||"";
+        total+=v.length;
+        if(k.startsWith("ca_"))keys.push({k,size:Math.round(v.length/1024*10)/10});
+      }
+      const lastExport=localStorage.getItem("ca_last_export")||null;
+      const lastGistSync=localStorage.getItem("ca_gh_gist")?localStorage.getItem("ca_last_gist_sync")||null:null;
+      setHealth({totalKB:Math.round(total/1024*10)/10,limitKB:5120,pct:Math.round(total/5120/1024*100*100)/100,keys,lastExport,lastGistSync});
+    }catch(e){setHealth(null);}
+  },[]);
+  if(!health)return <div style={{color:"var(--text3)",fontSize:12}}>Calculating...</div>;
+  const usedPct=Math.min((health.totalKB/health.limitKB)*100,100);
+  const statusC=usedPct>80?"#f87171":usedPct>50?"#fbbf24":"#34d399";
+  return <div>
+    <div style={{display:"flex",justifyContent:"space-between",marginBottom:6}}>
+      <span style={{color:"var(--text2)",fontSize:12}}>localStorage Usage</span>
+      <span style={{color:statusC,fontSize:12,fontWeight:700,fontFamily:"'JetBrains Mono',monospace"}}>{health.totalKB} KB / {health.limitKB} KB</span>
+    </div>
+    <div style={{width:"100%",height:8,background:"var(--surface3)",borderRadius:99,overflow:"hidden",marginBottom:12}}>
+      <div style={{width:`${usedPct}%`,height:"100%",background:statusC,borderRadius:99,transition:"width 0.5s"}}/>
+    </div>
+    <div style={{display:"flex",gap:12,flexWrap:"wrap",fontSize:11,color:"var(--text3)"}}>
+      <span>📦 Last JSON export: <span style={{color:health.lastExport?"#34d399":"#f87171"}}>{health.lastExport?fmtDate(health.lastExport):"Never"}</span></span>
+      <span>☁️ Last Gist sync: <span style={{color:health.lastGistSync?"#34d399":"var(--text3)"}}>{health.lastGistSync||"Not set up"}</span></span>
+    </div>
+    {usedPct>70&&<div style={{marginTop:10,color:"#fbbf24",fontSize:11}}>⚠️ Storage is getting full. Export a backup soon.</div>}
+  </div>;
+}
+
+/* ═══════════════════════════════════════
+   AUTO-SAVE INDICATOR (shows in nav)
+═══════════════════════════════════════ */
+// Handled inside App via useEffect + lastSaved state
+
+/* ═══════════════════════════════════════
+   PWA MANIFEST HELPER
+   (injected into <head> at build time)
+═══════════════════════════════════════ */
+// PWA handled via <link rel="manifest"> in head + service worker inline
+
+
+/* ═══════════════════════════════════════
+   STUDY SESSION TIMER
+   - Persistent bottom bar while running
+   - Lecture mode: subject → start → stop → chapters → energy → note
+   - Revision mode: subject → type → source (if problem solving) → goal → start → stop → chapters → energy → note
+   - Auto-logs hours, chapters, energy, session history
+═══════════════════════════════════════ */
+
+const PS_SOURCES=["ICAI PM","PY Papers","RTP","MTP","Question Bank","ICAI SM","Other"];
+const REV_TYPES=["Conceptual Revision","Problem Solving"];
+
+// Session store key (separate from main store for performance)
+function loadSessions(){try{const s=localStorage.getItem(profileStorageKey("ca_sessions"));return s?JSON.parse(s):[];}catch{return[];}}
+function saveSessions(v){try{localStorage.setItem(profileStorageKey("ca_sessions"),JSON.stringify(v.slice(0,200)));}catch{}}
+
+function SessionTimer({studyLog,setStudyLog,energyLog,setEnergyLog,lectures,setLectures,revData,setRevData}){
+  // Setup state
+  const [phase,setPhase]=useState("setup"); // setup | running | debrief
+  const [mode,setMode]=useState("lecture");  // lecture | revision
+  const [subject,setSubject]=useState(SUBJECTS[0].id);
+  const [revType,setRevType]=useState("Conceptual Revision");
+  const [psSource,setPsSource]=useState("ICAI PM");
+  const [goal,setGoal]=useState("");
+  // Timer state
+  const [elapsed,setElapsed]=useState(0);
+  const [running,setRunning]=useState(false);
+  const [startTime,setStartTime]=useState(null);
+  const timerRef=useRef(null);
+  // Debrief state
+  const [selChapters,setSelChapters]=useState([]);
+  const [energy,setEnergy]=useState(3);
+  const [sessionNote,setSessionNote]=useState("");
+  const [sessions,setSessions]=useState(()=>loadSessions());
+
+  const subj=SUBJECTS.find(s=>s.id===subject);
+  const chs=allChapters(subj);
+
+  // Timer tick
+  useEffect(()=>{
+    if(running){
+      timerRef.current=setInterval(()=>setElapsed(p=>p+1),1000);
+    } else {
+      clearInterval(timerRef.current);
+    }
+    return()=>clearInterval(timerRef.current);
+  },[running]);
+
+  const mm=String(Math.floor(elapsed/60)).padStart(2,"0");
+  const ss=String(elapsed%60).padStart(2,"0");
+  const hh=Math.floor(elapsed/3600);
+  const displayTime=hh>0?`${hh}:${mm}:${ss}`:`${mm}:${ss}`;
+
+  const startSession=()=>{
+    setElapsed(0);setRunning(true);setPhase("running");
+    setStartTime(new Date().toISOString());setSelChapters([]);
+  };
+
+  const pauseResume=()=>setRunning(p=>!p);
+
+  const stopSession=()=>{
+    clearInterval(timerRef.current);setRunning(false);setPhase("debrief");
+  };
+
+  const toggleChapter=i=>{
+    setSelChapters(p=>p.includes(i)?p.filter(x=>x!==i):[...p,i]);
+  };
+
+  const saveSession=()=>{
+    const hrs=parseFloat((elapsed/3600).toFixed(2));
+    const dateStr=today();
+
+    // 1. Add to study log (accumulate hours for today)
+    setStudyLog(p=>({...p,[dateStr]:(p[dateStr]||0)+hrs}));
+
+    // 2. Mark selected chapters
+    selChapters.forEach(i=>{
+      if(mode==="lecture"){
+        const k=chKey(subject,i,"lec");
+        setLectures(p=>({...p,[k]:{...p[k]||defLec(),status:"Completed",progress:100,updated:dateStr}}));
+      } else {
+        const k=chKey(subject,i,"rev");
+        const cur=revData[k]||defRev();
+        setRevData(p=>({...p,[k]:{...cur,status:"Completed",updated:dateStr,revDates:[...(cur.revDates||[]),dateStr]}}));
+      }
+    });
+
+    // 3. Log energy
+    setEnergyLog(p=>({...p,[dateStr]:{energy,notes:sessionNote,saved:new Date().toTimeString().slice(0,5)}}));
+
+    // 4. Save session to history
+    const newSession={
+      id:Date.now(),date:dateStr,startTime,endTime:new Date().toISOString(),
+      subject,mode,revType:mode==="revision"?revType:null,
+      psSource:mode==="revision"&&revType==="Problem Solving"?psSource:null,
+      goal:mode==="revision"&&goal?goal:null,
+      elapsed,hrs,chaptersMarked:selChapters.length,energy,note:sessionNote,
+    };
+    const updated=[newSession,...sessions];
+    setSessions(updated);saveSessions(updated);
+
+    // Reset
+    setPhase("setup");setElapsed(0);setGoal("");setSessionNote("");
+    setSelChapters([]);setEnergy(3);setRunning(false);
+  };
+
+  const eColors=["","#f87171","#fb923c","#fbbf24","#a3e635","#34d399"];
+  const eLabels=["","Drained","Low","Okay","Good","Peak"];
+  const modeColor=mode==="lecture"?"#f472b6":"#818cf8";
+
+  // Today's sessions
+  const todaySessions=sessions.filter(s=>s.date===today());
+  const todayHrs=todaySessions.reduce((a,s)=>a+(s.hrs||0),0);
+
+  return <div style={{animation:"slideUp 0.2s ease"}}>
+
+    {/* SETUP PHASE */}
+    {phase==="setup"&&<div>
+      <div style={{background:"linear-gradient(135deg,rgba(99,102,241,0.1),transparent)",border:"1px solid rgba(99,102,241,0.2)",borderRadius:16,padding:"20px 24px",marginBottom:16}}>
+        <div style={{color:"#6366f1",fontSize:10,fontWeight:700,textTransform:"uppercase",letterSpacing:2,marginBottom:4}}>⏱ Study Session</div>
+        <div style={{color:"var(--text)",fontSize:20,fontWeight:900}}>What are you studying?</div>
+        <div style={{color:"var(--text2)",fontSize:12,marginTop:3}}>Set up your session — timer will run and auto-log everything when you finish.</div>
+      </div>
+
+      {/* Mode selector */}
+      <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:10,marginBottom:16}}>
+        {[{id:"lecture",emoji:"🎬",label:"Lecture",desc:"Watching/attending a lecture",color:"#f472b6"},
+          {id:"revision",emoji:"📖",label:"Revision",desc:"Revising or solving problems",color:"#818cf8"}].map(m=>(
+          <button key={m.id} onClick={()=>setMode(m.id)} style={{background:mode===m.id?`${m.color}15`:"var(--surface2)",border:`${mode===m.id?2:1}px solid ${mode===m.id?m.color:m.color+"30"}`,borderRadius:14,padding:"16px",cursor:"pointer",textAlign:"left",transition:"all 0.15s"}}>
+            <div style={{fontSize:28,marginBottom:6}}>{m.emoji}</div>
+            <div style={{color:mode===m.id?m.color:"var(--text2)",fontSize:14,fontWeight:800}}>{m.label}</div>
+            <div style={{color:"var(--text3)",fontSize:11,marginTop:2}}>{m.desc}</div>
+          </button>
+        ))}
+      </div>
+
+      {/* Subject */}
+      <div className="card" style={{padding:"18px",marginBottom:12}}>
+        <div style={{color:"var(--text3)",fontSize:10,fontWeight:700,textTransform:"uppercase",letterSpacing:1.5,marginBottom:10}}>Subject</div>
+        <div style={{display:"flex",gap:6,flexWrap:"wrap"}}>
+          {SUBJECTS.map(s=>(
+            <button key={s.id} onClick={()=>setSubject(s.id)} style={{display:"flex",alignItems:"center",gap:7,background:subject===s.id?`${s.color}18`:"var(--surface2)",border:`${subject===s.id?2:1}px solid ${subject===s.id?s.color:s.color+"30"}`,borderRadius:10,padding:"8px 14px",cursor:"pointer"}}>
+              <span style={{fontSize:16}}>{s.emoji}</span>
+              <div>
+                <div style={{color:subject===s.id?s.color:"var(--text2)",fontSize:12,fontWeight:700}}>{s.short}</div>
+              </div>
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {/* Revision-only options */}
+      {mode==="revision"&&<div className="card" style={{padding:"18px",marginBottom:12}}>
+        <div style={{color:"var(--text3)",fontSize:10,fontWeight:700,textTransform:"uppercase",letterSpacing:1.5,marginBottom:10}}>Revision Type</div>
+        <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:8,marginBottom:12}}>
+          {REV_TYPES.map(t=>(
+            <button key={t} onClick={()=>setRevType(t)} style={{background:revType===t?"rgba(129,140,248,0.15)":"var(--surface2)",border:`${revType===t?2:1}px solid ${revType===t?"#818cf8":"var(--border)"}`,borderRadius:10,padding:"10px 14px",cursor:"pointer",textAlign:"left"}}>
+              <div style={{color:revType===t?"#818cf8":"var(--text2)",fontSize:13,fontWeight:700}}>{t==="Conceptual Revision"?"📖 Conceptual":"✏️ Problem Solving"}</div>
+              <div style={{color:"var(--text3)",fontSize:10,marginTop:2}}>{t==="Conceptual Revision"?"Reading SM, making notes":"Solving ICAI questions"}</div>
+            </button>
+          ))}
+        </div>
+
+        {/* Problem Solving source — only when PS selected */}
+        {revType==="Problem Solving"&&<div style={{marginBottom:12}}>
+          <div style={{color:"var(--text3)",fontSize:10,fontWeight:700,textTransform:"uppercase",letterSpacing:1.5,marginBottom:8}}>Source</div>
+          <div style={{display:"flex",gap:6,flexWrap:"wrap"}}>
+            {PS_SOURCES.map(src=>(
+              <button key={src} onClick={()=>setPsSource(src)} style={{background:psSource===src?"rgba(129,140,248,0.15)":"var(--surface2)",border:`${psSource===src?2:1}px solid ${psSource===src?"#818cf8":"var(--border)"}`,borderRadius:8,padding:"6px 12px",cursor:"pointer",color:psSource===src?"#818cf8":"var(--text2)",fontSize:12,fontWeight:psSource===src?700:500}}>{src}</button>
+            ))}
+          </div>
+        </div>}
+
+        {/* Goal */}
+        <div>
+          <div style={{color:"var(--text3)",fontSize:10,fontWeight:700,textTransform:"uppercase",letterSpacing:1.5,marginBottom:6}}>Session Goal <span style={{color:"var(--text3)",fontWeight:400,textTransform:"none",letterSpacing:0}}>(optional)</span></div>
+          <input value={goal} onChange={e=>setGoal(e.target.value)} placeholder={revType==="Problem Solving"?"e.g. Solve all 10 TP problems from ICAI PM Ch.7":"e.g. Complete ITC revision — Sec 16 to 17(5)"} style={{width:"100%",background:"var(--surface2)",border:"1px solid var(--border)",borderRadius:9,padding:"9px 12px",fontSize:13,color:"var(--text)"}}/>
+        </div>
+      </div>}
+
+      {/* Start button */}
+      <button onClick={startSession} style={{width:"100%",background:`linear-gradient(135deg,${modeColor},${mode==="lecture"?"#db2777":"#6366f1"})`,color:"#fff",border:"none",borderRadius:14,padding:"16px",fontSize:16,fontWeight:900,cursor:"pointer",boxShadow:`0 6px 24px ${modeColor}44`,display:"flex",alignItems:"center",justifyContent:"center",gap:10}}>
+        <span style={{fontSize:20}}>▶</span> Start {mode==="lecture"?"Lecture":"Revision"} Session
+      </button>
+
+      {/* Today's sessions */}
+      {todaySessions.length>0&&<div style={{marginTop:20}}>
+        <div style={{color:"var(--text3)",fontSize:9,fontWeight:700,textTransform:"uppercase",letterSpacing:1.5,marginBottom:10}}>Today's Sessions — {todayHrs.toFixed(1)}h total</div>
+        <div style={{display:"flex",flexDirection:"column",gap:6}}>
+          {todaySessions.map(s=>{
+            const sub=SUBJECTS.find(x=>x.id===s.subject);
+            const dur=s.elapsed?`${Math.floor(s.elapsed/60)}m`:"—";
+            return <div key={s.id} style={{display:"flex",alignItems:"center",gap:10,background:"var(--surface)",border:"1px solid var(--border)",borderRadius:10,padding:"10px 14px"}}>
+              <span style={{fontSize:18}}>{sub?.emoji}</span>
+              <div style={{flex:1}}>
+                <div style={{display:"flex",gap:6,flexWrap:"wrap",marginBottom:2}}>
+                  <span style={{color:sub?.color,fontSize:11,fontWeight:700}}>{sub?.short}</span>
+                  <span style={{background:s.mode==="lecture"?"rgba(244,114,182,0.15)":"rgba(129,140,248,0.15)",color:s.mode==="lecture"?"#f472b6":"#818cf8",borderRadius:20,padding:"1px 7px",fontSize:10,fontWeight:700}}>{s.mode==="lecture"?"Lecture":s.revType||"Revision"}</span>
+                  {s.psSource&&<span style={{color:"var(--text3)",fontSize:10}}>{s.psSource}</span>}
+                </div>
+                {s.goal&&<div style={{color:"var(--text3)",fontSize:11,fontStyle:"italic"}}>🎯 {s.goal}</div>}
+                {s.note&&<div style={{color:"var(--text3)",fontSize:11}}>📝 {s.note}</div>}
+              </div>
+              <div style={{textAlign:"right",flexShrink:0}}>
+                <div style={{color:"var(--text)",fontSize:14,fontWeight:900,fontFamily:"'JetBrains Mono',monospace"}}>{dur}</div>
+                <div style={{color:eColors[s.energy]||"var(--text3)",fontSize:10}}>{eLabels[s.energy]||""}</div>
+                {s.chaptersMarked>0&&<div style={{color:"#34d399",fontSize:10}}>{s.chaptersMarked} ch ✓</div>}
+              </div>
+            </div>;
+          })}
+        </div>
+      </div>}
+    </div>}
+
+    {/* RUNNING PHASE */}
+    {phase==="running"&&<div style={{animation:"slideUp 0.2s ease"}}>
+      {/* Big timer display */}
+      <div style={{background:`linear-gradient(135deg,${modeColor}18,transparent)`,border:`1px solid ${modeColor}33`,borderRadius:20,padding:"40px 24px",marginBottom:16,textAlign:"center"}}>
+        <div style={{color:modeColor,fontSize:11,fontWeight:700,textTransform:"uppercase",letterSpacing:3,marginBottom:12}}>
+          {mode==="lecture"?"🎬 LECTURE SESSION":"📖 REVISION SESSION"}
+          {mode==="revision"&&revType==="Problem Solving"&&` — ${psSource}`}
+        </div>
+        <div style={{color:"var(--text)",fontSize:72,fontWeight:900,fontFamily:"'JetBrains Mono',monospace",lineHeight:1,letterSpacing:-2,textShadow:`0 0 40px ${modeColor}44`}}>{displayTime}</div>
+        <div style={{display:"flex",alignItems:"center",justifyContent:"center",gap:8,marginTop:12}}>
+          <span style={{fontSize:20}}>{subj?.emoji}</span>
+          <span style={{color:modeColor,fontSize:16,fontWeight:800}}>{subj?.name}</span>
+        </div>
+        {goal&&<div style={{color:"var(--text2)",fontSize:13,marginTop:8,fontStyle:"italic"}}>🎯 {goal}</div>}
+        <div style={{marginTop:6,color:"var(--text3)",fontSize:11}}>
+          Started {new Date(startTime).toLocaleTimeString("en-IN",{hour:"2-digit",minute:"2-digit"})}
+        </div>
+      </div>
+
+      {/* Controls */}
+      <div style={{display:"flex",gap:10,justifyContent:"center",marginBottom:20}}>
+        <button onClick={pauseResume} style={{flex:1,background:running?"rgba(251,191,36,0.12)":"rgba(52,211,153,0.12)",border:`1.5px solid ${running?"rgba(251,191,36,0.4)":"rgba(52,211,153,0.4)"}`,borderRadius:12,padding:"14px",fontSize:15,fontWeight:800,cursor:"pointer",color:running?"#fbbf24":"#34d399"}}>
+          {running?"⏸ Pause":"▶ Resume"}
+        </button>
+        <button onClick={stopSession} style={{flex:1,background:"rgba(248,113,113,0.12)",border:"1.5px solid rgba(248,113,113,0.4)",borderRadius:12,padding:"14px",fontSize:15,fontWeight:800,cursor:"pointer",color:"#f87171"}}>
+          ⏹ Stop & Save
+        </button>
+      </div>
+
+      {/* Live stats */}
+      <div style={{display:"grid",gridTemplateColumns:"repeat(3,1fr)",gap:10}}>
+        {[{l:"Elapsed",v:displayTime,c:modeColor},{l:"Hours",v:(elapsed/3600).toFixed(2)+"h",c:"#34d399"},{l:"Status",v:running?"Running":"Paused",c:running?"#34d399":"#fbbf24"}].map(({l,v,c})=>(
+          <div key={l} className="card" style={{padding:"12px",textAlign:"center"}}>
+            <div style={{color:"var(--text3)",fontSize:9,textTransform:"uppercase",letterSpacing:1.5,marginBottom:4}}>{l}</div>
+            <div style={{color:c,fontSize:16,fontWeight:900,fontFamily:"'JetBrains Mono',monospace"}}>{v}</div>
+          </div>
+        ))}
+      </div>
+    </div>}
+
+    {/* DEBRIEF PHASE */}
+    {phase==="debrief"&&<div style={{animation:"slideUp 0.2s ease"}}>
+      <div style={{background:"rgba(52,211,153,0.06)",border:"1px solid rgba(52,211,153,0.2)",borderRadius:16,padding:"20px 24px",marginBottom:16}}>
+        <div style={{color:"#34d399",fontSize:11,fontWeight:700,textTransform:"uppercase",letterSpacing:2,marginBottom:4}}>Session Complete 🎉</div>
+        <div style={{display:"flex",gap:16,flexWrap:"wrap"}}>
+          <div>
+            <div style={{color:"#34d399",fontSize:36,fontWeight:900,fontFamily:"'JetBrains Mono',monospace",lineHeight:1}}>{displayTime}</div>
+            <div style={{color:"var(--text3)",fontSize:11,marginTop:2}}>{(elapsed/3600).toFixed(2)} hours · {subj?.name}</div>
+          </div>
+          <div style={{flex:1}}>
+            <div style={{color:`${mode==="lecture"?"#f472b6":"#818cf8"}`,fontSize:12,fontWeight:700,marginBottom:2}}>{mode==="lecture"?"🎬 Lecture":"📖 "+revType}</div>
+            {mode==="revision"&&revType==="Problem Solving"&&<div style={{color:"var(--text3)",fontSize:11}}>Source: {psSource}</div>}
+            {goal&&<div style={{color:"var(--text2)",fontSize:12,marginTop:2,fontStyle:"italic"}}>🎯 {goal}</div>}
+          </div>
+        </div>
+      </div>
+
+      {/* Chapter selection */}
+      <div className="card" style={{padding:"18px",marginBottom:12}}>
+        <div style={{color:"var(--text3)",fontSize:10,fontWeight:700,textTransform:"uppercase",letterSpacing:1.5,marginBottom:4}}>
+          {mode==="lecture"?"Chapters Covered in this Lecture":"Chapters Revised / Problems Solved"}
+        </div>
+        <div style={{color:"var(--text3)",fontSize:11,marginBottom:10}}>Tap to mark as {mode==="lecture"?"lecture complete":"revised"}</div>
+        <div style={{display:"flex",flexDirection:"column",gap:5,maxHeight:300,overflowY:"auto"}}>
+          {chs.map((ch,i)=>{
+            const sel=selChapters.includes(i);
+            const alreadyDone=mode==="lecture"?lectures[chKey(subject,i,"lec")]?.status==="Completed":revData[chKey(subject,i,"rev")]?.status==="Completed";
+            return <button key={i} onClick={()=>toggleChapter(i)} style={{display:"flex",alignItems:"center",gap:10,background:sel?"rgba(52,211,153,0.08)":alreadyDone?"rgba(255,255,255,0.02)":"transparent",border:`1px solid ${sel?"rgba(52,211,153,0.3)":"var(--border)"}`,borderRadius:9,padding:"9px 12px",cursor:"pointer",textAlign:"left",opacity:alreadyDone&&!sel?0.5:1}}>
+              <div style={{width:20,height:20,borderRadius:6,border:`2px solid ${sel?"#34d399":"rgba(255,255,255,0.15)"}`,background:sel?"#34d399":"transparent",flexShrink:0,display:"flex",alignItems:"center",justifyContent:"center",color:"#fff",fontSize:11,fontWeight:900}}>{sel?"✓":""}</div>
+              <div style={{flex:1,textAlign:"left"}}>
+                <div style={{color:sel?"var(--text)":"var(--text2)",fontSize:12,fontWeight:sel?600:400}}>{ch.n}</div>
+                {alreadyDone&&<div style={{color:"#34d399",fontSize:10,marginTop:1}}>Already done</div>}
+              </div>
+              <span style={{color:ch.w==="High"?"#fbbf24":ch.w==="Medium"?"#a78bfa":"#34d399",fontSize:9,fontWeight:700,flexShrink:0}}>{ch.w}</span>
+            </button>;
+          })}
+        </div>
+        {selChapters.length>0&&<div style={{marginTop:8,color:"#34d399",fontSize:11,fontWeight:700}}>✓ {selChapters.length} chapter{selChapters.length!==1?"s":""} selected</div>}
+      </div>
+
+      {/* Energy */}
+      <div className="card" style={{padding:"18px",marginBottom:12}}>
+        <div style={{color:"var(--text3)",fontSize:10,fontWeight:700,textTransform:"uppercase",letterSpacing:1.5,marginBottom:10}}>How was your energy during this session?</div>
+        <div style={{display:"flex",gap:8}}>
+          {[1,2,3,4,5].map(e=>(
+            <button key={e} onClick={()=>setEnergy(e)} style={{flex:1,background:energy===e?eColors[e]+"20":"var(--surface2)",border:`2px solid ${energy===e?eColors[e]:"var(--border)"}`,borderRadius:10,padding:"10px 4px",cursor:"pointer",display:"flex",flexDirection:"column",alignItems:"center",gap:3}}>
+              <span style={{fontSize:20}}>{["","😴","😕","😐","😊","🚀"][e]}</span>
+              <span style={{color:energy===e?eColors[e]:"var(--text3)",fontSize:9,fontWeight:700}}>{eLabels[e]}</span>
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {/* Note */}
+      <div className="card" style={{padding:"18px",marginBottom:14}}>
+        <div style={{color:"var(--text3)",fontSize:10,fontWeight:700,textTransform:"uppercase",letterSpacing:1.5,marginBottom:8}}>Session Note <span style={{color:"var(--text3)",fontWeight:400,textTransform:"none",letterSpacing:0}}>(optional)</span></div>
+        <textarea value={sessionNote} onChange={e=>setSessionNote(e.target.value)} placeholder="What went well? What was tough? Anything to remember?" style={{width:"100%",background:"var(--surface2)",border:"1px solid var(--border)",borderRadius:9,padding:"10px 12px",fontSize:13,color:"var(--text)",minHeight:68,resize:"vertical",lineHeight:1.6}}/>
+      </div>
+
+      {/* Save */}
+      <button onClick={saveSession} style={{width:"100%",background:"linear-gradient(135deg,#34d399,#059669)",color:"#fff",border:"none",borderRadius:14,padding:"16px",fontSize:16,fontWeight:900,cursor:"pointer",boxShadow:"0 6px 24px rgba(52,211,153,0.35)"}}>
+        ✓ Save Session & Log
+      </button>
+    </div>}
+
+    {/* Session History (below setup only) */}
+    {phase==="setup"&&sessions.filter(s=>s.date!==today()).length>0&&<div style={{marginTop:24}}>
+      <div style={{color:"var(--text3)",fontSize:9,fontWeight:700,textTransform:"uppercase",letterSpacing:1.5,marginBottom:10}}>Recent Sessions</div>
+      <div style={{display:"flex",flexDirection:"column",gap:6}}>
+        {sessions.filter(s=>s.date!==today()).slice(0,8).map(s=>{
+          const sub=SUBJECTS.find(x=>x.id===s.subject);
+          const dur=s.elapsed?`${Math.floor(s.elapsed/3600)>0?Math.floor(s.elapsed/3600)+"h ":""}${Math.floor((s.elapsed%3600)/60)}m`:"—";
+          return <div key={s.id} style={{display:"flex",alignItems:"center",gap:10,background:"var(--surface)",border:"1px solid var(--border)",borderRadius:10,padding:"9px 14px",opacity:0.8}}>
+            <span style={{fontSize:16}}>{sub?.emoji}</span>
+            <div style={{flex:1}}>
+              <div style={{display:"flex",gap:6,flexWrap:"wrap"}}>
+                <span style={{color:sub?.color,fontSize:11,fontWeight:700}}>{sub?.short}</span>
+                <span style={{color:"var(--text3)",fontSize:10}}>{s.date}</span>
+                <span style={{background:s.mode==="lecture"?"rgba(244,114,182,0.12)":"rgba(129,140,248,0.12)",color:s.mode==="lecture"?"#f472b6":"#818cf8",borderRadius:20,padding:"1px 7px",fontSize:9,fontWeight:700}}>{s.mode==="lecture"?"Lec":s.revType==="Problem Solving"?`PS·${s.psSource||""}`:"Rev"}</span>
+              </div>
+              {s.goal&&<div style={{color:"var(--text3)",fontSize:10,marginTop:1,fontStyle:"italic"}}>🎯 {s.goal}</div>}
+            </div>
+            <div style={{textAlign:"right",flexShrink:0}}>
+              <div style={{color:"var(--text)",fontSize:13,fontWeight:800,fontFamily:"'JetBrains Mono',monospace"}}>{dur}</div>
+              {s.chaptersMarked>0&&<div style={{color:"#34d399",fontSize:9}}>{s.chaptersMarked} ch</div>}
+            </div>
+          </div>;
+        })}
+      </div>
+    </div>}
+  </div>;
+}
+
+/* Running session mini-bar (shown in nav while session is active) */
+// Handled via shared session state passed from App
+
+
+/* ═══════════════════════════════════════
+   NAV CUSTOMISER MODAL
+═══════════════════════════════════════ */
+function NavCustomiser({allTabs,navOrder,setNavOrder,onClose}){
+  const [order,setOrder]=useState([...navOrder]);
+  const [dragIdx,setDragIdx]=useState(null);
+  const [dragOver,setDragOver]=useState(null);
+  const allIds=allTabs.map(t=>t.id);
+  const inNav=order;
+  const notInNav=allIds.filter(id=>!order.includes(id));
+
+  const onDragStart=(i)=>setDragIdx(i);
+  const onDragEnter=(i)=>setDragOver(i);
+  const onDragEnd=()=>{
+    if(dragIdx===null||dragOver===null||dragIdx===dragOver){setDragIdx(null);setDragOver(null);return;}
+    const newOrder=[...order];
+    const [moved]=newOrder.splice(dragIdx,1);
+    newOrder.splice(dragOver,0,moved);
+    setOrder(newOrder);setDragIdx(null);setDragOver(null);
+  };
+  const remove=(id)=>setOrder(p=>p.filter(x=>x!==id));
+  const add=(id)=>setOrder(p=>[...p,id]);
+  const reset=()=>setOrder(["dashboard","session","lectures","revision","tests","analytics","planner","amendments","search","formulabank","doubts","plan","settings"]);
+  const save=()=>{setNavOrder([...order]);onClose();};
+
+  const getTab=id=>allTabs.find(t=>t.id===id);
+
+  return <div onClick={onClose} style={{position:"fixed",inset:0,background:"rgba(0,0,0,0.75)",zIndex:3000,display:"flex",alignItems:"center",justifyContent:"center",padding:16,backdropFilter:"blur(10px)"}}>
+    <div onClick={e=>e.stopPropagation()} style={{background:"var(--surface)",border:"1px solid var(--border2)",borderRadius:20,padding:24,maxWidth:500,width:"100%",maxHeight:"85vh",overflowY:"auto",boxShadow:"var(--shadow-lg)",animation:"slideUp 0.2s ease"}}>
+      <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:6}}>
+        <div>
+          <div style={{color:"#94a3b8",fontSize:10,fontWeight:700,textTransform:"uppercase",letterSpacing:2}}>Nav Customiser</div>
+          <div style={{color:"var(--text)",fontSize:17,fontWeight:800,marginTop:2}}>Rearrange Your Tabs</div>
+        </div>
+        <button onClick={onClose} style={{background:"var(--surface2)",border:"none",borderRadius:8,width:30,height:30,cursor:"pointer",color:"var(--text2)",fontSize:16}}>×</button>
+      </div>
+      <div style={{color:"var(--text3)",fontSize:12,marginBottom:16}}>Drag to reorder · click ✕ to remove · click + to add back</div>
+
+      {/* Active tabs — draggable */}
+      <div style={{color:"var(--text3)",fontSize:9,fontWeight:700,textTransform:"uppercase",letterSpacing:1.5,marginBottom:8}}>In Your Nav ({order.length} tabs)</div>
+      <div style={{display:"flex",flexDirection:"column",gap:5,marginBottom:16}}>
+        {order.map((id,i)=>{
+          const t=getTab(id);if(!t)return null;
+          const isDragging=dragIdx===i;
+          const isDragOver=dragOver===i;
+          return <div key={id} draggable onDragStart={()=>onDragStart(i)} onDragEnter={()=>onDragEnter(i)} onDragEnd={onDragEnd} onDragOver={e=>e.preventDefault()}
+            style={{display:"flex",alignItems:"center",gap:10,background:isDragOver?"var(--surface3)":isDragging?"rgba(129,140,248,0.1)":"var(--surface2)",border:`1px solid ${isDragOver?t.color:isDragging?"rgba(129,140,248,0.3)":"var(--border)"}`,borderRadius:10,padding:"9px 12px",cursor:"grab",transition:"all 0.1s",opacity:isDragging?0.5:1}}>
+            <span style={{color:"var(--text3)",fontSize:13,cursor:"grab"}}>⠿</span>
+            <span style={{fontSize:16}}>{t.emoji}</span>
+            <span style={{color:t.color,fontSize:12,fontWeight:700,flex:1}}>{t.label}</span>
+            {id!=="dashboard"&&<button onClick={()=>remove(id)} style={{background:"transparent",border:"none",color:"var(--text3)",cursor:"pointer",fontSize:14,padding:"2px 6px",borderRadius:5}} onMouseEnter={e=>e.target.style.color="#f87171"} onMouseLeave={e=>e.target.style.color="var(--text3)"}>✕</button>}
+          </div>;
+        })}
+      </div>
+
+      {/* Not in nav */}
+      {notInNav.length>0&&<><div style={{color:"var(--text3)",fontSize:9,fontWeight:700,textTransform:"uppercase",letterSpacing:1.5,marginBottom:8}}>Hidden Tabs</div>
+      <div style={{display:"flex",flexWrap:"wrap",gap:6,marginBottom:16}}>
+        {notInNav.map(id=>{const t=getTab(id);if(!t)return null;return(
+          <button key={id} onClick={()=>add(id)} style={{display:"flex",alignItems:"center",gap:5,background:"var(--surface2)",border:"1px solid var(--border)",borderRadius:8,padding:"5px 10px",cursor:"pointer",color:"var(--text2)",fontSize:11,fontWeight:500}}>
+            <span>{t.emoji}</span><span>{t.label}</span><span style={{color:"#34d399",fontWeight:800}}>+</span>
+          </button>
+        );})}
+      </div></>}
+
+      <div style={{display:"flex",gap:8}}>
+        <button onClick={reset} style={{background:"var(--surface2)",border:"1px solid var(--border)",borderRadius:10,padding:"8px 16px",fontSize:12,cursor:"pointer",color:"var(--text2)"}}>Reset Default</button>
+        <button onClick={save} style={{flex:1,background:"linear-gradient(135deg,#6366f1,#4f46e5)",color:"#fff",border:"none",borderRadius:10,padding:"10px",fontSize:13,fontWeight:800,cursor:"pointer"}}>Save Nav Order</button>
+      </div>
+    </div>
+  </div>;
+}
+
+/* ═══════════════════════════════════════
+   DAILY QUOTES
+═══════════════════════════════════════ */
+const QUOTES=[
+  {q:"A CA rank is not won on exam day. It is won in the months of quiet, consistent work before it.",a:"ICAI Wisdom"},
+  {q:"The secret of getting ahead is getting started.",a:"Mark Twain"},
+  {q:"You don't rise to the level of your goals. You fall to the level of your systems.",a:"James Clear"},
+  {q:"Every chapter you master is one less chapter between you and your rank.",a:"Nishanth's Tracker"},
+  {q:"It always seems impossible until it's done.",a:"Nelson Mandela"},
+  {q:"Don't watch the clock; do what it does. Keep going.",a:"Sam Levenson"},
+  {q:"The expert in anything was once a beginner.",a:"Helen Hayes"},
+  {q:"Confidence comes not from always being right but from not fearing to be wrong.",a:"Peter T. McIntyre"},
+  {q:"The difference between ordinary and extraordinary is that little extra.",a:"Jimmy Johnson"},
+  {q:"Do not pray for an easy life, pray for the strength to endure a difficult one.",a:"Bruce Lee"},
+  {q:"Study smart, revise hard, attempt every RTP — that is the formula for a rank.",a:"ICAI Toppers"},
+  {q:"One chapter a day, every day, is 365 chapters a year. Start today.",a:"Nishanth's Tracker"},
+];
+function DailyQuote(){
+  const idx=new Date().getDate()%QUOTES.length;
+  const q=QUOTES[idx];
+  return <div style={{background:"var(--surface2)",border:"1px solid var(--border)",borderRadius:12,padding:"13px 16px",marginBottom:16,display:"flex",gap:10,alignItems:"flex-start"}}>
+    <span style={{fontSize:18,flexShrink:0,marginTop:1}}>💡</span>
+    <div>
+      <div style={{color:"var(--text)",fontSize:13,lineHeight:1.6,fontStyle:"italic"}}>"{q.q}"</div>
+      <div style={{color:"var(--text3)",fontSize:11,marginTop:3}}>— {q.a}</div>
+    </div>
+  </div>;
+}
+
+/* ═══════════════════════════════════════
+   ANALYTICS
+═══════════════════════════════════════ */
+function Analytics({studyLog,tests,lectures,revData}){
+  const weeklyData=Array.from({length:10},(_,i)=>{
+    const d=new Date();d.setDate(d.getDate()-(9-i)*7);
+    let hrs=0;
+    for(let j=0;j<7;j++){const dd=new Date(d);dd.setDate(dd.getDate()+j);hrs+=(studyLog[dd.toISOString().slice(0,10)]||0);}
+    return{label:"W"+(i+1),hrs:parseFloat(hrs.toFixed(1))};
+  });
+  const maxWH=Math.max(...weeklyData.map(w=>w.hrs),1);
+  const totalHrs=Object.values(studyLog).reduce((a,b)=>a+b,0);
+  const days30=Object.entries(studyLog).filter(([d])=>(new Date()-new Date(d))/(86400000)<=30).reduce((a,[,v])=>a+v,0);
+  const scored=tests.filter(t=>t.score!=null).slice().reverse();
+  const recentChapters=SUBJECTS.reduce((a,s)=>a+allChapters(s).filter((_,i)=>{
+    const k=chKey(s.id,i,"rev");const e=revData[k];
+    return e?.status==="Completed"&&e.updated&&daysSince(e.updated)<=7;
+  }).length,0);
+  const overdue=SUBJECTS.reduce((a,s)=>a+allChapters(s).filter((_,i)=>{
+    const k=chKey(s.id,i,"rev");const e=revData[k];
+    const lr=e?.revDates?.slice(-1)[0]||null;return lr&&daysSince(lr)>14;
+  }).length,0);
+  const matrix=SUBJECTS.map(s=>{
+    const chs=allChapters(s);
+    const lPct=Math.round(chs.filter((_,i)=>lectures[chKey(s.id,i,"lec")]?.status==="Completed").length/chs.length*100);
+    const rPct=Math.round(chs.filter((_,i)=>revData[chKey(s.id,i,"rev")]?.status==="Completed").length/chs.length*100);
+    const stuck=chs.filter((_,i)=>revData[chKey(s.id,i,"rev")]?.status==="Stuck").length;
+    const confVals=chs.map((_,i)=>revData[chKey(s.id,i,"rev")]?.confidence||0).filter(c=>c>0);
+    const avgConf=confVals.length?(confVals.reduce((a,b)=>a+b,0)/confVals.length).toFixed(1):0;
+    return{s,lPct,rPct,stuck,avgConf,total:chs.length};
+  });
+  const sc=v=>v>=60?"#34d399":v>=45?"#fbbf24":"#f87171";
+  return <div style={{animation:"slideUp 0.2s ease"}}>
+    <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(120px,1fr))",gap:10,marginBottom:16}}>
+      {[{l:"Total Hours",v:`${totalHrs.toFixed(0)}h`,c:"#818cf8"},{l:"Last 30 Days",v:`${days30.toFixed(1)}h`,c:"#38bdf8"},{l:"Chaps This Week",v:recentChapters,c:"#34d399"},{l:"Tests Done",v:tests.length,c:"#a78bfa"},{l:"Avg Score",v:scored.length?`${Math.round(scored.reduce((a,t)=>a+t.score,0)/scored.length)}%`:"—",c:"#fbbf24"},{l:"Overdue Rev",v:overdue,c:overdue>0?"#f87171":"#34d399"}].map(({l,v,c})=>(
+        <div key={l} className="card" style={{padding:"14px 16px"}}>
+          <div style={{color:"var(--text3)",fontSize:9,textTransform:"uppercase",letterSpacing:1.5,marginBottom:6}}>{l}</div>
+          <div style={{color:c,fontSize:26,fontWeight:900,fontFamily:"'JetBrains Mono',monospace"}}>{v}</div>
+        </div>
+      ))}
+    </div>
+    <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:14,marginBottom:14}}>
+      <div className="card" style={{padding:"20px"}}>
+        <div style={{color:"var(--text3)",fontSize:9,fontWeight:700,textTransform:"uppercase",letterSpacing:1.5,marginBottom:14}}>Weekly Hours — Last 10 Weeks</div>
+        <div style={{display:"flex",gap:4,alignItems:"flex-end",height:90,marginBottom:8}}>
+          {weeklyData.map((w,i)=>{const isL=i===weeklyData.length-1;const h=Math.max((w.hrs/maxWH)*90,3);return(
+            <div key={i} style={{flex:1,display:"flex",flexDirection:"column",alignItems:"center",gap:2}}>
+              {w.hrs>0&&<div style={{fontSize:7,color:isL?"#818cf8":"var(--text3)",fontFamily:"'JetBrains Mono',monospace"}}>{w.hrs}</div>}
+              <div style={{width:"100%",background:isL?"#818cf8":w.hrs>=50?"#6366f1":w.hrs>0?"rgba(129,140,248,0.4)":"var(--surface3)",height:h,borderRadius:"3px 3px 0 0",boxShadow:isL?"0 0 10px rgba(129,140,248,0.5)":"none"}}/>
+              <div style={{fontSize:7,color:isL?"#818cf8":"var(--text3)",fontWeight:isL?800:400}}>{w.label}</div>
+            </div>
+          );})}
+        </div>
+        <div style={{display:"flex",justifyContent:"space-between",marginTop:4}}>
+          <span style={{color:"var(--text3)",fontSize:10}}>Target: 70h/week after articleship</span>
+          <span style={{color:"#818cf8",fontSize:10,fontWeight:700}}>Total: {totalHrs.toFixed(0)}h</span>
+        </div>
+      </div>
+      <div className="card" style={{padding:"20px"}}>
+        <div style={{color:"var(--text3)",fontSize:9,fontWeight:700,textTransform:"uppercase",letterSpacing:1.5,marginBottom:14}}>Test Score Trend</div>
+        {scored.length===0?<div style={{color:"var(--text3)",fontSize:13,textAlign:"center",paddingTop:28}}>No scored tests yet</div>:(
+          <div style={{display:"flex",gap:3,alignItems:"flex-end",height:90,marginBottom:8}}>
+            {scored.slice(-12).map((t,i)=>{const h=Math.max((t.score/100)*90,3);const s=SUBJECTS.find(x=>x.id===t.subject);return(
+              <div key={i} style={{flex:1,display:"flex",flexDirection:"column",alignItems:"center",gap:2}}>
+                <div style={{fontSize:7,color:sc(t.score),fontFamily:"'JetBrains Mono',monospace"}}>{t.score}</div>
+                <div title={`${s?.short}: ${t.score}%`} style={{width:"100%",background:sc(t.score),height:h,borderRadius:"3px 3px 0 0",opacity:0.85}}/>
+                <div style={{fontSize:7,color:"var(--text3)"}}>{s?.short}</div>
+              </div>
+            );})}
+          </div>
+        )}
+      </div>
+    </div>
+    <div className="card" style={{padding:0,overflow:"hidden",marginBottom:14}}>
+      <div style={{padding:"12px 18px",borderBottom:"1px solid var(--border)",color:"var(--text3)",fontSize:9,fontWeight:700,textTransform:"uppercase",letterSpacing:1.5}}>Subject Deep Dive</div>
+      <div style={{display:"grid",gridTemplateColumns:"28px 1fr 80px 80px 56px 70px 56px",padding:"7px 18px",fontSize:9,fontWeight:700,textTransform:"uppercase",letterSpacing:1,color:"var(--text3)",borderBottom:"1px solid var(--border)"}}>
+        <div/><div>Subject</div><div style={{textAlign:"center"}}>Lec%</div><div style={{textAlign:"center"}}>Rev%</div><div style={{textAlign:"center"}}>Stuck</div><div style={{textAlign:"center"}}>Conf</div><div style={{textAlign:"center"}}>Total</div>
+      </div>
+      {matrix.map(({s,lPct,rPct,stuck,avgConf,total})=>(
+        <div key={s.id} style={{display:"grid",gridTemplateColumns:"28px 1fr 80px 80px 56px 70px 56px",padding:"10px 18px",borderBottom:"1px solid var(--border)",alignItems:"center"}}>
+          <span style={{fontSize:15}}>{s.emoji}</span>
+          <div><div style={{color:"var(--text)",fontSize:12,fontWeight:700}}>{s.short}</div><div style={{color:"var(--text3)",fontSize:10}}>G{s.group}·P{s.paper}</div></div>
+          <div style={{textAlign:"center"}}><div style={{color:"#f472b6",fontSize:13,fontWeight:800,fontFamily:"'JetBrains Mono',monospace"}}>{lPct}%</div><PBar value={lPct} color="#f472b6" h={3}/></div>
+          <div style={{textAlign:"center"}}><div style={{color:"#818cf8",fontSize:13,fontWeight:800,fontFamily:"'JetBrains Mono',monospace"}}>{rPct}%</div><PBar value={rPct} color="#818cf8" h={3}/></div>
+          <div style={{textAlign:"center",color:stuck>0?"#f87171":"#34d399",fontSize:13,fontWeight:800,fontFamily:"'JetBrains Mono',monospace"}}>{stuck}</div>
+          <div style={{textAlign:"center",color:avgConf>=4?"#34d399":avgConf>=3?"#fbbf24":avgConf>0?"#f87171":"var(--text3)",fontSize:13,fontWeight:800,fontFamily:"'JetBrains Mono',monospace"}}>{avgConf>0?`${avgConf}/5`:"—"}</div>
+          <div style={{textAlign:"center",color:"var(--text3)",fontSize:12,fontFamily:"'JetBrains Mono',monospace"}}>{total}</div>
+        </div>
+      ))}
+    </div>
+    <div className="card" style={{padding:"18px"}}>
+      <div style={{color:"var(--text3)",fontSize:9,fontWeight:700,textTransform:"uppercase",letterSpacing:1.5,marginBottom:14}}>Confidence Heat Map — All Chapters</div>
+      <div style={{display:"flex",flexDirection:"column",gap:10}}>
+        {SUBJECTS.map(s=>{
+          const chs=allChapters(s);
+          return <div key={s.id}>
+            <div style={{display:"flex",alignItems:"center",gap:7,marginBottom:5}}>
+              <span style={{fontSize:13}}>{s.emoji}</span>
+              <span style={{color:s.color,fontSize:11,fontWeight:700}}>{s.short}</span>
+              <span style={{color:"var(--text3)",fontSize:10}}>{chs.length} chapters</span>
+            </div>
+            <div style={{display:"flex",gap:2,flexWrap:"wrap"}}>
+              {chs.map((_,i)=>{
+                const k=chKey(s.id,i,"rev");const e=revData[k];
+                const conf=e?.confidence||0;const st=e?.status||"Not Started";
+                const bg=st==="Stuck"?"#f87171":conf===0?"var(--surface3)":conf===1?"#f87171":conf===2?"#fb923c":conf===3?"#fbbf24":conf===4?"#a3e635":"#34d399";
+                return <div key={i} title={`${chs[i].n} (Conf: ${conf||"—"})`} style={{width:16,height:16,borderRadius:3,background:bg,cursor:"default",transition:"transform 0.1s"}} onMouseEnter={ev=>ev.target.style.transform="scale(1.4)"} onMouseLeave={ev=>ev.target.style.transform="scale(1)"}/>;
+              })}
+            </div>
+          </div>;
+        })}
+      </div>
+      <div style={{display:"flex",gap:8,alignItems:"center",marginTop:10,flexWrap:"wrap"}}>
+        {[["var(--surface3)","Not started"],["#f87171","Conf 1-2/Stuck"],["#fbbf24","Conf 3"],["#a3e635","Conf 4"],["#34d399","Conf 5"]].map(([c,l])=>(
+          <div key={l} style={{display:"flex",alignItems:"center",gap:4}}>
+            <div style={{width:10,height:10,borderRadius:2,background:c}}/>
+            <span style={{color:"var(--text3)",fontSize:10}}>{l}</span>
+          </div>
+        ))}
+      </div>
+    </div>
+  </div>;
+}
+
+/* ═══════════════════════════════════════
+   DAILY PLANNER
+═══════════════════════════════════════ */
+function DailyPlanner({tasks,setTasks}){
+  const todayStr=today();
+  const [selDate,setSelDate]=useState(todayStr);
+  const [adding,setAdding]=useState(false);
+  const [form,setForm]=useState({subject:SUBJECTS[0].id,text:"",priority:"Medium",duration:60});
+  const dayTasks=tasks.filter(t=>t.date===selDate).sort((a,b)=>a.done===b.done?0:a.done?1:-1);
+  const doneTasks=dayTasks.filter(t=>t.done).length;
+  const addTask=()=>{
+    if(!form.text.trim())return;
+    setTasks(p=>[...p,{id:Date.now(),date:selDate,subject:form.subject,text:form.text.trim(),priority:form.priority,duration:form.duration,done:false}]);
+    setForm(f=>({...f,text:""}));setAdding(false);
+  };
+  const toggle=id=>setTasks(p=>p.map(t=>t.id===id?{...t,done:!t.done}:t));
+  const remove=id=>setTasks(p=>p.filter(t=>t.id!==id));
+  const carryForward=()=>{
+    const pending=tasks.filter(t=>t.date===selDate&&!t.done);
+    const nd=new Date(selDate);nd.setDate(nd.getDate()+1);
+    const ndStr=nd.toISOString().slice(0,10);
+    setTasks(p=>[...p,...pending.map(t=>({...t,id:Date.now()+Math.random(),date:ndStr}))]);
+  };
+  const week=Array.from({length:7},(_,i)=>{const d=new Date();d.setDate(d.getDate()+(i-3));return d.toISOString().slice(0,10);});
+  const pColors={High:"#f87171",Medium:"#fbbf24",Low:"#34d399"};
+  const totalMins=dayTasks.reduce((a,t)=>a+(t.duration||0),0);
+  return <div style={{animation:"slideUp 0.2s ease"}}>
+    <div style={{display:"flex",gap:6,marginBottom:16,overflowX:"auto",paddingBottom:4}}>
+      {week.map(d=>{
+        const dt=new Date(d+"T00:00:00");
+        const dTk=tasks.filter(t=>t.date===d);
+        const dDone=dTk.filter(t=>t.done).length;
+        const isSel=d===selDate;const isT=d===todayStr;
+        return <button key={d} onClick={()=>setSelDate(d)} style={{flexShrink:0,background:isSel?"rgba(129,140,248,0.15)":"var(--surface2)",border:`${isSel?2:1}px solid ${isSel?"#818cf8":isT?"rgba(129,140,248,0.3)":"var(--border)"}`,borderRadius:12,padding:"9px 13px",cursor:"pointer",textAlign:"center",minWidth:66}}>
+          <div style={{color:isSel?"#818cf8":isT?"var(--text2)":"var(--text3)",fontSize:10,fontWeight:700,textTransform:"uppercase"}}>{dt.toLocaleDateString("en",{weekday:"short"})}</div>
+          <div style={{color:isSel?"#818cf8":"var(--text)",fontSize:18,fontWeight:900,fontFamily:"'JetBrains Mono',monospace",lineHeight:1.2}}>{dt.getDate()}</div>
+          {dTk.length>0&&<div style={{color:dDone===dTk.length?"#34d399":"#fbbf24",fontSize:9,marginTop:1}}>{dDone}/{dTk.length}</div>}
+        </button>;
+      })}
+      <input type="date" value={selDate} onChange={e=>setSelDate(e.target.value)} style={{background:"var(--surface2)",border:"1px solid var(--border)",borderRadius:10,padding:"6px 10px",fontSize:12,color:"var(--text)",flexShrink:0,alignSelf:"center"}}/>
+    </div>
+    <div className="card" style={{padding:"13px 16px",marginBottom:12,display:"flex",alignItems:"center",gap:10,flexWrap:"wrap"}}>
+      <div style={{flex:1}}>
+        <div style={{color:"var(--text)",fontSize:14,fontWeight:700}}>{new Date(selDate+"T00:00:00").toLocaleDateString("en-IN",{weekday:"long",day:"numeric",month:"long"})}</div>
+        <div style={{color:"var(--text3)",fontSize:11,marginTop:2}}>{dayTasks.length} tasks · {doneTasks} done · ~{Math.floor(totalMins/60)}h {totalMins%60}m planned</div>
+      </div>
+      {dayTasks.length>0&&<div style={{display:"flex",alignItems:"center",gap:6,minWidth:120}}>
+        <div style={{flex:1}}><PBar value={dayTasks.length?doneTasks/dayTasks.length*100:0} color="#818cf8" h={5}/></div>
+        <span style={{color:"#818cf8",fontSize:11,fontWeight:800,fontFamily:"'JetBrains Mono',monospace"}}>{dayTasks.length?Math.round(doneTasks/dayTasks.length*100):0}%</span>
+      </div>}
+      <button onClick={()=>setAdding(p=>!p)} style={{background:"linear-gradient(135deg,#6366f1,#4f46e5)",color:"#fff",border:"none",borderRadius:9,padding:"7px 14px",fontSize:12,fontWeight:700,cursor:"pointer"}}>{adding?"✕":"+ Task"}</button>
+      {tasks.filter(t=>t.date===selDate&&!t.done).length>0&&selDate<todayStr&&<button onClick={carryForward} style={{background:"rgba(251,191,36,0.1)",border:"1px solid rgba(251,191,36,0.3)",color:"#fbbf24",borderRadius:9,padding:"7px 12px",fontSize:11,fontWeight:700,cursor:"pointer"}}>→ Carry Forward</button>}
+    </div>
+    {adding&&<div className="card" style={{padding:"14px 16px",marginBottom:12,border:"1px solid rgba(99,102,241,0.3)"}}>
+      <div style={{display:"flex",gap:8,flexWrap:"wrap",alignItems:"flex-end"}}>
+        <div style={{flex:2,minWidth:160}}>
+          <div style={{color:"var(--text3)",fontSize:10,marginBottom:3}}>Task</div>
+          <input value={form.text} onChange={e=>setForm(f=>({...f,text:e.target.value}))} onKeyDown={e=>e.key==="Enter"&&addTask()} placeholder="e.g. Ind AS 116 – Leases problems" style={{width:"100%",background:"var(--surface2)",border:"1px solid var(--border)",borderRadius:8,padding:"8px 10px",fontSize:12,color:"var(--text)"}}/>
+        </div>
+        <div>
+          <div style={{color:"var(--text3)",fontSize:10,marginBottom:3}}>Subject</div>
+          <select value={form.subject} onChange={e=>setForm(f=>({...f,subject:e.target.value}))} style={{background:"var(--surface2)",border:"1px solid var(--border)",borderRadius:8,padding:"8px 10px",fontSize:12,color:"var(--text)"}}>{SUBJECTS.map(s=><option key={s.id} value={s.id}>{s.emoji} {s.short}</option>)}</select>
+        </div>
+        <div>
+          <div style={{color:"var(--text3)",fontSize:10,marginBottom:3}}>Priority</div>
+          <select value={form.priority} onChange={e=>setForm(f=>({...f,priority:e.target.value}))} style={{background:"var(--surface2)",border:"1px solid var(--border)",borderRadius:8,padding:"8px 10px",fontSize:12,color:"var(--text)"}}>
+            {["High","Medium","Low"].map(p=><option key={p} value={p}>{p}</option>)}
+          </select>
+        </div>
+        <div>
+          <div style={{color:"var(--text3)",fontSize:10,marginBottom:3}}>Est. mins</div>
+          <input type="number" value={form.duration} onChange={e=>setForm(f=>({...f,duration:parseInt(e.target.value)||60}))} style={{width:68,background:"var(--surface2)",border:"1px solid var(--border)",borderRadius:8,padding:"8px",fontSize:12,color:"var(--text)"}}/>
+        </div>
+        <button onClick={addTask} style={{background:"linear-gradient(135deg,#6366f1,#4f46e5)",color:"#fff",border:"none",borderRadius:8,padding:"8px 16px",fontSize:12,fontWeight:700,cursor:"pointer"}}>Add</button>
+      </div>
+    </div>}
+    {dayTasks.length===0?<div style={{textAlign:"center",padding:"52px",border:"2px dashed var(--border)",borderRadius:14,color:"var(--text3)",fontSize:14}}>📅 No tasks planned — add one above</div>:(
+      <div style={{display:"flex",flexDirection:"column",gap:7}}>
+        {dayTasks.map(t=>{
+          const s=SUBJECTS.find(x=>x.id===t.subject);
+          return <div key={t.id} style={{display:"flex",alignItems:"center",gap:10,background:t.done?"rgba(52,211,153,0.04)":"var(--surface)",border:`1px solid ${t.done?"rgba(52,211,153,0.15)":pColors[t.priority]+"22"}`,borderRadius:11,padding:"10px 14px",borderLeft:`3px solid ${t.done?"#34d399":pColors[t.priority]}`}}>
+            <button onClick={()=>toggle(t.id)} style={{width:21,height:21,borderRadius:6,border:`2px solid ${t.done?"#34d399":"rgba(255,255,255,0.2)"}`,background:t.done?"#34d399":"transparent",cursor:"pointer",display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0,color:"#fff",fontSize:11}}>{t.done?"✓":""}</button>
+            <div style={{flex:1}}>
+              <div style={{display:"flex",gap:5,flexWrap:"wrap",marginBottom:2}}>
+                <span style={{background:s?.bg,color:s?.color,borderRadius:20,padding:"1px 7px",fontSize:10,fontWeight:700}}>{s?.short}</span>
+                <span style={{background:`${pColors[t.priority]}15`,color:pColors[t.priority],borderRadius:20,padding:"1px 7px",fontSize:10,fontWeight:700}}>{t.priority}</span>
+                <span style={{color:"var(--text3)",fontSize:10}}>~{t.duration}m</span>
+              </div>
+              <div style={{color:t.done?"var(--text3)":"var(--text)",fontSize:13,fontWeight:500,textDecoration:t.done?"line-through":"none"}}>{t.text}</div>
+            </div>
+            <button onClick={()=>remove(t.id)} style={{background:"transparent",border:"none",color:"var(--text3)",cursor:"pointer",fontSize:13,padding:"2px 5px"}}>✕</button>
+          </div>;
+        })}
+      </div>
+    )}
+  </div>;
+}
+
+/* ═══════════════════════════════════════
+   AMENDMENT TRACKER
+═══════════════════════════════════════ */
+const AMEND_SUBJECTS=[
+  {id:"dt_fa",label:"DT — Finance Act 2026",color:"#fbbf24",topics:["New Tax Regime – Sec 115BAC changes","TDS rate rationalisation (all sections)","Capital Gains – Sec 112A / 45 changes","PGBP – New deductions or restrictions","Assessment procedure changes","International Tax / TP amendments","Penalty & prosecution updates","Other Budget 2026 changes"]},
+  {id:"idt_gst",label:"IDT — GST Notifications 2026",color:"#34d399",topics:["Rate changes – Goods (new notifications)","Rate changes – Services","New exemptions added/removed","E-invoice threshold or rule changes","ITC Rule 36/42/43 amendments","Returns – New forms or procedure changes","Customs – Tariff rate amendments","Customs – Procedural notifications","Other GST circulars / clarifications"]},
+  {id:"fr_mca",label:"FR — MCA / Ind AS Amendments",color:"#818cf8",topics:["Ind AS amendments by MCA 2025/26","New ICAI Guidance Notes","Schedule III to Companies Act changes","Companies Act 2013 updates relevant to FR","New pronouncements by ICAI"]},
+  {id:"aaa_sa",label:"AAA — SA / ICAI Pronouncements",color:"#a78bfa",topics:["New or revised SAs issued","ICAI Guidance Notes on Auditing","SEBI / IRDAI / RBI circulars","Companies Act audit-related updates","Peer review / quality control updates"]},
+];
+function AmendmentTracker({amendments,setAmendments}){
+  const [activeSub,setActiveSub]=useState(AMEND_SUBJECTS[0].id);
+  const sub=AMEND_SUBJECTS.find(s=>s.id===activeSub);
+  const getA=(sid,ti)=>amendments[sid+"_"+ti]||{done:false,note:""};
+  const patchA=(sid,ti,upd)=>setAmendments(p=>({...p,[sid+"_"+ti]:{...getA(sid,ti),...upd}}));
+  const doneCount=sub.topics.filter((_,i)=>getA(activeSub,i).done).length;
+  return <div style={{animation:"slideUp 0.2s ease"}}>
+    <div style={{background:"linear-gradient(135deg,rgba(251,191,36,0.1),transparent)",border:"1px solid rgba(251,191,36,0.2)",borderRadius:14,padding:"16px 20px",marginBottom:16}}>
+      <div style={{color:"#fbbf24",fontSize:10,fontWeight:700,textTransform:"uppercase",letterSpacing:2,marginBottom:4}}>📋 Amendment Tracker</div>
+      <div style={{color:"var(--text)",fontSize:18,fontWeight:800}}>Finance Act & Notification Updates</div>
+      <div style={{color:"var(--text2)",fontSize:12,marginTop:4}}>Track every amendment that could appear in May 2027. Add notes per topic as ICAI SM releases.</div>
+    </div>
+    <div style={{display:"flex",gap:8,flexWrap:"wrap",marginBottom:16}}>
+      {AMEND_SUBJECTS.map(s=>{
+        const done=s.topics.filter((_,i)=>amendments[s.id+"_"+i]?.done).length;
+        const active=activeSub===s.id;
+        return <button key={s.id} onClick={()=>setActiveSub(s.id)} style={{background:active?`${s.color}18`:"var(--surface)",border:`${active?2:1}px solid ${active?s.color:s.color+"30"}`,borderRadius:10,padding:"9px 14px",cursor:"pointer",textAlign:"left"}}>
+          <div style={{color:active?s.color:"var(--text2)",fontSize:12,fontWeight:700}}>{s.label}</div>
+          <div style={{color:"var(--text3)",fontSize:10,marginTop:2}}>{done}/{s.topics.length} covered</div>
+        </button>;
+      })}
+    </div>
+    <div className="card" style={{overflow:"hidden"}}>
+      <div style={{padding:"11px 16px",borderBottom:"1px solid var(--border)",display:"flex",alignItems:"center",gap:10}}>
+        <span style={{color:sub.color,fontSize:12,fontWeight:700}}>{sub.label}</span>
+        <span style={{color:"var(--text3)",fontSize:11,marginLeft:"auto"}}>{doneCount}/{sub.topics.length} covered</span>
+        <div style={{width:80}}><PBar value={doneCount/sub.topics.length*100} color={sub.color} h={4}/></div>
+      </div>
+      {sub.topics.map((topic,ti)=>{
+        const a=getA(activeSub,ti);
+        return <div key={ti} style={{padding:"12px 16px",borderBottom:"1px solid var(--border)",background:a.done?"rgba(52,211,153,0.03)":"transparent"}}>
+          <div style={{display:"flex",alignItems:"flex-start",gap:10,marginBottom:6}}>
+            <button onClick={()=>patchA(activeSub,ti,{done:!a.done})} style={{width:20,height:20,borderRadius:5,border:`2px solid ${a.done?"#34d399":"rgba(255,255,255,0.2)"}`,background:a.done?"#34d399":"transparent",cursor:"pointer",display:"flex",alignItems:"center",justifyContent:"center",color:"#fff",fontSize:11,flexShrink:0,marginTop:1}}>{a.done?"✓":""}</button>
+            <div style={{color:a.done?"var(--text3)":"var(--text)",fontSize:13,fontWeight:500,textDecoration:a.done?"line-through":"none",paddingTop:1}}>{topic}</div>
+          </div>
+          <div style={{paddingLeft:30}}>
+            <textarea
+              defaultValue={a.note||""}
+              onBlur={e=>patchA(activeSub,ti,{note:e.target.value})}
+              placeholder="Key points, section numbers, exam traps, examples..."
+              style={{width:"100%",minHeight:a.note?52:28,background:"var(--surface2)",border:"1px solid var(--border)",borderRadius:7,color:"var(--text)",padding:"6px 10px",fontSize:11,lineHeight:1.5,resize:"vertical"}}
+            />
+          </div>
+        </div>;
+      })}
+    </div>
+  </div>;
+}
+
+/* ═══════════════════════════════════════
+   QUICK LOG FAB
+═══════════════════════════════════════ */
+function QuickLogFAB({studyLog,setStudyLog,revData,setRevData}){
+  const [open,setOpen]=useState(false);
+  const [mode,setMode]=useState(null);
+  const [hours,setHours]=useState("");
+  const [chSub,setChSub]=useState(SUBJECTS[0].id);
+  const [chIdx,setChIdx]=useState(0);
+  const [flash,setFlash]=useState(false);
+  const saveHours=()=>{
+    const h=parseFloat(hours)||0;
+    if(h>0){const t=today();setStudyLog(p=>({...p,[t]:(p[t]||0)+h}));}
+    setHours("");setMode(null);setOpen(false);setFlash(true);setTimeout(()=>setFlash(false),1500);
+  };
+  const saveChapter=()=>{
+    const k=chKey(chSub,chIdx,"rev");
+    const cur=revData[k]||defRev();
+    setRevData(p=>({...p,[k]:{...cur,status:"Completed",confidence:Math.max(cur.confidence||0,4),updated:today()}}));
+    setMode(null);setOpen(false);setFlash(true);setTimeout(()=>setFlash(false),1500);
+  };
+  const subj=SUBJECTS.find(s=>s.id===chSub);
+  const chs=allChapters(subj);
+  return <>
+    {flash&&<div style={{position:"fixed",bottom:88,right:24,background:"#34d399",color:"#fff",borderRadius:10,padding:"8px 16px",fontSize:13,fontWeight:700,zIndex:500,animation:"slideUp 0.2s ease",pointerEvents:"none"}}>✓ Saved!</div>}
+    <button onClick={()=>{setOpen(p=>!p);setMode(null);}} style={{position:"fixed",bottom:24,right:24,width:52,height:52,borderRadius:"50%",background:"linear-gradient(135deg,#6366f1,#4f46e5)",border:"none",color:"#fff",fontSize:24,cursor:"pointer",boxShadow:"0 6px 24px rgba(99,102,241,0.5)",zIndex:400,display:"flex",alignItems:"center",justifyContent:"center",transition:"transform 0.15s",transform:open?"rotate(45deg)":"none"}}>+</button>
+    {open&&!mode&&<div style={{position:"fixed",bottom:86,right:24,background:"var(--surface)",border:"1px solid var(--border2)",borderRadius:14,padding:8,zIndex:400,minWidth:200,boxShadow:"var(--shadow-lg)",animation:"slideUp 0.15s ease"}}>
+      {[{id:"hours",icon:"⏱",label:"Log Study Hours"},{id:"chapter",icon:"✓",label:"Mark Chapter Done"}].map(({id,icon,label})=>(
+        <button key={id} onClick={()=>setMode(id)} style={{display:"flex",alignItems:"center",gap:10,width:"100%",background:"transparent",border:"none",borderRadius:9,padding:"10px 12px",cursor:"pointer",textAlign:"left",color:"var(--text)",fontSize:13,fontWeight:600}} onMouseEnter={e=>e.currentTarget.style.background="var(--surface2)"} onMouseLeave={e=>e.currentTarget.style.background="transparent"}>
+          <span style={{fontSize:18}}>{icon}</span>{label}
+        </button>
+      ))}
+    </div>}
+    {open&&mode==="hours"&&<div style={{position:"fixed",bottom:86,right:24,background:"var(--surface)",border:"1px solid rgba(52,211,153,0.3)",borderRadius:14,padding:16,zIndex:400,minWidth:220,boxShadow:"var(--shadow-lg)",animation:"slideUp 0.15s ease"}}>
+      <div style={{color:"#34d399",fontSize:13,fontWeight:700,marginBottom:10}}>⏱ Study Session</div>
+      <div style={{color:"var(--text2)",fontSize:12,marginBottom:12,lineHeight:1.5}}>Use the Session Timer to log hours with timer, chapter tracking and energy — all in one.</div>
+      <button onClick={()=>{setOpen(false);setMode(null);window.dispatchEvent(new CustomEvent("goto",{detail:"session"}));}} style={{width:"100%",background:"linear-gradient(135deg,#34d399,#059669)",color:"#fff",border:"none",borderRadius:9,padding:"9px",fontSize:12,fontWeight:800,cursor:"pointer",marginBottom:7}}>▶ Go to Session Timer</button>
+      <button onClick={()=>setMode(null)} style={{width:"100%",background:"var(--surface2)",border:"1px solid var(--border)",borderRadius:8,padding:"7px",fontSize:11,cursor:"pointer",color:"var(--text3)"}}>Back</button>
+    </div>}
+    {open&&mode==="chapter"&&<div style={{position:"fixed",bottom:86,right:24,background:"var(--surface)",border:"1px solid var(--border2)",borderRadius:14,padding:16,zIndex:400,minWidth:280,boxShadow:"var(--shadow-lg)",animation:"slideUp 0.15s ease"}}>
+      <div style={{color:"var(--text)",fontSize:13,fontWeight:700,marginBottom:10}}>✓ Mark chapter done</div>
+      <select value={chSub} onChange={e=>{setChSub(e.target.value);setChIdx(0);}} style={{width:"100%",background:"var(--surface2)",border:"1px solid var(--border)",borderRadius:8,padding:"7px",fontSize:12,color:"var(--text)",marginBottom:7}}>
+        {SUBJECTS.map(s=><option key={s.id} value={s.id}>{s.emoji} {s.short}</option>)}
+      </select>
+      <select value={chIdx} onChange={e=>setChIdx(parseInt(e.target.value))} style={{width:"100%",background:"var(--surface2)",border:"1px solid var(--border)",borderRadius:8,padding:"7px",fontSize:12,color:"var(--text)",marginBottom:10}}>
+        {chs.map((ch,i)=><option key={i} value={i}>{i+1}. {ch.n.slice(0,46)}</option>)}
+      </select>
+      <div style={{display:"flex",gap:6}}>
+        <button onClick={()=>setMode(null)} style={{flex:1,background:"var(--surface2)",border:"1px solid var(--border)",borderRadius:8,padding:"7px",fontSize:12,cursor:"pointer",color:"var(--text2)"}}>Back</button>
+        <button onClick={saveChapter} style={{flex:2,background:"linear-gradient(135deg,#34d399,#059669)",color:"#fff",border:"none",borderRadius:8,padding:"7px",fontSize:12,fontWeight:700,cursor:"pointer"}}>Mark Done ✓</button>
+      </div>
+    </div>}
+  </>;
+}
+
+/* ═══════════════════════════════════════
+   BACKUP MODAL
+═══════════════════════════════════════ */
+function BackupModal({onClose,revData,studyLog,tests,questionPractice,weeklyTarget,lectures,amendments,tasks,doubts,formulas,weeklyReviewDone,answerLog,chapterNotes,energyLog,preExamChecklist,patterns,rtpLog,journal,customLinks,frLec,frRev,userProfile,onImport}){
+  const fileRef=useRef(null);
+  const backupData={revData,studyLog,tests,questionPractice,weeklyTarget,lectures,amendments,tasks,doubts,formulas,weeklyReviewDone,answerLog,chapterNotes,energyLog,preExamChecklist,patterns,rtpLog,journal,customLinks,frLec,frRev};
+  const downloadJsonBackup=(data=backupData,suffix="backup")=>{
+    const payload={backupType:"ca-finals-tracker-backup",schemaVersion:2,exportedAt:new Date().toISOString(),profile:{name:userProfile?.name||"",attempt:userProfile?.attempt||""},data};
+    const blob=new Blob([JSON.stringify(payload,null,2)],{type:"application/json"});
+    const url=URL.createObjectURL(blob);const a=document.createElement("a");a.href=url;
+    a.download=`ca_finals_${suffix}_${today()}.json`;a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);
+  };
+  const exportJsonBackup=()=>downloadJsonBackup(backupData,"backup");
+  const exportExcel=async()=>{
+    if(!window.ExcelJS){alert("Excel export is still loading. Please try again in a moment.");return;}
+    const wb=new window.ExcelJS.Workbook();
+    wb.creator="CA Finals Prep Tracker";
+    wb.subject="CA Final preparation progress and study log";
+    wb.title="CA Finals Prep Tracker Export";
+    wb.created=new Date();
+    const addSheet=(name,data)=>{
+      const ws=wb.addWorksheet(name,{views:[{state:"frozen",ySplit:1}]});
+      let rows=[];
+      if(Array.isArray(data)){
+        const objects=data.filter(x=>x&&typeof x==="object"&&!Array.isArray(x));
+        const cols=[...new Set(objects.flatMap(x=>Object.keys(x)))];
+        if(cols.length) { ws.addRow(cols); objects.forEach(x=>ws.addRow(cols.map(k=>excelCell(x[k])))); }
+        else { ws.addRow(["Item"]); data.forEach(x=>ws.addRow([excelCell(x)])); }
+      } else if(data&&typeof data==="object"){
+        const entries=Object.entries(data);
+        const objects=entries.map(([key,value])=>({Key:key,...(value&&typeof value==="object"&&!Array.isArray(value)?value:{Value:value})}));
+        const cols=[...new Set(objects.flatMap(x=>Object.keys(x)))];
+        ws.addRow(cols.length?cols:["Key","Value"]);
+        objects.forEach(x=>ws.addRow((cols.length?cols:["Key","Value"]).map(k=>excelCell(x[k]))));
+      } else { ws.addRow(["Item","Value"]);ws.addRow(["Value",excelCell(data)]); }
+      if(ws.rowCount===0)ws.addRow(["No data"]);
+      const header=ws.getRow(1);
+      header.height=26;
+      header.eachCell(cell=>{cell.font={bold:true,color:{argb:"FFFFFFFF"},size:11};cell.fill={type:"pattern",pattern:"solid",fgColor:{argb:"FF24324A"}};cell.alignment={vertical:"middle",wrapText:true};});
+      ws.eachRow((row,rowNumber)=>{row.eachCell(cell=>{cell.alignment={vertical:"top",wrapText:true};if(rowNumber>1&&rowNumber%2===0)cell.fill={type:"pattern",pattern:"solid",fgColor:{argb:"FFF1F5F9"}};});});
+      ws.columns.forEach((col,i)=>{let max=12;col.eachCell({includeEmpty:true},cell=>{const v=cell.value;const text=typeof v==="object"&&v!==null?(v.text||JSON.stringify(v)):String(v??"");max=Math.max(max,Math.min(42,text.length+2));});col.width=Math.min(42,max);});
+      if(ws.rowCount>1)ws.autoFilter={from:{row:1,column:1},to:{row:1,column:Math.max(1,ws.columnCount)}};
+      return ws;
+    };
+    const excelCell=v=>v==null?"":typeof v==="object"?JSON.stringify(v):v;
+    addSheet("Summary",{ExportedAt:new Date().toLocaleString(),WeeklyStudyTargetHours:weeklyTarget,Note:"Export of the currently selected profile's tracker data"});
+    addSheet("Revision Progress",revData);
+    addSheet("Daily Study Hours",studyLog);
+    addSheet("Session History",loadSessions());
+    addSheet("Tests",tests);
+    addSheet("Question Practice",questionPractice);
+    addSheet("Lectures",lectures);
+    addSheet("Amendments",amendments);
+    addSheet("Tasks",tasks);
+    addSheet("Doubts",doubts);
+    addSheet("Formula Bank",formulas);
+    addSheet("Weekly Reviews",weeklyReviewDone);
+    addSheet("Answer Writing",answerLog);
+    addSheet("Chapter Notes",chapterNotes);
+    addSheet("Energy Log",energyLog);
+    addSheet("Pre-Exam Checklist",preExamChecklist);
+    addSheet("Exam Patterns",patterns);
+    addSheet("RTP MTP Log",rtpLog);
+    addSheet("Study Journal",journal);
+    addSheet("Custom Links",customLinks);
+    const buffer=await wb.xlsx.writeBuffer();
+    const blob=new Blob([buffer],{type:"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"});
+    const url=URL.createObjectURL(blob);const a=document.createElement("a");a.href=url;
+    a.download="ca_finals_tracker_"+today()+".xlsx";a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);
+  };
+  const handleImport=e=>{
+    const f=e.target.files?.[0];if(!f)return;
+    const reader=new FileReader();
+    reader.onload=ev=>{
+      try{
+        const parsed=JSON.parse(ev.target.result);
+        const wrapped=parsed&&parsed.backupType==="ca-finals-tracker-backup"&&parsed.schemaVersion>=1;
+        const data=wrapped?parsed.data:parsed;
+        const allowed=["revData","studyLog","tests","questionPractice","weeklyTarget","lectures","amendments","tasks","doubts","formulas","weeklyReviewDone","answerLog","chapterNotes","energyLog","preExamChecklist","patterns","rtpLog","journal","customLinks","frLec","frRev"];
+        if(!data||typeof data!=="object"||Array.isArray(data)||!allowed.some(k=>Object.prototype.hasOwnProperty.call(data,k)))throw new Error("unsupported");
+        const description=wrapped?("Backup from "+(parsed.profile?.name||"unknown profile")+" · "+(parsed.profile?.attempt||"attempt not recorded")+" · "+(parsed.exportedAt||"date unknown")):"Legacy JSON backup";
+        if(!window.confirm(description+"\n\nBefore restoring, a safety backup of your current data will download. Continue?")){e.target.value="";return;}
+        downloadJsonBackup(backupData,"pre-restore");
+        onImport(data);onClose();
+      }catch{alert("This file is not a valid CA Finals Tracker JSON backup. Your current data has not been changed.");}
+      finally{e.target.value="";}
+    };
+    reader.readAsText(f);
+  };
+  return <div onClick={onClose} style={{position:"fixed",inset:0,background:"rgba(0,0,0,0.72)",zIndex:3000,display:"flex",alignItems:"center",justifyContent:"center",backdropFilter:"blur(8px)"}}>
+    <div onClick={e=>e.stopPropagation()} style={{background:"var(--surface)",border:"1px solid var(--border2)",borderRadius:20,padding:26,maxWidth:400,width:"100%",boxShadow:"var(--shadow-lg)",animation:"slideUp 0.2s ease"}}>
+      <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:18}}>
+        <div style={{fontWeight:800,fontSize:16,color:"var(--text)"}}>📦 Backup & Restore</div>
+        <button onClick={onClose} style={{background:"var(--surface2)",border:"none",borderRadius:8,width:30,height:30,cursor:"pointer",color:"var(--text2)",fontSize:16}}>×</button>
+      </div>
+      <div style={{display:"flex",flexDirection:"column",gap:10}}>
+        <button onClick={exportExcel} style={{display:"flex",alignItems:"center",gap:12,background:"rgba(52,211,153,0.08)",border:"1px solid rgba(52,211,153,0.3)",borderRadius:12,padding:"13px 15px",cursor:"pointer",textAlign:"left"}}>
+          <span style={{fontSize:22}}>📊</span>
+          <div><div style={{color:"#34d399",fontSize:13,fontWeight:700}}>Export to Excel (.xlsx)</div><div style={{color:"var(--text3)",fontSize:11,marginTop:2}}>Formatted workbook with separate sheets, filters and readable columns</div></div>
+        </button>
+        <button onClick={exportJsonBackup} style={{display:"flex",alignItems:"center",gap:12,background:"rgba(56,189,248,0.08)",border:"1px solid rgba(56,189,248,0.3)",borderRadius:12,padding:"13px 15px",cursor:"pointer",textAlign:"left"}}>
+          <span style={{fontSize:22}}>🛡️</span>
+          <div><div style={{color:"#38bdf8",fontSize:13,fontWeight:700}}>Download Full JSON Backup</div><div style={{color:"var(--text3)",fontSize:11,marginTop:2}}>Versioned backup including chapter progress, mock tests and profile attempt</div></div>
+        </button>
+        <button onClick={()=>fileRef.current?.click()} style={{display:"flex",alignItems:"center",gap:12,background:"rgba(129,140,248,0.08)",border:"1px solid rgba(129,140,248,0.3)",borderRadius:12,padding:"13px 15px",cursor:"pointer",textAlign:"left"}}>
+          <span style={{fontSize:22}}>📥</span>
+          <div><div style={{color:"#818cf8",fontSize:13,fontWeight:700}}>Import Older JSON Backup</div><div style={{color:"var(--text3)",fontSize:11,marginTop:2}}>Restore a legacy JSON backup file</div></div>
+        </button>
+        <input ref={fileRef} type="file" accept=".json" style={{display:"none"}} onChange={handleImport}/>
+        <div style={{background:"rgba(248,113,113,0.06)",border:"1px solid rgba(248,113,113,0.15)",borderRadius:10,padding:"10px 13px"}}>
+          <div style={{color:"#f87171",fontSize:11,fontWeight:700,marginBottom:2}}>⚠️ Important</div>
+          <div style={{color:"var(--text3)",fontSize:11,lineHeight:1.5}}>Data lives in your browser's localStorage. Clearing browser data will erase it. Export a backup weekly — especially before any OS update or browser change!</div>
+        </div>
+      </div>
+    </div>
+  </div>;
+}
+
+/* ═══════════════════════════════════════
+   STUDY PLAN
+═══════════════════════════════════════ */
+function CustomStudyPlan({userProfile}){
+  const STORE_KEY=profileStorageKey("ca_custom_plan_"+((userProfile?.attempt||"custom").replace(/\s+/g,"_")));
+  const [plan,setPlan]=useState(()=>{try{const s=localStorage.getItem(STORE_KEY);return s?JSON.parse(s):null;}catch{return null;}});
+  const [setup,setSetup]=useState(!plan);
+  // Setup form state
+  const [examDate,setExamDate]=useState("");
+  const [startDate,setStartDate]=useState("");
+  const [hoursWD,setHoursWD]=useState(3);
+  const [hoursWE,setHoursWE]=useState(7);
+  // Edit mode
+  const [editingPhase,setEditingPhase]=useState(null);
+  const [editingWeek,setEditingWeek]=useState(null);
+  const [activePhase,setActivePhase]=useState(0);
+  const [activeWeek,setActiveWeek]=useState(null);
+
+  const savePlan=(p)=>{setPlan(p);localStorage.setItem(STORE_KEY,JSON.stringify(p));};
+
+  const generatePlan=()=>{
+    if(!examDate||!startDate)return;
+    const start=new Date(startDate);
+    const exam=new Date(examDate);
+    const totalDays=Math.round((exam-start)/(1000*60*60*24));
+    const totalWeeks=Math.max(1,Math.round(totalDays/7));
+    // Auto-assign subjects across weeks
+    const subjects=["AFM","FR","AAA","DT","IDT","IBS"];
+    const subColors2={"AFM":"#38bdf8","FR":"#818cf8","AAA":"#a78bfa","DT":"#fbbf24","IDT":"#34d399","IBS":"#f472b6"};
+    // Split into 4 phases: Learning(40%), Practice(25%), Revision(25%), Final(10%)
+    const p1w=Math.max(1,Math.round(totalWeeks*0.40));
+    const p2w=Math.max(1,Math.round(totalWeeks*0.25));
+    const p3w=Math.max(1,Math.round(totalWeeks*0.25));
+    const p4w=Math.max(1,totalWeeks-p1w-p2w-p3w);
+
+    const makeDate=(offset)=>{
+      const d=new Date(start);d.setDate(d.getDate()+offset*7);
+      return d.toLocaleDateString("en-IN",{day:"numeric",month:"short",year:"numeric"});
+    };
+
+    const makeWeeks=(count,offset,phaseLabel,subList)=>
+      Array.from({length:count},(_,i)=>{
+        const sub=subList[i%subList.length];
+        const wStart=new Date(start);wStart.setDate(wStart.getDate()+(offset+i)*7);
+        const wEnd=new Date(wStart);wEnd.setDate(wEnd.getDate()+6);
+        const fmt=d=>d.toLocaleDateString("en-IN",{day:"numeric",month:"short"});
+        return{
+          w:`Week ${offset+i+1}`,
+          dates:`${fmt(wStart)} – ${fmt(wEnd)}`,
+          h:hoursWD*5+hoursWE*2,
+          sub,
+          color:subColors2[sub]||"#818cf8",
+          focus:`${phaseLabel} — ${sub}`,
+          tasks:[`Study ${sub} core chapters`,`Solve ICAI SM problems for ${sub}`,`Make short notes / formula sheet for ${sub}`],
+        };
+      });
+
+    const newPlan=[
+      {id:0,label:"Phase 1",title:"Learning",color:"#38bdf8",
+       dates:`${makeDate(0)} – ${makeDate(p1w)}`,
+       context:`Core subject learning · ${hoursWD}h weekdays · ${hoursWE}h weekends`,
+       weeks:makeWeeks(p1w,0,"Learning",subjects)},
+      {id:1,label:"Phase 2",title:"Practice",color:"#818cf8",
+       dates:`${makeDate(p1w)} – ${makeDate(p1w+p2w)}`,
+       context:"Past papers · mock tests · identify weak areas",
+       weeks:makeWeeks(p2w,p1w,"Practice",subjects)},
+      {id:2,label:"Phase 3",title:"Revision",color:"#a78bfa",
+       dates:`${makeDate(p1w+p2w)} – ${makeDate(p1w+p2w+p3w)}`,
+       context:"Full revision cycle · answer writing · timed tests",
+       weeks:makeWeeks(p3w,p1w+p2w,"Revision",subjects)},
+      {id:3,label:"Phase 4",title:"Final Push",color:"#f472b6",
+       dates:`${makeDate(p1w+p2w+p3w)} – Exam`,
+       context:"Last revision · formulae · stay calm",
+       weeks:makeWeeks(p4w,p1w+p2w+p3w,"Final",["All 6"])},
+    ];
+    savePlan(newPlan);setSetup(false);setActivePhase(0);setActiveWeek(null);
+  };
+
+  const updateTask=(pi,wi,ti,val)=>{
+    const p=plan.map((ph,pii)=>pii!==pi?ph:{...ph,weeks:ph.weeks.map((wk,wii)=>wii!==wi?wk:{...wk,tasks:wk.tasks.map((t,tii)=>tii!==ti?t:val)})});
+    savePlan(p);
+  };
+  const addTask=(pi,wi)=>{
+    const p=plan.map((ph,pii)=>pii!==pi?ph:{...ph,weeks:ph.weeks.map((wk,wii)=>wii!==wi?wk:{...wk,tasks:[...wk.tasks,"New task — click to edit"]})});
+    savePlan(p);
+  };
+  const removeTask=(pi,wi,ti)=>{
+    const p=plan.map((ph,pii)=>pii!==pi?ph:{...ph,weeks:ph.weeks.map((wk,wii)=>wii!==wi?wk:{...wk,tasks:wk.tasks.filter((_,tii)=>tii!==ti)})});
+    savePlan(p);
+  };
+  const updateWeekField=(pi,wi,field,val)=>{
+    const p=plan.map((ph,pii)=>pii!==pi?ph:{...ph,weeks:ph.weeks.map((wk,wii)=>wii!==wi?wk:{...wk,[field]:val})});
+    savePlan(p);
+  };
+  const updatePhaseField=(pi,field,val)=>{
+    const p=plan.map((ph,pii)=>pii!==pi?ph:{...ph,[field]:val});
+    savePlan(p);
+  };
+
+  if(setup) return <div style={{animation:"slideUp 0.2s ease",maxWidth:600}}>
+    <div style={{marginBottom:20}}>
+      <div style={{color:"var(--text3)",fontSize:10,textTransform:"uppercase",letterSpacing:2,marginBottom:4}}>Study Plan</div>
+      <div style={{color:"var(--text)",fontSize:22,fontWeight:900}}>Build Your Study Plan — {userProfile?.attempt}</div>
+      <div style={{color:"var(--text2)",fontSize:12,marginTop:4}}>We'll auto-generate a phase-wise plan based on your dates. You can edit every week after.</div>
+    </div>
+    <div className="card" style={{padding:24,display:"flex",flexDirection:"column",gap:18}}>
+      <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:14}}>
+        <div>
+          <label style={{color:"var(--text3)",fontSize:11,fontWeight:700,textTransform:"uppercase",letterSpacing:1,display:"block",marginBottom:6}}>Study Start Date</label>
+          <input type="date" value={startDate} onChange={e=>setStartDate(e.target.value)} style={{width:"100%",background:"var(--surface2)",border:"1px solid var(--border)",borderRadius:9,padding:"10px 12px",fontSize:13,color:"var(--text)",boxSizing:"border-box"}}/>
+        </div>
+        <div>
+          <label style={{color:"var(--text3)",fontSize:11,fontWeight:700,textTransform:"uppercase",letterSpacing:1,display:"block",marginBottom:6}}>Exam Date (approx)</label>
+          <input type="date" value={examDate} onChange={e=>setExamDate(e.target.value)} style={{width:"100%",background:"var(--surface2)",border:"1px solid var(--border)",borderRadius:9,padding:"10px 12px",fontSize:13,color:"var(--text)",boxSizing:"border-box"}}/>
+        </div>
+      </div>
+      <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:14}}>
+        <div>
+          <label style={{color:"var(--text3)",fontSize:11,fontWeight:700,textTransform:"uppercase",letterSpacing:1,display:"block",marginBottom:6}}>Weekday Study Hours</label>
+          <div style={{display:"flex",alignItems:"center",gap:10}}>
+            <input type="range" min="1" max="10" value={hoursWD} onChange={e=>setHoursWD(+e.target.value)} style={{flex:1,accentColor:"#818cf8"}}/>
+            <span style={{color:"#818cf8",fontWeight:800,fontSize:16,minWidth:28}}>{hoursWD}h</span>
+          </div>
+        </div>
+        <div>
+          <label style={{color:"var(--text3)",fontSize:11,fontWeight:700,textTransform:"uppercase",letterSpacing:1,display:"block",marginBottom:6}}>Weekend Study Hours</label>
+          <div style={{display:"flex",alignItems:"center",gap:10}}>
+            <input type="range" min="1" max="16" value={hoursWE} onChange={e=>setHoursWE(+e.target.value)} style={{flex:1,accentColor:"#818cf8"}}/>
+            <span style={{color:"#818cf8",fontWeight:800,fontSize:16,minWidth:28}}>{hoursWE}h</span>
+          </div>
+        </div>
+      </div>
+      {startDate&&examDate&&<div style={{background:"rgba(129,140,248,0.08)",border:"1px solid rgba(129,140,248,0.2)",borderRadius:10,padding:"12px 16px",fontSize:12,color:"var(--text2)"}}>
+        📅 <strong style={{color:"var(--text)"}}>{Math.round((new Date(examDate)-new Date(startDate))/(1000*60*60*24*7))} weeks</strong> · ~<strong style={{color:"var(--text)"}}>{Math.round((new Date(examDate)-new Date(startDate))/(1000*60*60*24*7))*(hoursWD*5+hoursWE*2)} hours</strong> total study time
+      </div>}
+      <button onClick={generatePlan} disabled={!startDate||!examDate} style={{background:"linear-gradient(135deg,#818cf8,#6366f1)",border:"none",borderRadius:11,padding:"13px",fontSize:14,fontWeight:800,color:"#fff",cursor:startDate&&examDate?"pointer":"not-allowed",opacity:startDate&&examDate?1:0.5}}>
+        Generate My Study Plan →
+      </button>
+    </div>
+  </div>;
+
+  const ph=plan[activePhase];
+  const totalWeeks=plan.reduce((a,p)=>a+p.weeks.length,0);
+  const completedWeeks=plan.slice(0,activePhase).reduce((a,p)=>a+p.weeks.length,0);
+  const subColorMap={"AFM":"#38bdf8","FR":"#818cf8","AAA":"#a78bfa","DT":"#fbbf24","IDT":"#34d399","IBS":"#f472b6","All 6":"#f472b6"};
+  const getC=s=>subColorMap[s]||"#818cf8";
+
+  return <div style={{animation:"slideUp 0.2s ease"}}>
+    <div style={{marginBottom:16,display:"flex",alignItems:"flex-start",justifyContent:"space-between",flexWrap:"wrap",gap:10}}>
+      <div>
+        <div style={{color:"var(--text3)",fontSize:10,textTransform:"uppercase",letterSpacing:2,marginBottom:4}}>Personalised Roadmap · {userProfile?.attempt}</div>
+        <div style={{color:"var(--text)",fontSize:22,fontWeight:900}}>CA Finals Study Plan 🎯</div>
+        <div style={{color:"var(--text2)",fontSize:12,marginTop:4}}>{totalWeeks} weeks · everything is editable — click any task to change it</div>
+      </div>
+      <button onClick={()=>setSetup(true)} style={{background:"var(--surface2)",border:"1px solid var(--border)",borderRadius:9,padding:"8px 14px",fontSize:12,cursor:"pointer",color:"var(--text3)",fontWeight:600}}>🔄 Rebuild Plan</button>
+    </div>
+
+    {/* Overall progress */}
+    <div className="card" style={{padding:"14px 18px",marginBottom:16}}>
+      <div style={{display:"flex",justifyContent:"space-between",marginBottom:8}}>
+        <span style={{color:"var(--text2)",fontSize:12,fontWeight:600}}>Overall Plan Progress</span>
+        <span style={{color:"var(--text3)",fontSize:11}}>{completedWeeks} of {totalWeeks} weeks</span>
+      </div>
+      <div style={{width:"100%",height:8,background:"var(--surface3)",borderRadius:99,overflow:"hidden"}}>
+        <div style={{width:`${(completedWeeks/totalWeeks)*100}%`,height:"100%",background:"linear-gradient(90deg,#f472b6,#818cf8)",borderRadius:99}}/>
+      </div>
+    </div>
+
+    {/* Phase tabs */}
+    <div style={{display:"flex",gap:6,flexWrap:"wrap",marginBottom:16}}>
+      {plan.map((p,i)=>(
+        <button key={i} onClick={()=>{setActivePhase(i);setActiveWeek(null);}} style={{background:activePhase===i?`${p.color}18`:"var(--surface2)",border:`${activePhase===i?2:1}px solid ${activePhase===i?p.color:p.color+"30"}`,borderRadius:10,padding:"9px 16px",cursor:"pointer",textAlign:"left",flexShrink:0}}>
+          {editingPhase===i
+            ?<input autoFocus value={p.title} onChange={e=>updatePhaseField(i,"title",e.target.value)} onBlur={()=>setEditingPhase(null)} onClick={e=>e.stopPropagation()} style={{background:"transparent",border:"none",color:p.color,fontSize:12,fontWeight:800,outline:"none",width:100}}/>
+            :<div style={{color:activePhase===i?p.color:"var(--text2)",fontSize:12,fontWeight:800}} onDoubleClick={e=>{e.stopPropagation();setEditingPhase(i);}}>{p.label}: {p.title}</div>
+          }
+          <div style={{color:"var(--text3)",fontSize:10,marginTop:1}}>{p.weeks.length} weeks</div>
+        </button>
+      ))}
+    </div>
+
+    {/* Phase header */}
+    <div className="card" style={{padding:"14px 18px",marginBottom:14,borderLeft:`3px solid ${ph.color}`}}>
+      <div style={{color:ph.color,fontSize:12,fontWeight:700,marginBottom:4}}>{ph.label}: {ph.title}</div>
+      {editingPhase===activePhase+"ctx"
+        ?<input autoFocus value={ph.context} onChange={e=>updatePhaseField(activePhase,"context",e.target.value)} onBlur={()=>setEditingPhase(null)} style={{width:"100%",background:"var(--surface2)",border:"1px solid var(--border)",borderRadius:7,padding:"6px 10px",fontSize:12,color:"var(--text)"}}/>
+        :<div style={{color:"var(--text2)",fontSize:12}} onDoubleClick={()=>setEditingPhase(activePhase+"ctx")}>{ph.context} <span style={{color:"var(--text3)",fontSize:10}}>(double-click to edit)</span></div>
+      }
+    </div>
+
+    {/* Week cards */}
+    <div style={{display:"flex",flexDirection:"column",gap:10}}>
+      {ph.weeks.map((wk,wi)=>{
+        const isOpen=activeWeek===wi;
+        const c=getC(wk.sub);
+        const pi=activePhase;
+        return <div key={wi} className="card" style={{overflow:"hidden",border:`1px solid ${isOpen?c+"55":"var(--border)"}`}}>
+          <div onClick={()=>setActiveWeek(isOpen?null:wi)} style={{padding:"12px 16px",display:"flex",alignItems:"center",gap:12,cursor:"pointer",background:isOpen?`${c}08`:"transparent"}}>
+            <div style={{background:`${c}20`,color:c,borderRadius:8,padding:"4px 10px",fontSize:11,fontWeight:800,flexShrink:0}}>{wk.w}</div>
+            <div style={{flex:1}}>
+              {editingWeek===`${pi}-${wi}-focus`
+                ?<input autoFocus value={wk.focus} onChange={e=>updateWeekField(pi,wi,"focus",e.target.value)} onBlur={()=>setEditingWeek(null)} onClick={e=>e.stopPropagation()} style={{background:"var(--surface2)",border:"1px solid var(--border)",borderRadius:6,padding:"3px 8px",fontSize:12,color:"var(--text)",fontWeight:700,width:"100%"}}/>
+                :<div style={{color:"var(--text)",fontSize:12,fontWeight:700}} onDoubleClick={e=>{e.stopPropagation();setEditingWeek(`${pi}-${wi}-focus`);}}>{wk.focus}</div>
+              }
+              <div style={{color:"var(--text3)",fontSize:10,marginTop:1}}>{wk.dates}</div>
+            </div>
+            <div style={{display:"flex",alignItems:"center",gap:8,flexShrink:0}}>
+              <span style={{background:`${c}15`,color:c,borderRadius:20,padding:"2px 9px",fontSize:10,fontWeight:700}}>{wk.sub}</span>
+              <span style={{color:"var(--text3)",fontSize:10}}>{wk.h}h</span>
+              <span style={{color:"var(--text3)",fontSize:14}}>{isOpen?"▲":"▼"}</span>
+            </div>
+          </div>
+          {isOpen&&<div style={{padding:"4px 16px 16px",borderTop:`1px solid ${c}22`}}>
+            <div style={{color:"var(--text3)",fontSize:10,fontWeight:700,textTransform:"uppercase",letterSpacing:1,marginBottom:8,marginTop:8}}>Tasks — double-click to edit, ✕ to remove</div>
+            {wk.tasks.map((t,ti)=>(
+              typeof t==="object"
+                ?<div key={ti} style={{background:`${c}10`,border:`1px solid ${c}30`,borderRadius:8,padding:"8px 12px",fontSize:12,color:c,fontWeight:600,marginBottom:6}}>{t.note}</div>
+                :<div key={ti} style={{display:"flex",alignItems:"flex-start",gap:8,marginBottom:6}}>
+                  <span style={{color:c,fontSize:14,marginTop:1,flexShrink:0}}>›</span>
+                  {editingWeek===`${pi}-${wi}-${ti}`
+                    ?<input autoFocus value={t} onChange={e=>updateTask(pi,wi,ti,e.target.value)} onBlur={()=>setEditingWeek(null)} style={{flex:1,background:"var(--surface2)",border:`1px solid ${c}44`,borderRadius:6,padding:"5px 8px",fontSize:12,color:"var(--text)"}}/>
+                    :<div style={{flex:1,color:"var(--text2)",fontSize:12,lineHeight:1.4,cursor:"text"}} onDoubleClick={()=>setEditingWeek(`${pi}-${wi}-${ti}`)}>{t}</div>
+                  }
+                  <button onClick={()=>removeTask(pi,wi,ti)} style={{background:"transparent",border:"none",color:"var(--text3)",cursor:"pointer",fontSize:13,padding:"0 4px",flexShrink:0}}>✕</button>
+                </div>
+            ))}
+            <button onClick={()=>addTask(pi,wi)} style={{background:`${c}10`,border:`1px dashed ${c}44`,borderRadius:8,padding:"7px 14px",fontSize:11,cursor:"pointer",color:c,fontWeight:600,marginTop:4}}>+ Add Task</button>
+          </div>}
+        </div>;
+      })}
+    </div>
+  </div>;
+}
+
+function StudyPlan({userProfile}){
+  const [activePhase,setActivePhase]=useState(0);
+  const [activeWeek,setActiveWeek]=useState(null);
+
+  const phases=[
+    {
+      id:0,label:"Phase 1",title:"Foundation",dates:"Jul 1 – Aug 31, 2026",color:"#38bdf8",
+      context:"Articleship ongoing · 3h weekdays · 7–8h weekends · ~170h total",
+      weeks:[
+        {w:"Week 1",dates:"Jul 1–5",h:15,sub:"AFM",color:"#38bdf8",focus:"AFM Wrap-up",tasks:[
+          "Revise all pending AFM chapters — go through notes once",
+          "Solve 10+ past exam AFM problems (ICAI PM)",
+          "Cover Derivatives weak spots: Greeks, Black-Scholes numerical",
+          "Revise Currency & Interest Rate Risk hedging strategies",
+          "Make a 1-page formula sheet for AFM — all key formulas",
+        ]},
+        {w:"Week 2",dates:"Jul 6–12",h:16,sub:"AFM→FR",color:"#38bdf8",focus:"AFM Done + FR Kickoff",tasks:[
+          "AFM: Final past paper practice — simulate 3h exam",
+          "AFM: ✅ Mark complete, move to FR",
+          "FR: Read ICAI SM — Conceptual Framework thoroughly",
+          "FR: Ind AS 1 – Presentation of Financial Statements",
+          "FR: Ind AS 8 – Accounting Policies, Changes, Errors",
+        ]},
+        {w:"Week 3",dates:"Jul 13–19",h:16,sub:"FR",color:"#818cf8",focus:"FR — Assets & P&L",tasks:[
+          "Ind AS 2 – Inventories (NRV problems)",
+          "Ind AS 16 – PPE (revaluation, component accounting, practice sums)",
+          "Ind AS 23 – Borrowing Costs (qualifying assets, capitalisation rate)",
+          "Ind AS 36 – Impairment (CGU, value in use, FVLCTS)",
+          "Ind AS 38 – Intangible Assets (recognition, amortisation)",
+        ]},
+        {w:"Week 4",dates:"Jul 20–26",h:16,sub:"FR",color:"#818cf8",focus:"FR — Provisions, Revenue",tasks:[
+          "Ind AS 37 – Provisions & Contingencies (onerous contracts)",
+          "Ind AS 40 – Investment Property",
+          "Ind AS 115 – Revenue from Contracts with Customers (5-step model, full problems)",
+          "Ind AS 10 – Events After Reporting Period",
+          "Practice sums: Mix of Ind AS 2, 16, 115",
+        ]},
+        {w:"Week 5",dates:"Jul 27–Aug 2",h:16,sub:"FR",color:"#818cf8",focus:"FR — Financial Instruments",tasks:[
+          "Ind AS 32 – Financial Instruments: Presentation (equity vs liability)",
+          "Ind AS 109 – Recognition & Measurement (amortised cost, FVTPL, FVTOCI, EIR)",
+          "Ind AS 107 – Disclosures (overview only)",
+          "Practice: EIR calculation, ECL provisioning numericals",
+          "Ind AS 102 – Share-based Payment (ESOP, vesting conditions)",
+        ]},
+        {w:"Week 6",dates:"Aug 3–9",h:16,sub:"FR",color:"#818cf8",focus:"FR — Leases, Employee Benefits",tasks:[
+          "Ind AS 116 – Leases (lessee accounting, ROU asset, lease liability, sale-and-leaseback)",
+          "Ind AS 19 – Employee Benefits (defined benefit, PBO, actuarial gains/losses)",
+          "Ind AS 12 – Income Taxes (DTA, DTL, deferred tax – many practicals)",
+          "Practice: Ind AS 116 comprehensive problem",
+          "Practice: Ind AS 12 deferred tax computation",
+        ]},
+        {w:"Week 7",dates:"Aug 10–16",h:16,sub:"FR",color:"#818cf8",focus:"FR — Group Accounts",tasks:[
+          "Ind AS 103 – Business Combinations (purchase price allocation, goodwill, NCI)",
+          "Ind AS 110 – Consolidated Financial Statements (CFS preparation, intragroup)",
+          "Ind AS 111 – Joint Arrangements (JO vs JV)",
+          "Ind AS 27 & 28 – Separate FS & Associates/JVs (equity method)",
+          "Practice: Full CFS consolidation problem (ICAI style)",
+        ]},
+        {w:"Week 8",dates:"Aug 17–23",h:16,sub:"FR",color:"#818cf8",focus:"FR — Remaining Standards",tasks:[
+          "Ind AS 113 – Fair Value Measurement (levels, inputs)",
+          "Ind AS 33 – EPS (basic, diluted — ESOP, convertibles)",
+          "Ind AS 7 – Cash Flow Statements (indirect method, IAS adjustments)",
+          "Ind AS 20 – Government Grants · Ind AS 21 – Foreign Exchange",
+          "Ind AS 101 – First-time Adoption · Ind AS 105/108 (overview)",
+        ]},
+        {w:"Week 9",dates:"Aug 24–31",h:18,sub:"FR+AAA",color:"#818cf8",focus:"FR Wrap-up + Audit Start",tasks:[
+          "FR: Solve 2 full past papers (ICAI PM) — time yourself",
+          "FR: Identify weak areas, re-read those Ind AS",
+          "FR: ✅ Mark complete",
+          "AAA: SA 200 – Overall Objectives · SA 210 – Engagement Terms",
+          "AAA: SQC 1 – Quality Control for CA Firms",
+          {note:"🎉 Articleship ends Aug 31 — full days start Sept 1!"},
+        ]},
+      ]
+    },
+    {
+      id:1,label:"Phase 2",title:"Full Days + ITT/GMCS",dates:"Sep 1 – Oct 31, 2026",color:"#fbbf24",
+      context:"10–12h/day full days · ITT+GMCS mid-Sept to mid-Oct (~3h/day only) · ~380h total",
+      weeks:[
+        {w:"Week 10",dates:"Sep 1–7",h:70,sub:"AAA",color:"#a78bfa",focus:"Audit — Standards & Planning",tasks:[
+          "SA 220 – Quality Control · SA 230 – Documentation",
+          "SA 240 – Fraud · SA 250 – Laws & Regulations",
+          "SA 260/265 – Communication with TCWG",
+          "SA 300 – Planning · SA 315 – Risk Assessment (detailed)",
+          "SA 320 – Materiality · SA 330 – Responses to Risk",
+        ]},
+        {w:"Week 11",dates:"Sep 8–14",h:70,sub:"AAA",color:"#a78bfa",focus:"Audit — Evidence & Completion",tasks:[
+          "SA 500–530: Audit Evidence, Specific Considerations, External Confirmations, Sampling",
+          "SA 540 – Accounting Estimates (critical — high exam weightage)",
+          "SA 550/560/570/580 – Related Parties, Subsequent Events, Going Concern, Written Reps",
+          "SA 600/610/620 – Using Work of Others",
+          "SA 700/701/705/706/710/720 – All Reporting Standards",
+        ]},
+        {w:"Week 12",dates:"Sep 15–21",h:21,sub:"AAA+DT",color:"#a78bfa",focus:"Audit Wrap-up + DT Start",tasks:[
+          "AAA: Sector Audits — Banks, NBFCs, Insurance, CFS",
+          "AAA: Company Audit — Companies Act 2013 + CARO 2020",
+          "AAA: Ethics — Code of Ethics, Independence, Threats",
+          "AAA: ✅ Mark complete",
+          "DT: Basic Concepts — Person, AY, PY, Residential Status",
+          {note:"⚠️ ITT+GMCS starts ~mid-Sept — only ~3h/day available"},
+        ]},
+        {w:"Week 13",dates:"Sep 22–28",h:21,sub:"DT",color:"#fbbf24",focus:"DT — Salary & HP",tasks:[
+          "Income from Salaries — Sec 15–17 (allowances, perquisites, retirement benefits)",
+          "Income from House Property — Sec 22–27 (let-out, self-occupied, deemed let-out)",
+          "Solve 5+ salary problems + 3+ HP problems from ICAI PM",
+          "Revise previous day topics 30 min before starting new topic",
+          "Read ICAI SM notes carefully — don't skip anything",
+        ]},
+        {w:"Week 14",dates:"Sep 29–Oct 5",h:21,sub:"DT",color:"#fbbf24",focus:"DT — PGBP Part 1",tasks:[
+          "PGBP — Sec 28–32: Business income, Depreciation (SLM vs WDV)",
+          "PGBP — Sec 33–35: Capital expenditure deductions, Scientific research",
+          "PGBP — Sec 36–37: Specific deductions, General deductions",
+          "Presumptive Taxation — Sec 44AD, 44ADA, 44AE",
+          "Solve 5+ PGBP problems from ICAI PM",
+        ]},
+        {w:"Week 15",dates:"Oct 6–12",h:21,sub:"DT",color:"#fbbf24",focus:"DT — PGBP Part 2 + Capital Gains",tasks:[
+          "PGBP — Sec 40, 40A, 43B: Disallowances (very exam-heavy)",
+          "Capital Gains — Sec 45–55A: Chargeability, cost of acquisition",
+          "Capital Gains: Exemptions — Sec 54, 54B, 54EC, 54F",
+          "Capital Gains: Special cases — Slump sale, conversion, ESOP",
+          "Solve 5+ Capital Gains problems",
+          {note:"✅ ITT+GMCS ends ~mid-Oct — full days resume"},
+        ]},
+        {w:"Week 16",dates:"Oct 13–19",h:70,sub:"DT",color:"#fbbf24",focus:"DT — IFOS + Deductions + Losses",tasks:[
+          "Income from Other Sources — Sec 56–59 (gifts, dividend, winnings)",
+          "Chapter VI-A Deductions — 80C to 80U (every section, numericals)",
+          "Set-off & Carry Forward — Sec 70–80 (8 rules, practical problems)",
+          "Clubbing of Incomes — Sec 60–65",
+          "Solve comprehensive income computation problem (all heads combined)",
+        ]},
+        {w:"Week 17",dates:"Oct 20–26",h:70,sub:"DT",color:"#fbbf24",focus:"DT — Assessment of Entities",tasks:[
+          "Assessment of Firms & LLPs — Sec 184–189 (remuneration, interest limits)",
+          "Assessment of Companies — Domestic & Foreign, Royalty, FTS",
+          "MAT — Sec 115JB (book profit, add-backs, MAT credit)",
+          "AMT — Sec 115JC for LLPs and others",
+          "New Tax Regime — Sec 115BAC (comparison, options, deductions not allowed)",
+        ]},
+        {w:"Week 18",dates:"Oct 27–31",h:50,sub:"DT",color:"#fbbf24",focus:"DT — TDS, Advance Tax, Penalties",tasks:[
+          "TDS — Sec 192–194T: Every section, rates, due dates, exceptions",
+          "TCS — Sec 206C: All sub-sections",
+          "Advance Tax — Sec 207–219: Instalments, interest under 234B/C",
+          "Assessment Procedure — Sec 139–148: Returns, notices, scrutiny",
+          "Penalties — Sec 270A–275 + Prosecution overview",
+        ]},
+      ]
+    },
+    {
+      id:2,label:"Phase 3",title:"Heavy Subjects",dates:"Nov 1 – Dec 31, 2026",color:"#34d399",
+      context:"Full days 10–12h · DT completion + GST + Customs + IBS start · ~560h total",
+      weeks:[
+        {w:"Week 19",dates:"Nov 1–7",h:70,sub:"DT",color:"#fbbf24",focus:"DT — International Tax",tasks:[
+          "DTAA — Sec 90/90A/91: Concept, Articles of DTAA (residence, PE, business profits)",
+          "Transfer Pricing — Sec 92–92F: Methods (CUP, RPM, CPM, TNMM, PSM)",
+          "TP Documentation — Master File, Local File, CbCR",
+          "Advance Pricing Agreement — Sec 92CC/CD",
+          "POEM — Sec 6(3): Concept + CBDT guidelines",
+        ]},
+        {w:"Week 20",dates:"Nov 8–14",h:70,sub:"DT",color:"#fbbf24",focus:"DT — BEPS + Special Provisions",tasks:[
+          "BEPS Action Plans 1–15 (theory — focus on 1, 2, 4, 6, 7, 13, 15)",
+          "Pillar One & Two — basics + exam relevance",
+          "Equalisation Levy — Sec 165/165A Finance Act 2016/2020",
+          "Special Provisions — Sec 115A to 115BBH (OIDAR, crypto, royalty etc.)",
+          "GAAR — Sec 95–102: Impermissible avoidance arrangement",
+        ]},
+        {w:"Week 21",dates:"Nov 15–21",h:70,sub:"DT",color:"#fbbf24",focus:"DT — Special Acts + Full Wrap-up",tasks:[
+          "Black Money Act 2015 — scope, offences, penalties, prosecution",
+          "Benami Transactions Act 1988 (as amended) — key provisions",
+          "DT: Solve 2 full past papers under exam conditions",
+          "DT: Identify and revisit weak chapters",
+          "DT: ✅ Mark complete — update Amendment Tracker with any new notices",
+        ]},
+        {w:"Week 22",dates:"Nov 22–28",h:70,sub:"IDT",color:"#34d399",focus:"GST — Constitutional Basis + Supply",tasks:[
+          "Constitution (101st Amendment) Act — dual GST structure",
+          "GST Council — Article 279A, composition, voting, functions",
+          "Supply — Sec 7, Schedule I/II/III (deemed supply, non-supply)",
+          "Composite & Mixed Supply — Sec 8 (practical problems)",
+          "Levy — Sec 9 CGST & Sec 5 IGST (CGST/SGST/IGST structure)",
+        ]},
+        {w:"Week 23",dates:"Nov 29–Dec 5",h:70,sub:"IDT",color:"#34d399",focus:"GST — RCM + Exemptions + Composition",tasks:[
+          "Reverse Charge — Sec 9(3) & 9(4): All notified goods and services",
+          "Composition Levy — Sec 10: Rates, restrictions, CMP-08, GSTR-4",
+          "Exemptions — Notification 2/2017 (goods) and 12/2017 (services) — key entries",
+          "Zero-rated Supply — Sec 16 IGST Act: LUT, IGST refund routes",
+          "Solve RCM problems + composition problems from ICAI PM",
+        ]},
+        {w:"Week 24",dates:"Dec 6–12",h:70,sub:"IDT",color:"#34d399",focus:"GST — Time, Place & Value",tasks:[
+          "Time of Supply — Goods Sec 12 + Services Sec 13 (all scenarios)",
+          "Time of Supply — Change in Rate Sec 14 (exam favourite — all 6 cases)",
+          "Place of Supply — Goods Sec 10 IGST Act",
+          "Place of Supply — Services B2B & B2C Sec 12 (all specific rules)",
+          "Place of Supply — Cross-border Sec 13 + Value Sec 15 + Valuation Rules 27–32",
+        ]},
+        {w:"Week 25",dates:"Dec 13–19",h:70,sub:"IDT",color:"#34d399",focus:"GST — ITC (Most Critical Unit)",tasks:[
+          "ITC Eligibility — Sec 16(2): 4 conditions + GSTR-2B matching",
+          "Blocked Credits — Sec 17(5): ALL 13 items + exceptions (memorise)",
+          "ITC Apportionment — Rules 42 & 43: Formula, monthly/annual reversal",
+          "ISD — Sec 20: Distribution, GSTR-6, mandatory from Budget 2024",
+          "ITC on Job Work — Sec 19: Time limits (1 yr inputs, 3 yr CG)",
+        ]},
+        {w:"Week 26",dates:"Dec 20–26",h:70,sub:"IDT",color:"#34d399",focus:"GST — Registration + Invoicing + Returns",tasks:[
+          "Registration — Sec 22 (thresholds), Sec 24 (compulsory), Sec 27 (CTP/NRTP)",
+          "Tax Invoice — Sec 31, Rule 46 (contents), Bill of Supply, E-Invoice Rule 48",
+          "Credit Note/Debit Note — Sec 34 (time limits, ITC reversal)",
+          "Returns — GSTR-1, GSTR-3B, GSTR-9, GSTR-9C (due dates, QRMP scheme)",
+          "Payment — Sec 49 (ITC utilisation order), TDS Sec 51, TCS Sec 52",
+        ]},
+        {w:"Week 27",dates:"Dec 27–31",h:50,sub:"IDT+IBS",color:"#34d399",focus:"GST — Demand, Refund, Appeals + IBS Start",tasks:[
+          "Assessment — Sec 59–64 · Audit — Sec 65 & 66",
+          "Demand — Sec 73 vs 74: Full comparison (non-fraud vs fraud, all penalty stages)",
+          "Refund — Sec 54: All situations, relevant date, inverted duty formula",
+          "Appeals — Sec 107–121: Hierarchy, pre-deposit, GSTAT",
+          "IBS: Read ICAI Study Material intro — understand case study format",
+        ]},
+      ]
+    },
+    {
+      id:3,label:"Phase 4",title:"Customs + IBS + First Revision",dates:"Jan 1 – Jan 31, 2027",color:"#a78bfa",
+      context:"Full days · Customs law + complete IBS + first revision of FR & AAA · ~280h + Finance Act SM",
+      weeks:[
+        {w:"Week 28",dates:"Jan 1–7",h:70,sub:"IDT",color:"#34d399",focus:"Customs Law",tasks:[
+          "Basic Concepts — Customs Act 1962, taxable event, types of duty",
+          "Classification — Customs Tariff Act, HSN, interpretive rules",
+          "Valuation — Customs Valuation Rules 2007 (Transaction value + 5 alternates)",
+          "Import Procedure — Bill of Entry, warehousing, assessment",
+          "Export Procedure — Shipping Bill, duty drawback Sec 74 & 75",
+        ]},
+        {w:"Week 29",dates:"Jan 8–14",h:70,sub:"IDT+IBS",color:"#f472b6",focus:"Customs + IBS Methodology",tasks:[
+          "Customs: SEZ provisions + appeals + penalties overview",
+          "IDT: ✅ Mark complete — update Amendment Tracker",
+          "IBS: Study ICAI SM — understand all 6 subject integration points",
+          "IBS: Solve ICAI Past Year Case Study Paper 1 (time yourself — 3 hours)",
+          "IBS: Analyse answer key — where did you lose marks?",
+        ]},
+        {w:"Week 30",dates:"Jan 15–21",h:70,sub:"IBS",color:"#f472b6",focus:"IBS — Case Studies 2 & 3",tasks:[
+          "IBS: Solve Past Year Case Study Paper 2 (focus on FR + Audit integration)",
+          "IBS: Analyse — note answer writing structure used in suggested answers",
+          "IBS: Solve Past Year Case Study Paper 3 (DT + IDT focus)",
+          "IBS: Strategic Management — PESTLE, Porter's Five Forces, SWOT",
+          "IBS: Corporate Governance, Ethics in business context",
+          {note:"📘 Finance Act 2026 SM expected this month — grab it the day it releases"},
+        ]},
+        {w:"Week 31",dates:"Jan 22–28",h:70,sub:"IBS+FR",color:"#818cf8",focus:"IBS Done + FR Revision Start",tasks:[
+          "IBS: Solve remaining past papers — answer writing drills",
+          "IBS: ✅ Mark complete",
+          "FR Revision: Ind AS 109, 116, 110 — these 3 are the heaviest, start here",
+          "FR Revision: Redo all starred problems from July study",
+          "FR Revision: Make concise notes for each Ind AS (1 page per standard)",
+        ]},
+        {w:"Week 32",dates:"Jan 29–31",h:30,sub:"FR+AAA",color:"#818cf8",focus:"FR + Audit Revision",tasks:[
+          "FR: Complete first revision — go through all Ind AS notes",
+          "AAA: Revise SA series — SA 315, 540, 570 are most exam-critical",
+          "Update DT Amendment Tracker with Finance Act 2026 changes",
+          "Update IDT Amendment Tracker with GST notifications",
+          "Make a list of all weak chapters across all 6 subjects",
+        ]},
+      ]
+    },
+    {
+      id:4,label:"Phase 5",title:"3-Month Revision Blitz",dates:"Feb 1 – Apr 30, 2027",color:"#f472b6",
+      context:"Rank targeting · RTPs · MTPs · Mock exams · Answer writing · ~840h total",
+      weeks:[
+        {w:"Weeks 33–36",dates:"Feb 1–28",h:280,sub:"DT+IDT",color:"#fbbf24",focus:"Revision 1 — Tax Papers",tasks:[
+          "DT: Full revision with Finance Act 2026 amendments (2 weeks)",
+          "DT: Solve every DT RTP question — mark-worthy answers only",
+          "DT: Solve DT MTP — time yourself, write full answers",
+          "IDT: Full GST + Customs revision with 2026 notifications (2 weeks)",
+          "IDT: Solve every IDT RTP + MTP — note examiner patterns",
+          "Log all weak areas in Amendment Tracker — revisit daily",
+        ]},
+        {w:"Weeks 37–40",dates:"Mar 1–31",h:280,sub:"FR+AAA+AFM",color:"#818cf8",focus:"Revision 2 — Group 1 Papers",tasks:[
+          "FR: Full second revision — consolidation + Ind AS 109/116/19/12 heavy",
+          "FR: Solve FR RTP + MTP — all problems written under time pressure",
+          "AAA: Full second revision — SA series + sector audits + ethics",
+          "AAA: Solve AAA RTP + MTP — scenario-based questions fully written",
+          "AFM: COMPLETE FRESH REVISION — 9 months since you finished it",
+          "AFM: Solve AFM RTP + MTP — all formulas, all numericals",
+        ]},
+        {w:"Weeks 41–44",dates:"Apr 1–30",h:280,sub:"All 6",color:"#f472b6",focus:"Final Push — Mock Exams",tasks:[
+          "Full mock exams every 2 days — one paper per sitting, 3 hours strict",
+          "After each mock: Analyse, identify weak spots, revisit SM",
+          "Formula sheets for all 6 subjects — stick on wall",
+          "Weak chapter blitz: daily 1-hour targeted revision of flagged topics",
+          "Answer writing speed drills — practice writing concise, structured answers",
+          {note:"🎯 Exam simulation rules: No phone, 3-hour blocks, answer all questions attempted in full"},
+        ]},
+      ]
+    },
+  ];
+
+  const subColors={"AFM":"#38bdf8","FR":"#818cf8","AAA":"#a78bfa","DT":"#fbbf24","IDT":"#34d399","IBS":"#f472b6","All 6":"#f472b6","AFM→FR":"#38bdf8","AAA+DT":"#a78bfa","FR+AAA":"#818cf8","IDT+IBS":"#f472b6","IDT":"#34d399","IBS+FR":"#818cf8","FR+AAA":"#818cf8","DT+IDT":"#fbbf24","FR+AAA+AFM":"#818cf8"};
+  const getC=sub=>subColors[sub]||"#818cf8";
+
+  const isMay27=(userProfile?.attempt||"May 2027")==="May 2027";
+  if(!isMay27) return <CustomStudyPlan userProfile={userProfile}/>;
+
+  const ph=phases[activePhase];
+  const totalWeeks=phases.reduce((a,p)=>a+p.weeks.length,0);
+  const completedWeeks=phases.slice(0,activePhase).reduce((a,p)=>a+p.weeks.length,0);
+
+  return <div style={{animation:"slideUp 0.2s ease"}}>
+    {/* Header */}
+    <div style={{marginBottom:20}}>
+      <div style={{color:"var(--text3)",fontSize:10,textTransform:"uppercase",letterSpacing:2,marginBottom:4}}>Personalised Roadmap · ICAI 2023 Scheme</div>
+      <div style={{color:"var(--text)",fontSize:22,fontWeight:900}}>CA Finals Weekly Study Plan — May 2027 🎯</div>
+      <div style={{color:"var(--text2)",fontSize:12,marginTop:4}}>Rank attempt · 44 weeks · ~1,400 study hours · Week-by-week breakdown</div>
+    </div>
+
+    {/* Milestones */}
+    <div style={{display:"flex",gap:7,flexWrap:"wrap",marginBottom:20}}>
+      {[{i:"✅",t:"AFM done",d:"Jun 30, 2026",c:"#38bdf8"},{i:"🏢",t:"Articleship ends",d:"Aug 31, 2026",c:"#34d399"},{i:"🖥️",t:"ITT+GMCS",d:"Mid-Sept–Mid-Oct",c:"#fbbf24"},{i:"📘",t:"Finance Act 2026 SM",d:"~Jan 2027",c:"#818cf8"},{i:"🏆",t:"CA Finals",d:"May 2027",c:"#f472b6"}].map((m,i)=>(
+        <div key={i} style={{display:"flex",alignItems:"center",gap:7,background:"var(--surface2)",border:`1px solid ${m.c}33`,borderRadius:20,padding:"5px 12px"}}>
+          <span>{m.i}</span>
+          <div>
+            <div style={{color:m.c,fontSize:11,fontWeight:700}}>{m.t}</div>
+            <div style={{color:"var(--text3)",fontSize:10}}>{m.d}</div>
+          </div>
+        </div>
+      ))}
+    </div>
+
+    {/* Overall progress bar */}
+    <div className="card" style={{padding:"14px 18px",marginBottom:16}}>
+      <div style={{display:"flex",justifyContent:"space-between",marginBottom:8}}>
+        <span style={{color:"var(--text2)",fontSize:12,fontWeight:600}}>Overall Plan Progress</span>
+        <span style={{color:"var(--text3)",fontSize:11}}>{completedWeeks} of {totalWeeks} weeks viewed</span>
+      </div>
+      <div style={{width:"100%",height:8,background:"var(--surface3)",borderRadius:99,overflow:"hidden"}}>
+        <div style={{width:`${(completedWeeks/totalWeeks)*100}%`,height:"100%",background:"linear-gradient(90deg,#f472b6,#818cf8)",borderRadius:99}}/>
+      </div>
+    </div>
+
+    {/* Phase tabs */}
+    <div style={{display:"flex",gap:6,flexWrap:"wrap",marginBottom:16}}>
+      {phases.map((p,i)=>(
+        <button key={i} onClick={()=>{setActivePhase(i);setActiveWeek(null);}} style={{background:activePhase===i?`${p.color}18`:"var(--surface2)",border:`${activePhase===i?2:1}px solid ${activePhase===i?p.color:p.color+"30"}`,borderRadius:10,padding:"9px 16px",cursor:"pointer",textAlign:"left",flexShrink:0}}>
+          <div style={{color:activePhase===i?p.color:"var(--text2)",fontSize:12,fontWeight:800}}>{p.label}: {p.title}</div>
+          <div style={{color:"var(--text3)",fontSize:10,marginTop:1}}>{p.dates}</div>
+        </button>
+      ))}
+    </div>
+
+    {/* Phase overview card */}
+    <div style={{background:`${ph.color}0a`,border:`1px solid ${ph.color}33`,borderRadius:14,padding:"14px 18px",marginBottom:16}}>
+      <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",flexWrap:"wrap",gap:8}}>
+        <div>
+          <div style={{color:ph.color,fontSize:14,fontWeight:800,marginBottom:3}}>{ph.label}: {ph.title}</div>
+          <div style={{color:"var(--text2)",fontSize:12}}>{ph.dates}</div>
+          <div style={{color:"var(--text3)",fontSize:11,marginTop:4}}>{ph.context}</div>
+        </div>
+        <div style={{background:`${ph.color}15`,border:`1px solid ${ph.color}33`,borderRadius:10,padding:"8px 14px",textAlign:"center"}}>
+          <div style={{color:ph.color,fontSize:22,fontWeight:900,fontFamily:"'JetBrains Mono',monospace"}}>{ph.weeks.length}</div>
+          <div style={{color:"var(--text3)",fontSize:10}}>weeks</div>
+        </div>
+      </div>
+    </div>
+
+    {/* Week cards */}
+    <div style={{display:"flex",flexDirection:"column",gap:8}}>
+      {ph.weeks.map((wk,wi)=>{
+        const isOpen=activeWeek===wi;
+        const wc=getC(wk.sub);
+        return <div key={wi} style={{border:`1px solid ${isOpen?wc+"55":"var(--border)"}`,borderRadius:12,overflow:"hidden",background:"var(--surface)",transition:"border-color 0.15s"}}>
+          {/* Week header — always visible */}
+          <button onClick={()=>setActiveWeek(isOpen?null:wi)} style={{width:"100%",background:isOpen?`${wc}0a`:"transparent",border:"none",cursor:"pointer",padding:"12px 16px",display:"flex",alignItems:"center",gap:12,textAlign:"left"}}>
+            <div style={{background:`${wc}20`,color:wc,borderRadius:8,padding:"4px 10px",fontSize:11,fontWeight:800,flexShrink:0,minWidth:72,textAlign:"center"}}>{wk.w}</div>
+            <div style={{flex:1}}>
+              <div style={{display:"flex",alignItems:"center",gap:8,flexWrap:"wrap"}}>
+                <span style={{color:"var(--text)",fontSize:13,fontWeight:700}}>{wk.focus}</span>
+                <span style={{background:`${wc}15`,color:wc,borderRadius:20,padding:"1px 8px",fontSize:10,fontWeight:700}}>{wk.sub}</span>
+              </div>
+              <div style={{color:"var(--text3)",fontSize:11,marginTop:2}}>{wk.dates} · ~{wk.h}h</div>
+            </div>
+            <span style={{color:"var(--text3)",fontSize:14,transform:isOpen?"rotate(180deg)":"none",transition:"transform 0.2s",flexShrink:0}}>▾</span>
+          </button>
+          {/* Expanded tasks */}
+          {isOpen&&<div style={{borderTop:`1px solid ${wc}22`,padding:"12px 16px",background:`${wc}05`}}>
+            <div style={{color:"var(--text3)",fontSize:9,textTransform:"uppercase",letterSpacing:1.5,marginBottom:10,fontWeight:700}}>Daily Tasks & Focus Points</div>
+            <div style={{display:"flex",flexDirection:"column",gap:6}}>
+              {wk.tasks.map((task,ti)=>{
+                if(typeof task==="object"&&task.note){
+                  return <div key={ti} style={{background:`${wc}10`,border:`1px solid ${wc}30`,borderRadius:8,padding:"7px 12px",fontSize:12,color:wc,fontWeight:600}}>{task.note}</div>;
+                }
+                return <div key={ti} style={{display:"flex",alignItems:"flex-start",gap:8}}>
+                  <span style={{color:wc,fontSize:13,flexShrink:0,marginTop:1}}>›</span>
+                  <span style={{color:"var(--text2)",fontSize:13,lineHeight:1.5}}>{task}</span>
+                </div>;
+              })}
+            </div>
+          </div>}
+        </div>;
+      })}
+    </div>
+
+    {/* Rank Targeting Rules */}
+    <div className="card" style={{padding:"18px",marginTop:16}}>
+      <div style={{color:"var(--text3)",fontSize:9,textTransform:"uppercase",letterSpacing:2,marginBottom:12,fontWeight:700}}>Rank Targeting Rules</div>
+      <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fill,minmax(240px,1fr))",gap:10}}>
+        {[
+          ["📌","ICAI SM is the bible","Examiners set from SM. Answer in SM language — never paraphrase."],
+          ["⚡","Amendments are non-negotiable","Read Finance Act 2026 SM the day ICAI releases it (~Jan 2027)."],
+          ["📝","RTPs > everything else","Rank marks come from RTPs. Solve every single RTP question."],
+          ["🔁","AFM needs March 2027 refresh","You finish AFM in June 2026. 9-month gap = full re-revision required."],
+          ["🧠","IBS = integration not memory","Only timed full 3-hour case studies count as practice. No shortcuts."],
+          ["⏱️","Answer writing = rank marks","Write every answer from April. No silent reading revision in the final month."],
+        ].map(([icon,t,s],i)=>(
+          <div key={i} style={{background:"var(--surface2)",border:"1px solid var(--border)",borderRadius:10,padding:"12px 14px",display:"flex",gap:10}}>
+            <span style={{fontSize:18,flexShrink:0}}>{icon}</span>
+            <div>
+              <div style={{color:"var(--text)",fontSize:13,fontWeight:700,marginBottom:3}}>{t}</div>
+              <div style={{color:"var(--text3)",fontSize:12,lineHeight:1.5}}>{s}</div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </div>;
+}
+
+
+
+/* ═══════════════════════════════════════
+   ROOT APP
+═══════════════════════════════════════ */
+function App(){
+  // Apply the onboarding group choice before initializing syllabus state.
+  let initialProfile=null;
+  try{initialProfile=JSON.parse(localStorage.getItem("ca_user_profile")||"null");}catch{}
+  const selectedGroups=Array.isArray(initialProfile?.groups)&&initialProfile.groups.length?initialProfile.groups:[1,2];
+  SUBJECTS=ALL_SUBJECTS.filter(subject=>selectedGroups.includes(subject.group));
+  const saved=loadStore();
+  const [revData,setRevData]=useState(()=>({...initRevData(),...(saved?.revData||{})}));
+  const [studyLog,setStudyLog]=useState(()=>saved?.studyLog||{});
+  const [tests,setTests]=useState(()=>saved?.tests||[]);
+  const [questionPractice,setQuestionPractice]=useState(()=>saved?.questionPractice||[]);
+  const [weeklyTarget,setWeeklyTarget]=useState(()=>saved?.weeklyTarget||70);
+  const [lectures,setLectures]=useState(()=>({...initLecData(),...loadLec()}));
+  const [amendments,setAmendments]=useState(()=>saved?.amendments||{});
+  const [tasks,setTasks]=useState(()=>saved?.tasks||[]);
+  const [doubts,setDoubts]=useState(()=>saved?.doubts||[]);
+  const [formulas,setFormulas]=useState(()=>saved?.formulas||{});
+  const [weeklyReviewDone,setWeeklyReviewDone]=useState(()=>saved?.weeklyReviewDone||{});
+  const [answerLog,setAnswerLog]=useState(()=>saved?.answerLog||[]);
+  const [chapterNotes,setChapterNotes]=useState(()=>saved?.chapterNotes||{});
+  const [energyLog,setEnergyLog]=useState(()=>saved?.energyLog||{});
+  const [preExamChecklist,setPreExamChecklist]=useState(()=>saved?.preExamChecklist||{});
+  const [patterns,setPatterns]=useState(()=>saved?.patterns||{});
+  const [rtpLog,setRtpLog]=useState(()=>saved?.rtpLog||[]);
+  const [journal,setJournal]=useState(()=>saved?.journal||{});
+  const [focusMode,setFocusMode]=useState(false);
+  const [fontSize,setFontSize]=useState(()=>parseInt(localStorage.getItem("ca_font_size")||"14"));
+  const [subColors,setSubColors]=useState(()=>{try{return JSON.parse(localStorage.getItem("ca_sub_colors")||"{}");}catch{return {};}});
+  const [autoSaveInterval,setAutoSaveInterval]=useState(()=>parseInt(localStorage.getItem("ca_autosave")||"2"));
+  const [lastSaved,setLastSaved]=useState("");
+  const [showCloudSync,setShowCloudSync]=useState(false);
+  const [customLinks,setCustomLinks]=useState(()=>saved?.customLinks||[]);
+  const [liveSession,setLiveSession]=useState(null);
+  const [showNavCustomiser,setShowNavCustomiser]=useState(false);
+  const ALL_TAB_IDS=["dashboard","session","lectures","revision","tests","analytics","planner","amendments","search","formulabank","doubts","rtplog","answerwriting","marksanalyser","checklist","examsim","patterns","notes","energy","journal","coverage","predict","plan","icailinks","settings"];
+  const [navOrder,setNavOrder]=useState(()=>{
+    try{const s=localStorage.getItem("ca_nav_order");return s?JSON.parse(s):["dashboard","session","lectures","revision","tests","analytics","planner","amendments","search","formulabank","doubts","plan","settings"];}
+    catch{return["dashboard","session","lectures","revision","tests","analytics","planner","amendments","search","formulabank","doubts","plan","settings"];}
+  });
+  useEffect(()=>{localStorage.setItem("ca_nav_order",JSON.stringify(navOrder));},[navOrder]);
+  const [frLec,setFrLec]=useState(()=>{try{const s=localStorage.getItem(profileStorageKey("ca_fr_lec"));return s?JSON.parse(s):{}}catch{return {};}});
+  const [frRev,setFrRev]=useState(()=>{try{const s=localStorage.getItem(profileStorageKey("ca_fr_rev"));return s?JSON.parse(s):{}}catch{return {};}});
+  useEffect(()=>{try{localStorage.setItem(profileStorageKey("ca_fr_lec"),JSON.stringify(frLec));}catch{}},[frLec]);
+  useEffect(()=>{try{localStorage.setItem(profileStorageKey("ca_fr_rev"),JSON.stringify(frRev));}catch{}},[frRev]);
+  const [userProfile,setUserProfile]=useState(()=>{try{const s=localStorage.getItem("ca_user_profile");const p=s?JSON.parse(s):null;return p&&p.name?p:null;}catch{return null;}});
+  useEffect(()=>{const displayName=(userProfile?.name||"Nishanth").trim()||"Nishanth";document.title=displayName;document.querySelector('meta[name="apple-mobile-web-app-title"]')?.setAttribute("content",displayName);},[userProfile?.name]);
+  const saveProfile=(p)=>{
+    let previous=null;try{previous=JSON.parse(localStorage.getItem("ca_user_profile")||"null");}catch{}
+    const profile={...p,storageId:p.storageId||("p_"+Date.now()+"_"+Math.random().toString(36).slice(2,10))};
+    const changedAttempt=!!previous&&((previous.attempt||"")!==(profile.attempt||"")||(previous.name||"")!==(profile.name||""));
+    setUserProfile(profile);localStorage.setItem("ca_user_profile",JSON.stringify(profile));
+    // Reload into the selected attempt's independent storage instead of carrying the prior attempt's state over.
+    if(changedAttempt)window.location.reload();
+  };
+  const resetProfile=()=>{localStorage.removeItem("ca_user_profile");window.location.reload();};
+  const [world,setWorld]=useState("dashboard");
+  const [theme,setTheme]=useState(()=>localStorage.getItem("ca_theme")||"dark");
+  const [showBackup,setShowBackup]=useState(false);
+  const [showWeeklyReview,setShowWeeklyReview]=useState(false);
+  const [saveFlash,setSaveFlash]=useState(false);
+
+  useEffect(()=>{
+    document.body.className=theme==="light"?"theme-light":"";
+    localStorage.setItem("ca_theme",theme);
+  },[theme]);
+  useEffect(()=>{
+    document.documentElement.style.setProperty("--font-size",fontSize+"px");
+    localStorage.setItem("ca_font_size",fontSize);
+  },[fontSize]);
+  useEffect(()=>{
+    localStorage.setItem("ca_sub_colors",JSON.stringify(subColors));
+    // Apply custom colors to SUBJECTS dynamically
+    SUBJECTS.forEach(s=>{if(subColors[s.id])s.color=subColors[s.id];});
+  },[subColors]);
+  useEffect(()=>{
+    localStorage.setItem("ca_autosave",autoSaveInterval);
+    if(autoSaveInterval===0)return;
+    const iv=setInterval(()=>{
+      saveStore({revData,studyLog,tests,questionPractice,weeklyTarget,amendments,tasks,doubts,formulas,weeklyReviewDone,answerLog,chapterNotes,energyLog,preExamChecklist,patterns,rtpLog,journal,customLinks});
+      saveLec(lectures);
+      const t=new Date().toLocaleTimeString("en-IN",{hour:"2-digit",minute:"2-digit"});
+      setLastSaved(t);
+    },autoSaveInterval*60*1000);
+    return()=>clearInterval(iv);
+  },[autoSaveInterval,revData,studyLog,tests,questionPractice,amendments,tasks,doubts,formulas,weeklyReviewDone,answerLog,chapterNotes,energyLog,preExamChecklist,patterns,rtpLog,journal,customLinks,lectures]);
+  useEffect(()=>{saveStore({revData,studyLog,tests,questionPractice,weeklyTarget,amendments,tasks,doubts,formulas,weeklyReviewDone,answerLog,chapterNotes,energyLog,preExamChecklist,patterns,rtpLog,journal,customLinks});},[revData,studyLog,tests,questionPractice,weeklyTarget,amendments,tasks,doubts,formulas,weeklyReviewDone,answerLog,chapterNotes,energyLog,preExamChecklist,patterns,rtpLog,journal,customLinks]);
+  useEffect(()=>{saveLec(lectures);},[lectures]);
+
+  // keyboard shortcuts
+  useEffect(()=>{
+    const handler=e=>{
+      if(e.target.tagName==="INPUT"||e.target.tagName==="TEXTAREA"||e.target.tagName==="SELECT")return;
+      const map={d:"dashboard",l:"lectures",r:"revision",t:"tests",p:"plan",a:"analytics",n:"planner",m:"amendments",s:"search",f:"formulabank",w:"doubts",e:"energy",j:"journal",c:"checklist",x:"examsim",v:"coverage",q:"answerwriting",y:"rtplog",k:"patterns",z:"marksanalyser",o:"notes",i:"icailinks",g:"settings",b:"session"};
+      if(map[e.key])setWorld(map[e.key]);
+    };
+    window.addEventListener("keydown",handler);
+    const gotoHandler=e=>setWorld(e.detail);
+    window.addEventListener("goto",gotoHandler);
+    return()=>{window.removeEventListener("keydown",handler);window.removeEventListener("goto",gotoHandler);};
+  },[]);
+
+  const streak=useMemo(()=>{
+    let s=0;
+    for(let i=0;i<365;i++){const d=new Date();d.setDate(d.getDate()-i);const k=d.toISOString().slice(0,10);if((studyLog[k]||0)>0)s++;else{if(i===0)continue;break;}}
+    return s;
+  },[studyLog]);
+
+  const saveNow=()=>{
+    saveStore({revData,studyLog,tests,questionPractice,weeklyTarget,amendments,tasks,doubts,formulas,weeklyReviewDone,answerLog,chapterNotes,energyLog,preExamChecklist,patterns,rtpLog,journal,customLinks});
+    saveLec(lectures);setSaveFlash(true);setTimeout(()=>setSaveFlash(false),2000);
+    const t=new Date().toLocaleTimeString("en-IN",{hour:"2-digit",minute:"2-digit"});setLastSaved(t);
+  };
+
+  const handleImport=d=>{
+    if(d.questionPractice)setQuestionPractice(d.questionPractice);
+    if(d.revData)setRevData(p=>({...p,...d.revData}));
+    if(d.studyLog)setStudyLog(d.studyLog);
+    if(d.tests)setTests(d.tests);
+    if(d.weeklyTarget)setWeeklyTarget(d.weeklyTarget);
+    if(d.lectures)setLectures(p=>({...p,...d.lectures}));
+    if(d.amendments)setAmendments(d.amendments);
+    if(d.tasks)setTasks(d.tasks);
+    if(d.doubts)setDoubts(d.doubts);
+    if(d.formulas)setFormulas(d.formulas);
+    if(d.weeklyReviewDone)setWeeklyReviewDone(d.weeklyReviewDone);
+    if(d.answerLog)setAnswerLog(d.answerLog);
+    if(d.chapterNotes)setChapterNotes(d.chapterNotes);
+    if(d.energyLog)setEnergyLog(d.energyLog);
+    if(d.preExamChecklist)setPreExamChecklist(d.preExamChecklist);
+    if(d.patterns)setPatterns(d.patterns);
+    if(d.rtpLog)setRtpLog(d.rtpLog);
+    if(d.journal)setJournal(d.journal);
+    if(d.customLinks)setCustomLinks(d.customLinks);
+    if(d.frLec)setFrLec(p=>({...p,...d.frLec}));
+    if(d.frRev)setFrRev(p=>({...p,...d.frRev}));
+  };
+
+  const lecComp=SUBJECTS.reduce((a,s)=>a+allChapters(s).filter((_,i)=>lectures[chKey(s.id,i,"lec")]?.status==="Completed").length,0);
+  const lecTotal=totalChapterCount();
+  const lecPct=Math.round(lecComp/lecTotal*100);
+  const revComp=SUBJECTS.reduce((a,s)=>a+allChapters(s).filter((_,i)=>revData[chKey(s.id,i,"rev")]?.status==="Completed").length,0);
+  const revPct=Math.round(revComp/lecTotal*100);
+  const nextExam=Object.entries(EXAM_DATES).map(([id,e])=>({id,...e,days:daysUntil(e.date)})).filter(e=>e.days>0).sort((a,b)=>a.days-b.days)[0];
+
+  const ALL_TABS=[
+    {id:"dashboard",label:"Dashboard",emoji:"🏠",color:"#94a3b8"},
+    {id:"session",label:"Study Session",emoji:"⏱️",color:"#34d399"},
+    {id:"lectures",label:"Lectures",emoji:"🎬",color:"#f472b6",pct:lecPct},
+    {id:"revision",label:"Revision",emoji:"📖",color:"#818cf8",pct:revPct},
+    {id:"tests",label:"Tests",emoji:"📝",color:"#34d399"},
+    {id:"questionpractice",label:"Question Practice",emoji:"✍️",color:"#38bdf8"},
+    {id:"analytics",label:"Analytics",emoji:"📈",color:"#38bdf8"},
+    {id:"planner",label:"Planner",emoji:"📅",color:"#a78bfa"},
+    {id:"amendments",label:"Amendments",emoji:"📋",color:"#fbbf24"},
+    {id:"search",label:"Search",emoji:"🔍",color:"#06b6d4"},
+    {id:"formulabank",label:"Formulas",emoji:"🧮",color:"#10b981"},
+    {id:"doubts",label:"Doubts",emoji:"❓",color:"#f59e0b"},
+    {id:"rtplog",label:"RTP/MTP",emoji:"📋",color:"#a78bfa"},
+    {id:"answerwriting",label:"Answer Writing",emoji:"✍️",color:"#10b981"},
+    {id:"marksanalyser",label:"Marks Analysis",emoji:"📐",color:"#38bdf8"},
+    {id:"checklist",label:"Pre-Exam",emoji:"✅",color:"#34d399"},
+    {id:"examsim",label:"Exam Sim",emoji:"⏱️",color:"#6366f1"},
+    {id:"patterns",label:"Examiner Patterns",emoji:"🔁",color:"#6366f1"},
+    {id:"notes",label:"Chapter Notes",emoji:"📓",color:"#f472b6"},
+    {id:"energy",label:"Energy Log",emoji:"⚡",color:"#fbbf24"},
+    {id:"journal",label:"Journal",emoji:"📖",color:"#f472b6"},
+    {id:"coverage",label:"Coverage Report",emoji:"📄",color:"#6366f1"},
+    {id:"predict",label:"Predictor",emoji:"🎯",color:"#34d399"},
+    {id:"plan",label:"Study Plan",emoji:"🗺️",color:"#818cf8"},
+    {id:"icailinks",label:"ICAI Links",emoji:"🔗",color:"#818cf8"},
+    {id:"settings",label:"Settings",emoji:"⚙️",color:"#94a3b8"},
+  ];
+  const tabs=[...navOrder.map(id=>ALL_TABS.find(t=>t.id===id)).filter(Boolean),...ALL_TABS.filter(t=>!navOrder.includes(t.id))];
+
+  if(!userProfile) return <OnboardingModal onSave={saveProfile}/>;
+
+  return <div style={{minHeight:"100vh"}}>
+    
+    {showCloudSync&&<CloudSync onClose={()=>setShowCloudSync(false)} revData={revData} studyLog={studyLog} tests={tests} weeklyTarget={weeklyTarget} lectures={lectures} amendments={amendments} tasks={tasks} doubts={doubts} formulas={formulas} weeklyReviewDone={weeklyReviewDone} answerLog={answerLog} chapterNotes={chapterNotes} energyLog={energyLog} preExamChecklist={preExamChecklist} patterns={patterns} rtpLog={rtpLog} journal={journal} onImport={handleImport}/>}
+    {showBackup && (<BackupModal onClose={()=>setShowBackup(false)} revData={revData} studyLog={studyLog} tests={tests} questionPractice={questionPractice} weeklyTarget={weeklyTarget} lectures={lectures} amendments={amendments} tasks={tasks} doubts={doubts} formulas={formulas} weeklyReviewDone={weeklyReviewDone} answerLog={answerLog} chapterNotes={chapterNotes} energyLog={energyLog} preExamChecklist={preExamChecklist} patterns={patterns} rtpLog={rtpLog} journal={journal} customLinks={customLinks} frLec={frLec} frRev={frRev} userProfile={userProfile} onImport={handleImport} />)}
+    {focusMode&&<FocusMode activeSub={world==="lectures"?SUBJECTS[0].id:SUBJECTS[0].id} lectures={lectures} revData={revData} setLectures={setLectures} setRevData={setRevData} onExit={()=>setFocusMode(false)}/>}
+    {showNavCustomiser&&<NavCustomiser allTabs={ALL_TABS} navOrder={navOrder} setNavOrder={setNavOrder} onClose={()=>setShowNavCustomiser(false)}/>}
+    {showWeeklyReview&&<WeeklyReview studyLog={studyLog} revData={revData} tests={tests} weeklyTarget={weeklyTarget} onClose={()=>setShowWeeklyReview(false)} weeklyReviewDone={weeklyReviewDone} setWeeklyReviewDone={setWeeklyReviewDone}/>}
+    <QuickLogFAB studyLog={studyLog} setStudyLog={setStudyLog} revData={revData} setRevData={setRevData}/>
+
+    {/* NAV */}
+    <div style={{background:"rgba(10,11,20,0.97)",backdropFilter:"blur(16px)",borderBottom:"1px solid rgba(255,255,255,0.06)",position:"sticky",top:0,zIndex:200,display:"flex",alignItems:"stretch",justifyContent:"space-between"}}>
+      <div style={{padding:"0 16px",display:"flex",alignItems:"center",gap:8,borderRight:"1px solid var(--border)",flexShrink:0}}>
+        <div>
+          <div style={{color:"#f1f5f9",fontSize:13,fontWeight:800,lineHeight:1}}>CA Finals</div>
+          <div style={{color:"rgba(148,163,184,0.8)",fontSize:9}}>{userProfile?.name} · {userProfile?.attempt||"May 2027"}</div>
+        </div>
+      </div>
+
+      <button aria-label="Scroll navigation left" title="Scroll tabs left" onClick={()=>{const el=document.getElementById("ca-main-nav-tabs");if(el)el.scrollBy({left:-Math.max(240,el.clientWidth*0.8),behavior:"smooth"});}} style={{flexShrink:0,width:30,border:"none",borderRight:"1px solid var(--border)",background:"rgba(255,255,255,0.025)",color:"var(--text2)",cursor:"pointer",fontSize:19,fontWeight:800}}>‹</button>
+      <div id="ca-main-nav-tabs" style={{display:"flex",alignItems:"stretch",flex:"1 1 0",minWidth:0,maxWidth:"100%",overflowX:"auto",overflowY:"hidden",overscrollBehaviorX:"contain",WebkitOverflowScrolling:"touch",touchAction:"pan-x",scrollbarWidth:"thin",scrollBehavior:"smooth"}}>
+        {tabs.map(t=>{
+          const active=world===t.id;
+          return <button id={`ca-nav-tab-${t.id}`} key={t.id} onClick={()=>{setWorld(t.id);document.getElementById(`ca-nav-tab-${t.id}`)?.scrollIntoView({behavior:"smooth",block:"nearest",inline:"center"});}} style={{flexShrink:0,background:active?`${t.color}18`:"transparent",border:"none",cursor:"pointer",padding:"0 12px",fontSize:11,fontWeight:active?800:500,color:active?t.color:"rgba(203,213,225,0.75)",borderBottom:`2.5px solid ${active?t.color:"transparent"}`,whiteSpace:"nowrap",minHeight:52,display:"flex",alignItems:"center",gap:5,transition:"all 0.15s"}}>
+            <span style={{fontSize:13}}>{t.emoji}</span>
+            <span>{t.label}</span>
+            {t.pct!=null&&<span style={{background:active?t.color:"var(--surface2)",color:active?"#fff":"var(--text3)",borderRadius:20,padding:"1px 6px",fontSize:9,fontWeight:900}}>{t.pct}%</span>}
+          </button>;
+        })}
+      </div>
+      <button aria-label="Scroll navigation right" title="Scroll tabs right" onClick={()=>{const el=document.getElementById("ca-main-nav-tabs");if(el)el.scrollBy({left:Math.max(240,el.clientWidth*0.8),behavior:"smooth"});}} style={{flexShrink:0,width:30,border:"none",borderLeft:"1px solid var(--border)",background:"rgba(255,255,255,0.025)",color:"var(--text2)",cursor:"pointer",fontSize:19,fontWeight:800}}>›</button>
+
+      <div style={{display:"flex",alignItems:"center",gap:5,padding:"0 10px",borderLeft:"1px solid var(--border)",flexShrink:0}}>
+        {streak>0&&<div style={{display:"flex",alignItems:"center",gap:3,background:"rgba(251,146,60,0.1)",border:"1px solid rgba(251,146,60,0.25)",borderRadius:20,padding:"3px 9px"}}>
+          <span style={{fontSize:12,animation:"streakFire 1.5s infinite"}}>🔥</span>
+          <span style={{color:"#fb923c",fontSize:11,fontWeight:900,fontFamily:"'JetBrains Mono',monospace"}}>{streak}</span>
+        </div>}
+        
+        <button onClick={()=>setShowCloudSync(true)} title="Cloud Sync (GitHub Gist)" style={{background:"rgba(99,102,241,0.08)",border:"1px solid rgba(99,102,241,0.25)",color:"#6366f1",borderRadius:7,padding:"5px 8px",fontSize:12,cursor:"pointer"}}>☁️</button>
+        <button onClick={()=>setFocusMode(true)} title="Focus Mode (no distractions)" style={{background:"rgba(52,211,153,0.06)",border:"1px solid rgba(52,211,153,0.2)",color:"#34d399",borderRadius:7,padding:"5px 8px",fontSize:12,cursor:"pointer"}}>🎯</button>
+        <button onClick={()=>setShowBackup(true)} title="Backup & Restore" style={{background:"rgba(52,211,153,0.06)",border:"1px solid rgba(52,211,153,0.2)",color:"#34d399",borderRadius:7,padding:"5px 8px",fontSize:12,cursor:"pointer"}}>📦</button>
+        {lastSaved&&<span style={{color:"#34d399",fontSize:9,fontFamily:"'JetBrains Mono',monospace",whiteSpace:"nowrap"}}>✓ {lastSaved}</span>}
+        <button onClick={saveNow} title="Save all data" style={{background:saveFlash?"rgba(52,211,153,0.12)":"rgba(255,255,255,0.04)",border:`1px solid ${saveFlash?"rgba(52,211,153,0.3)":"rgba(255,255,255,0.08)"}`,color:saveFlash?"#34d399":"#475569",borderRadius:7,padding:"5px 8px",fontSize:12,cursor:"pointer"}}>{saveFlash?"✓":"💾"}</button>
+        <div style={{display:"flex",background:"var(--surface2)",border:"1px solid var(--border)",borderRadius:7,overflow:"hidden"}}>
+          <button onClick={()=>setTheme("dark")} style={{background:theme==="dark"?"var(--border2)":"transparent",border:"none",padding:"5px 8px",fontSize:11,cursor:"pointer",color:theme==="dark"?"var(--text)":"var(--text3)"}}>🌑</button>
+          <button onClick={()=>setTheme("light")} style={{background:theme==="light"?"var(--border2)":"transparent",border:"none",padding:"5px 8px",fontSize:11,cursor:"pointer",color:theme==="light"?"var(--text)":"var(--text3)"}}>☀️</button>
+        </div>
+        {nextExam&&<div style={{background:nextExam.days<=30?"rgba(248,113,113,0.1)":"rgba(52,211,153,0.08)",border:`1px solid ${nextExam.days<=30?"rgba(248,113,113,0.3)":"rgba(52,211,153,0.2)"}`,borderRadius:9,padding:"3px 10px",textAlign:"center",flexShrink:0}}>
+          <div style={{color:nextExam.days<=30?"#f87171":"#34d399",fontSize:16,fontWeight:900,lineHeight:1,fontFamily:"'JetBrains Mono',monospace"}}>{nextExam.days}</div>
+          <div style={{color:"var(--text3)",fontSize:7,fontWeight:700,textTransform:"uppercase",letterSpacing:1}}>days</div>
+        </div>}
+      </div>
+    </div>
+
+    {/* KEYBOARD SHORTCUT HINT — only on dashboard */}
+    {world==="dashboard"&&<div style={{background:"rgba(129,140,248,0.04)",borderBottom:"1px solid var(--border)",padding:"5px 24px",display:"flex",gap:12,flexWrap:"wrap",alignItems:"center"}}>
+      <span style={{color:"var(--text3)",fontSize:10}}>Shortcuts:</span>
+      {[["B","Session"],["D","Home"],["L","Lectures"],["R","Revision"],["T","Tests"],["A","Analytics"],["N","Planner"],["S","Search"],["F","Formulas"],["W","Doubts"],["J","Journal"],["C","Checklist"],["X","Exam Sim"],["P","Plan"]].map(([k,l])=>(
+        <span key={k} style={{color:"var(--text3)",fontSize:10,display:"flex",alignItems:"center",gap:3}}>
+          <kbd style={{background:"var(--surface2)",border:"1px solid var(--border2)",borderRadius:4,padding:"1px 5px",fontSize:9,fontFamily:"'JetBrains Mono',monospace",color:"var(--text2)"}}>{k}</kbd>{l}
+        </span>
+      ))}
+      <span style={{color:"var(--text3)",fontSize:10,marginLeft:"auto"}}>+ button (bottom-right) → quick log</span>
+    </div>}
+
+    {/* WORLDS BANNER */}
+    {(world==="lectures"||world==="revision")&&<div style={{background:world==="lectures"?"linear-gradient(90deg,rgba(244,114,182,0.1),transparent)":"linear-gradient(90deg,rgba(129,140,248,0.1),transparent)",borderBottom:"1px solid var(--border)",padding:"7px 20px",display:"flex",alignItems:"center",gap:14,flexWrap:"wrap"}}>
+      <button onClick={()=>setWorld("lectures")} style={{display:"flex",alignItems:"center",gap:6,background:world==="lectures"?"rgba(244,114,182,0.15)":"transparent",border:`1px solid ${world==="lectures"?"rgba(244,114,182,0.4)":"transparent"}`,borderRadius:20,padding:"4px 13px",cursor:"pointer",color:world==="lectures"?"#f472b6":"var(--text3)",fontWeight:700,fontSize:12}}>
+        🎬 Lectures World <span style={{background:"rgba(244,114,182,0.2)",borderRadius:20,padding:"1px 6px",fontSize:10}}>{lecPct}%</span>
+      </button>
+      <span style={{color:"var(--text3)",fontSize:14}}>→</span>
+      <button onClick={()=>setWorld("revision")} style={{display:"flex",alignItems:"center",gap:6,background:world==="revision"?"rgba(129,140,248,0.15)":"transparent",border:`1px solid ${world==="revision"?"rgba(129,140,248,0.4)":"transparent"}`,borderRadius:20,padding:"4px 13px",cursor:"pointer",color:world==="revision"?"#818cf8":"var(--text3)",fontWeight:700,fontSize:12}}>
+        📖 Revision World <span style={{background:"rgba(129,140,248,0.2)",borderRadius:20,padding:"1px 6px",fontSize:10}}>{revPct}%</span>
+      </button>
+      <span style={{color:"var(--text3)",fontSize:11}}>Finish lectures first, then revise. Both tracked independently.</span>
+    </div>}
+
+    {/* MAIN CONTENT */}
+    <div style={{maxWidth:1400,margin:"0 auto",padding:"20px 20px 80px"}}>
+      {world==="dashboard"&&<><DailyQuote/><TodayFocus revData={revData} lectures={lectures} tasks={tasks} studyLog={studyLog} setWorld={setWorld}/><SmartInsights studyLog={studyLog} revData={revData} tests={tests} lectures={lectures}/><SubjectRotationAlert revData={revData} setWorld={setWorld}/><ExamCountdowns revData={revData}/><Dashboard lectures={lectures} revData={revData} studyLog={studyLog} setStudyLog={setStudyLog} tests={tests} streak={streak} weeklyTarget={weeklyTarget} setWeeklyTarget={setWeeklyTarget}/></>}
+      {world==="lectures"&&<LecturesWorld lectures={lectures} setLectures={setLectures} frLec={frLec} setFrLec={setFrLec}/>}
+      {world==="revision"&&<RevisionWorld revData={revData} setRevData={setRevData} lectures={lectures} frRev={frRev} setFrRev={setFrRev}/>}
+      {world==="tests"&&<Tests tests={tests} setTests={setTests}/>}
+      {world==="questionpractice"&&<QuestionPractice questionPractice={questionPractice} setQuestionPractice={setQuestionPractice}/>}
+      {world==="analytics"&&<Analytics studyLog={studyLog} tests={tests} lectures={lectures} revData={revData}/>}
+      {world==="planner"&&<DailyPlanner tasks={tasks} setTasks={setTasks}/>}
+      {world==="amendments"&&<AmendmentTracker amendments={amendments} setAmendments={setAmendments}/>}
+      {world==="search"&&<GlobalSearch lectures={lectures} revData={revData} setWorld={setWorld} setLectures={setLectures} setRevData={setRevData}/>}
+      {world==="formulabank"&&<FormulaBank formulas={formulas} setFormulas={setFormulas}/>}
+      {world==="doubts"&&<DoubtLog doubts={doubts} setDoubts={setDoubts}/>}
+      {world==="rtplog"&&<RTPLog rtpLog={rtpLog} setRtpLog={setRtpLog}/>}
+      {world==="answerwriting"&&<AnswerWriting answerLog={answerLog} setAnswerLog={setAnswerLog}/>}
+      {world==="marksanalyser"&&<MarksAnalyser tests={tests}/>}
+      {world==="checklist"&&<PreExamChecklist preExamChecklist={preExamChecklist} setPreExamChecklist={setPreExamChecklist}/>}
+      {world==="examsim"&&<ExamSimulator/>}
+      {world==="patterns"&&<ExaminerPatterns patterns={patterns} setPatterns={setPatterns}/>}
+      {world==="notes"&&<ChapterNotes chapterNotes={chapterNotes} setChapterNotes={setChapterNotes}/>}
+      {world==="energy"&&<EnergyLog energyLog={energyLog} setEnergyLog={setEnergyLog} studyLog={studyLog} setStudyLog={setStudyLog}/>}
+      {world==="journal"&&<StudyJournal journal={journal} setJournal={setJournal}/>}
+      {world==="coverage"&&<CoverageReport lectures={lectures} revData={revData}/>}
+      {world==="predict"&&<PerformancePredictor lectures={lectures} revData={revData} tests={tests} studyLog={studyLog}/>}
+      {world==="plan"&&<StudyPlan userProfile={userProfile}/>}
+      {world==="session"&&<SessionTimer studyLog={studyLog} setStudyLog={setStudyLog} energyLog={energyLog} setEnergyLog={setEnergyLog} lectures={lectures} setLectures={setLectures} revData={revData} setRevData={setRevData}/>}
+      {world==="icailinks"&&<ICAILinks customLinks={customLinks} setCustomLinks={setCustomLinks}/>}
+      {world==="settings"&&<SettingsPage fontSize={fontSize} setFontSize={setFontSize} subColors={subColors} setSubColors={setSubColors} autoSaveInterval={autoSaveInterval} setAutoSaveInterval={setAutoSaveInterval} onOpenCloudSync={()=>setShowCloudSync(true)} onOpenBackup={()=>setShowBackup(true)} lastSaved={lastSaved} userProfile={userProfile} saveProfile={saveProfile} resetProfile={resetProfile}/>}
+    </div>
+    <footer style={{textAlign:"center",padding:"18px 12px 26px",color:"var(--text3)",fontSize:11,borderTop:"1px solid var(--border)",marginTop:18}}>
+      CA Finals Study Tracker <span style={{opacity:.55}}>·</span> Developed by <strong style={{color:"var(--text2)"}}>Nishanth</strong>
+    </footer>
+  </div>;
+}
+
+try {
+  ReactDOM.createRoot(document.getElementById("root")).render(React.createElement(App));
+  window.__caAppStarted = true;
+} catch (error) {
+  window.__caBootError = "App render failed: " + __caDescribeError(error);
+  throw error;
+}
