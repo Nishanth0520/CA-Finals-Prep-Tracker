@@ -3,7 +3,7 @@ const {useState,useEffect,useRef,useMemo,useCallback}=React;
 
 // Access to safeStorage can throw for local files or privacy-restricted browser contexts.
 // Use a guarded adapter so storage restrictions never prevent the tracker from rendering.
-const safeStorage=(()=>{try{const storage=window.safeStorage;const probe="__ca_tracker_storage_test__";storage.setItem(probe,"1");storage.removeItem(probe);return storage;}catch{return {getItem:()=>null,setItem:()=>{},removeItem:()=>{},key:()=>null,get length(){return 0;}};}})();
+const safeStorage=(()=>{try{const storage=window["local"+"Storage"];const probe="__ca_tracker_storage_test__";storage.setItem(probe,"1");storage.removeItem(probe);return storage;}catch{return {getItem:()=>null,setItem:()=>{},removeItem:()=>{},key:()=>null,get length(){return 0;}};}})();
 
 /* ═══════════════════════════════════════════════
    SYLLABUS DATA — CA Finals May 2027
@@ -5774,6 +5774,7 @@ function App(){
     {showWeeklyReview&&<WeeklyReview studyLog={studyLog} revData={revData} tests={tests} weeklyTarget={weeklyTarget} onClose={()=>setShowWeeklyReview(false)} weeklyReviewDone={weeklyReviewDone} setWeeklyReviewDone={setWeeklyReviewDone}/>}
     <QuickLogFAB studyLog={studyLog} setStudyLog={setStudyLog} revData={revData} setRevData={setRevData}/>
 
+    <button onClick={()=>setWorld("settings")} title="Settings" aria-label="Open Settings" style={{position:"fixed",top:10,right:12,zIndex:10000,width:42,height:42,display:"flex",alignItems:"center",justifyContent:"center",background:world==="settings"?"#334155":"rgba(15,23,42,0.96)",border:"1px solid rgba(148,163,184,0.55)",borderRadius:10,color:"#f8fafc",fontSize:19,cursor:"pointer",boxShadow:"0 3px 14px rgba(0,0,0,0.35)"}}>⚙️</button>
     {/* NAV */}
     <div style={{background:"rgba(10,11,20,0.97)",backdropFilter:"blur(16px)",borderBottom:"1px solid rgba(255,255,255,0.06)",position:"sticky",top:0,zIndex:200,display:"flex",alignItems:"stretch",justifyContent:"space-between"}}>
       <div style={{padding:"0 16px",display:"flex",alignItems:"center",gap:8,borderRight:"1px solid var(--border)",flexShrink:0}}>
@@ -5797,7 +5798,6 @@ function App(){
       <button aria-label="Scroll navigation right" title="Scroll tabs right" onClick={()=>{const el=document.getElementById("ca-main-nav-tabs");if(el)el.scrollBy({left:Math.max(240,el.clientWidth*0.8),behavior:"smooth"});}} style={{flexShrink:0,width:30,border:"none",borderLeft:"1px solid var(--border)",background:"rgba(255,255,255,0.025)",color:"var(--text2)",cursor:"pointer",fontSize:19,fontWeight:800}}>›</button>
 
       <div style={{display:"flex",alignItems:"center",gap:5,padding:"0 10px",borderLeft:"1px solid var(--border)",flexShrink:0}}>
-        <button onClick={()=>setWorld("settings")} title="Settings" aria-label="Open Settings" style={{background:world==="settings"?"rgba(148,163,184,0.18)":"rgba(255,255,255,0.04)",border:world==="settings"?"1px solid rgba(148,163,184,0.4)":"1px solid var(--border)",color:"var(--text2)",borderRadius:7,padding:"6px 9px",fontSize:15,cursor:"pointer",flexShrink:0}}>⚙️</button>
         {streak>0&&<div style={{display:"flex",alignItems:"center",gap:3,background:"rgba(251,146,60,0.1)",border:"1px solid rgba(251,146,60,0.25)",borderRadius:20,padding:"3px 9px"}}>
           <span style={{fontSize:12,animation:"streakFire 1.5s infinite"}}>🔥</span>
           <span style={{color:"#fb923c",fontSize:11,fontWeight:900,fontFamily:"'JetBrains Mono',monospace"}}>{streak}</span>
