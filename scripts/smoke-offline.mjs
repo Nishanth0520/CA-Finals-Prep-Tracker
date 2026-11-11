@@ -10,6 +10,7 @@ const pageErrors = [];
 const networkRequests = [];
 
 page.on("pageerror", error => pageErrors.push(error.stack || error.message));
+page.on("console", message => { if (message.type() === "error") pageErrors.push("console: " + message.text()); });
 page.on("request", request => {
   if (/^https?:/i.test(request.url())) networkRequests.push(request.url());
 });
@@ -54,7 +55,7 @@ try {
   for (const [key, value] of Object.entries(checks)) {
     if (key === "rootTextLength" ? value <= 100 : value !== true) failures.push(key + "=" + value);
   }
-  if (pageErrors.length) failures.push("page errors: " + pageErrors.join(" | "));
+  if (pageErrors.length) { const parse = await page.evaluate(() => Array.from(document.scripts).map((s,i) => { try { new Function(s.textContent); return null; } catch(e) { return "script["+i+"] "+e.message+" "+(e.stack||"").slice(0,500); } }).filter(Boolean)); failures.push("page errors: " + pageErrors.join(" | ") + " ; parse: " + parse.join(" || ")); }
   if (networkRequests.length) failures.push("unexpected network requests: " + networkRequests.join(" | "));
   if (failures.length) throw new Error("Offline browser smoke test failed: " + failures.join("; "));
 
