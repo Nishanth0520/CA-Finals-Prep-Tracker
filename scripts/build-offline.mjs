@@ -39,7 +39,7 @@ if (!loaderPattern.test(html)) throw new Error("Could not find the old network-d
 html = html.replace(loaderPattern, "");
 html = html.replace(/\s*\/\/ Register service worker for offline support[\s\S]*?navigator\.serviceWorker\.register\(URL\.createObjectURL\(swBlob\)\)\.catch\(\(\)=>\{\}\);/, "\n// Single-file mode is self-contained; service workers require a separate HTTPS-served worker file.");
 html = html.replace('if(!window.Babel) problems.push("Babel is unavailable");', "");
-html = html.replace(/<script>\\s*\\/\\/ PWA Manifest \\(inline\\)[\\s\\S]*?<\\/script>/, "");
+html = html.replace(/<script>\s*\/\/ PWA Manifest \(inline\)[\s\S]*?<\/script>/, "");
 html = html.replace(/    var babelScripts=[\s\S]*?\.join\(" \| "\);/, '    var babelState="precompiled offline bundle";');
 html = html.replace(' | babelScripts=" + (babelState || "none")', ' | startup=" + babelState');
 
