@@ -1,6 +1,10 @@
 
 const {useState,useEffect,useRef,useMemo,useCallback}=React;
 
+// Access to safeStorage can throw for local files or privacy-restricted browser contexts.
+// Use a guarded adapter so storage restrictions never prevent the tracker from rendering.
+const safeStorage=(()=>{try{const storage=window.safeStorage;const probe="__ca_tracker_storage_test__";storage.setItem(probe,"1");storage.removeItem(probe);return storage;}catch{return {getItem:()=>null,setItem:()=>{},removeItem:()=>{},key:()=>null,get length(){return 0;}};}})();
+
 /* ═══════════════════════════════════════════════
    SYLLABUS DATA — CA Finals May 2027
    ICAI 2023 Scheme
@@ -970,7 +974,7 @@ const defRev=()=>({status:"Not Started",confidence:0,notes:"",revDates:[],update
 
 function profileStorageKey(base){
   try{
-    const p=JSON.parse(localStorage.getItem("ca_user_profile")||"null");
+    const p=JSON.parse(safeStorage.getItem("ca_user_profile")||"null");
     if(!p||!p.name)return base+"__new_user";
     const identity=(p.name+"_"+(p.attempt||"unspecified")).toLowerCase().replace(/[^a-z0-9]+/g,"_").replace(/^_+|_+$/g,"")||"user";
     const target=base+"__"+identity;
@@ -979,9 +983,9 @@ function profileStorageKey(base){
     if(p.storageId){
       const legacy=base+"__"+p.storageId;
       const marker="ca_attempt_migration_v1__"+base+"__"+p.storageId;
-      if(!localStorage.getItem(marker)){
-        if(!localStorage.getItem(target)&&localStorage.getItem(legacy)!==null)localStorage.setItem(target,localStorage.getItem(legacy));
-        localStorage.setItem(marker,"1");
+      if(!safeStorage.getItem(marker)){
+        if(!safeStorage.getItem(target)&&safeStorage.getItem(legacy)!==null)safeStorage.setItem(target,safeStorage.getItem(legacy));
+        safeStorage.setItem(marker,"1");
       }
     }
     return target;
@@ -989,7 +993,7 @@ function profileStorageKey(base){
 }
 function loadStore(){
   try{
-    const s=localStorage.getItem(profileStorageKey(STORE_KEY));
+    const s=safeStorage.getItem(profileStorageKey(STORE_KEY));
     if(!s)return null;
     const data=JSON.parse(s);
     // DT/IDT chapter indices changed for the May 2027 ICAI syllabus.
@@ -998,17 +1002,17 @@ function loadStore(){
     return data;
   }catch{return null;}
 }
-function saveStore(v){try{localStorage.setItem(profileStorageKey(STORE_KEY),JSON.stringify(v));}catch{}}
+function saveStore(v){try{safeStorage.setItem(profileStorageKey(STORE_KEY),JSON.stringify(v));}catch{}}
 function loadLec(){
   try{
-    const s=localStorage.getItem(profileStorageKey(LSTORE_KEY));
+    const s=safeStorage.getItem(profileStorageKey(LSTORE_KEY));
     const data=s?JSON.parse(s):{};
     // Keep lecture progress for other papers; rebuild DT/IDT against the revised chapter list.
     for(const k of Object.keys(data))if(/^(dt|idt)_\d+_lec$/.test(k))delete data[k];
     return data;
   }catch{return {};}
 }
-function saveLec(v){try{localStorage.setItem(profileStorageKey(LSTORE_KEY),JSON.stringify(v));}catch{}}
+function saveLec(v){try{safeStorage.setItem(profileStorageKey(LSTORE_KEY),JSON.stringify(v));}catch{}}
 
 function initRevData(){
   const d={};
@@ -3493,16 +3497,16 @@ function FocusMode({activeSub,lectures,revData,setLectures,setRevData,onExit}){
    GITHUB GIST CLOUD SYNC
 ═══════════════════════════════════════ */
 function CloudSync({onClose,revData,studyLog,tests,weeklyTarget,lectures,amendments,tasks,doubts,formulas,weeklyReviewDone,answerLog,chapterNotes,energyLog,preExamChecklist,patterns,rtpLog,journal,onImport}){
-  const [token,setToken]=useState(()=>localStorage.getItem("ca_gh_token")||"");
-  const [gistId,setGistId]=useState(()=>localStorage.getItem("ca_gh_gist")||"");
+  const [token,setToken]=useState(()=>safeStorage.getItem("ca_gh_token")||"");
+  const [gistId,setGistId]=useState(()=>safeStorage.getItem("ca_gh_gist")||"");
   const [status,setStatus]=useState("");
   const [loading,setLoading]=useState(false);
 
   const allData=()=>({revData,studyLog,tests,weeklyTarget,amendments,tasks,doubts,formulas,weeklyReviewDone,answerLog,chapterNotes,energyLog,preExamChecklist,patterns,rtpLog,journal,lectures,syncedAt:new Date().toISOString(),version:8});
 
   const saveToken=()=>{
-    localStorage.setItem("ca_gh_token",token);
-    localStorage.setItem("ca_gh_gist",gistId);
+    safeStorage.setItem("ca_gh_token",token);
+    safeStorage.setItem("ca_gh_gist",gistId);
     setStatus("Credentials saved locally.");
   };
 
@@ -3519,7 +3523,7 @@ function CloudSync({onClose,revData,studyLog,tests,weeklyTarget,lectures,amendme
       }
       const data=await res.json();
       if(data.id){
-        setGistId(data.id);localStorage.setItem("ca_gh_gist",data.id);
+        setGistId(data.id);safeStorage.setItem("ca_gh_gist",data.id);
         setStatus("✅ Synced to GitHub Gist! ID: "+data.id);
       } else {
         setStatus("❌ Sync failed: "+(data.message||"Unknown error"));
@@ -3938,7 +3942,7 @@ function SettingsPage({fontSize,setFontSize,subColors,setSubColors,autoSaveInter
         </div>
         {lastSaved&&<div style={{color:"var(--text3)",fontSize:11}}>Last saved: <span style={{color:"#34d399",fontWeight:700}}>{lastSaved}</span></div>}
       </div>
-      <div style={{color:"var(--text3)",fontSize:11,marginTop:8}}>Auto-save writes to localStorage automatically. Manual 💾 button always available in nav.</div>
+      <div style={{color:"var(--text3)",fontSize:11,marginTop:8}}>Auto-save writes to safeStorage automatically. Manual 💾 button always available in nav.</div>
     </div>
 
     {/* Data & Sync */}
@@ -3954,7 +3958,7 @@ function SettingsPage({fontSize,setFontSize,subColors,setSubColors,autoSaveInter
       </div>
       <div style={{marginTop:10,background:"rgba(248,113,113,0.06)",border:"1px solid rgba(248,113,113,0.15)",borderRadius:9,padding:"10px 14px"}}>
         <div style={{color:"#f87171",fontSize:11,fontWeight:700,marginBottom:2}}>⚠️ Data Safety Reminder</div>
-        <div style={{color:"var(--text3)",fontSize:11,lineHeight:1.6}}>All data is in your browser localStorage. Clearing browser data = losing everything. Set up GitHub Gist sync OR export JSON backup at least weekly. Before any exam, always export a fresh backup.</div>
+        <div style={{color:"var(--text3)",fontSize:11,lineHeight:1.6}}>All data is in your browser safeStorage. Clearing browser data = losing everything. Set up GitHub Gist sync OR export JSON backup at least weekly. Before any exam, always export a fresh backup.</div>
       </div>
     </div>
 
@@ -3981,14 +3985,14 @@ function DataHealth(){
     try{
       let total=0;
       const keys=[];
-      for(let i=0;i<localStorage.length;i++){
-        const k=localStorage.key(i);
-        const v=localStorage.getItem(k)||"";
+      for(let i=0;i<safeStorage.length;i++){
+        const k=safeStorage.key(i);
+        const v=safeStorage.getItem(k)||"";
         total+=v.length;
         if(k.startsWith("ca_"))keys.push({k,size:Math.round(v.length/1024*10)/10});
       }
-      const lastExport=localStorage.getItem("ca_last_export")||null;
-      const lastGistSync=localStorage.getItem("ca_gh_gist")?localStorage.getItem("ca_last_gist_sync")||null:null;
+      const lastExport=safeStorage.getItem("ca_last_export")||null;
+      const lastGistSync=safeStorage.getItem("ca_gh_gist")?safeStorage.getItem("ca_last_gist_sync")||null:null;
       setHealth({totalKB:Math.round(total/1024*10)/10,limitKB:5120,pct:Math.round(total/5120/1024*100*100)/100,keys,lastExport,lastGistSync});
     }catch(e){setHealth(null);}
   },[]);
@@ -3997,7 +4001,7 @@ function DataHealth(){
   const statusC=usedPct>80?"#f87171":usedPct>50?"#fbbf24":"#34d399";
   return <div>
     <div style={{display:"flex",justifyContent:"space-between",marginBottom:6}}>
-      <span style={{color:"var(--text2)",fontSize:12}}>localStorage Usage</span>
+      <span style={{color:"var(--text2)",fontSize:12}}>safeStorage Usage</span>
       <span style={{color:statusC,fontSize:12,fontWeight:700,fontFamily:"'JetBrains Mono',monospace"}}>{health.totalKB} KB / {health.limitKB} KB</span>
     </div>
     <div style={{width:"100%",height:8,background:"var(--surface3)",borderRadius:99,overflow:"hidden",marginBottom:12}}>
@@ -4035,8 +4039,8 @@ const PS_SOURCES=["ICAI PM","PY Papers","RTP","MTP","Question Bank","ICAI SM","O
 const REV_TYPES=["Conceptual Revision","Problem Solving"];
 
 // Session store key (separate from main store for performance)
-function loadSessions(){try{const s=localStorage.getItem(profileStorageKey("ca_sessions"));return s?JSON.parse(s):[];}catch{return[];}}
-function saveSessions(v){try{localStorage.setItem(profileStorageKey("ca_sessions"),JSON.stringify(v.slice(0,200)));}catch{}}
+function loadSessions(){try{const s=safeStorage.getItem(profileStorageKey("ca_sessions"));return s?JSON.parse(s):[];}catch{return[];}}
+function saveSessions(v){try{safeStorage.setItem(profileStorageKey("ca_sessions"),JSON.stringify(v.slice(0,200)));}catch{}}
 
 function SessionTimer({studyLog,setStudyLog,energyLog,setEnergyLog,lectures,setLectures,revData,setRevData}){
   // Setup state
@@ -4921,7 +4925,7 @@ function BackupModal({onClose,revData,studyLog,tests,questionPractice,weeklyTarg
         <input ref={fileRef} type="file" accept=".json" style={{display:"none"}} onChange={handleImport}/>
         <div style={{background:"rgba(248,113,113,0.06)",border:"1px solid rgba(248,113,113,0.15)",borderRadius:10,padding:"10px 13px"}}>
           <div style={{color:"#f87171",fontSize:11,fontWeight:700,marginBottom:2}}>⚠️ Important</div>
-          <div style={{color:"var(--text3)",fontSize:11,lineHeight:1.5}}>Data lives in your browser's localStorage. Clearing browser data will erase it. Export a backup weekly — especially before any OS update or browser change!</div>
+          <div style={{color:"var(--text3)",fontSize:11,lineHeight:1.5}}>Data lives in your browser's safeStorage. Clearing browser data will erase it. Export a backup weekly — especially before any OS update or browser change!</div>
         </div>
       </div>
     </div>
@@ -4933,7 +4937,7 @@ function BackupModal({onClose,revData,studyLog,tests,questionPractice,weeklyTarg
 ═══════════════════════════════════════ */
 function CustomStudyPlan({userProfile}){
   const STORE_KEY=profileStorageKey("ca_custom_plan_"+((userProfile?.attempt||"custom").replace(/\s+/g,"_")));
-  const [plan,setPlan]=useState(()=>{try{const s=localStorage.getItem(STORE_KEY);return s?JSON.parse(s):null;}catch{return null;}});
+  const [plan,setPlan]=useState(()=>{try{const s=safeStorage.getItem(STORE_KEY);return s?JSON.parse(s):null;}catch{return null;}});
   const [setup,setSetup]=useState(!plan);
   // Setup form state
   const [examDate,setExamDate]=useState("");
@@ -4946,7 +4950,7 @@ function CustomStudyPlan({userProfile}){
   const [activePhase,setActivePhase]=useState(0);
   const [activeWeek,setActiveWeek]=useState(null);
 
-  const savePlan=(p)=>{setPlan(p);localStorage.setItem(STORE_KEY,JSON.stringify(p));};
+  const savePlan=(p)=>{setPlan(p);safeStorage.setItem(STORE_KEY,JSON.stringify(p));};
 
   const generatePlan=()=>{
     if(!examDate||!startDate)return;
@@ -5588,7 +5592,7 @@ function StudyPlan({userProfile}){
 function App(){
   // Apply the onboarding group choice before initializing syllabus state.
   let initialProfile=null;
-  try{initialProfile=JSON.parse(localStorage.getItem("ca_user_profile")||"null");}catch{}
+  try{initialProfile=JSON.parse(safeStorage.getItem("ca_user_profile")||"null");}catch{}
   const selectedGroups=Array.isArray(initialProfile?.groups)&&initialProfile.groups.length?initialProfile.groups:[1,2];
   SUBJECTS=ALL_SUBJECTS.filter(subject=>selectedGroups.includes(subject.group));
   const saved=loadStore();
@@ -5611,9 +5615,9 @@ function App(){
   const [rtpLog,setRtpLog]=useState(()=>saved?.rtpLog||[]);
   const [journal,setJournal]=useState(()=>saved?.journal||{});
   const [focusMode,setFocusMode]=useState(false);
-  const [fontSize,setFontSize]=useState(()=>parseInt(localStorage.getItem("ca_font_size")||"14"));
-  const [subColors,setSubColors]=useState(()=>{try{return JSON.parse(localStorage.getItem("ca_sub_colors")||"{}");}catch{return {};}});
-  const [autoSaveInterval,setAutoSaveInterval]=useState(()=>parseInt(localStorage.getItem("ca_autosave")||"2"));
+  const [fontSize,setFontSize]=useState(()=>parseInt(safeStorage.getItem("ca_font_size")||"14"));
+  const [subColors,setSubColors]=useState(()=>{try{return JSON.parse(safeStorage.getItem("ca_sub_colors")||"{}");}catch{return {};}});
+  const [autoSaveInterval,setAutoSaveInterval]=useState(()=>parseInt(safeStorage.getItem("ca_autosave")||"2"));
   const [lastSaved,setLastSaved]=useState("");
   const [showCloudSync,setShowCloudSync]=useState(false);
   const [customLinks,setCustomLinks]=useState(()=>saved?.customLinks||[]);
@@ -5621,46 +5625,46 @@ function App(){
   const [showNavCustomiser,setShowNavCustomiser]=useState(false);
   const ALL_TAB_IDS=["dashboard","session","lectures","revision","tests","analytics","planner","amendments","search","formulabank","doubts","rtplog","answerwriting","marksanalyser","checklist","examsim","patterns","notes","energy","journal","coverage","predict","plan","icailinks","settings"];
   const [navOrder,setNavOrder]=useState(()=>{
-    try{const s=localStorage.getItem("ca_nav_order");return s?JSON.parse(s):["dashboard","session","lectures","revision","tests","analytics","planner","amendments","search","formulabank","doubts","plan","settings"];}
+    try{const s=safeStorage.getItem("ca_nav_order");return s?JSON.parse(s):["dashboard","session","lectures","revision","tests","analytics","planner","amendments","search","formulabank","doubts","plan","settings"];}
     catch{return["dashboard","session","lectures","revision","tests","analytics","planner","amendments","search","formulabank","doubts","plan","settings"];}
   });
-  useEffect(()=>{localStorage.setItem("ca_nav_order",JSON.stringify(navOrder));},[navOrder]);
-  const [frLec,setFrLec]=useState(()=>{try{const s=localStorage.getItem(profileStorageKey("ca_fr_lec"));return s?JSON.parse(s):{}}catch{return {};}});
-  const [frRev,setFrRev]=useState(()=>{try{const s=localStorage.getItem(profileStorageKey("ca_fr_rev"));return s?JSON.parse(s):{}}catch{return {};}});
-  useEffect(()=>{try{localStorage.setItem(profileStorageKey("ca_fr_lec"),JSON.stringify(frLec));}catch{}},[frLec]);
-  useEffect(()=>{try{localStorage.setItem(profileStorageKey("ca_fr_rev"),JSON.stringify(frRev));}catch{}},[frRev]);
-  const [userProfile,setUserProfile]=useState(()=>{try{const s=localStorage.getItem("ca_user_profile");const p=s?JSON.parse(s):null;return p&&p.name?p:null;}catch{return null;}});
+  useEffect(()=>{safeStorage.setItem("ca_nav_order",JSON.stringify(navOrder));},[navOrder]);
+  const [frLec,setFrLec]=useState(()=>{try{const s=safeStorage.getItem(profileStorageKey("ca_fr_lec"));return s?JSON.parse(s):{}}catch{return {};}});
+  const [frRev,setFrRev]=useState(()=>{try{const s=safeStorage.getItem(profileStorageKey("ca_fr_rev"));return s?JSON.parse(s):{}}catch{return {};}});
+  useEffect(()=>{try{safeStorage.setItem(profileStorageKey("ca_fr_lec"),JSON.stringify(frLec));}catch{}},[frLec]);
+  useEffect(()=>{try{safeStorage.setItem(profileStorageKey("ca_fr_rev"),JSON.stringify(frRev));}catch{}},[frRev]);
+  const [userProfile,setUserProfile]=useState(()=>{try{const s=safeStorage.getItem("ca_user_profile");const p=s?JSON.parse(s):null;return p&&p.name?p:null;}catch{return null;}});
   useEffect(()=>{const displayName=(userProfile?.name||"Nishanth").trim()||"Nishanth";document.title=displayName;document.querySelector('meta[name="apple-mobile-web-app-title"]')?.setAttribute("content",displayName);},[userProfile?.name]);
   const saveProfile=(p)=>{
-    let previous=null;try{previous=JSON.parse(localStorage.getItem("ca_user_profile")||"null");}catch{}
+    let previous=null;try{previous=JSON.parse(safeStorage.getItem("ca_user_profile")||"null");}catch{}
     const profile={...p,storageId:p.storageId||("p_"+Date.now()+"_"+Math.random().toString(36).slice(2,10))};
     const changedAttempt=!!previous&&((previous.attempt||"")!==(profile.attempt||"")||(previous.name||"")!==(profile.name||""));
-    setUserProfile(profile);localStorage.setItem("ca_user_profile",JSON.stringify(profile));
+    setUserProfile(profile);safeStorage.setItem("ca_user_profile",JSON.stringify(profile));
     // Reload into the selected attempt's independent storage instead of carrying the prior attempt's state over.
     if(changedAttempt)window.location.reload();
   };
-  const resetProfile=()=>{localStorage.removeItem("ca_user_profile");window.location.reload();};
+  const resetProfile=()=>{safeStorage.removeItem("ca_user_profile");window.location.reload();};
   const [world,setWorld]=useState("dashboard");
-  const [theme,setTheme]=useState(()=>localStorage.getItem("ca_theme")||"dark");
+  const [theme,setTheme]=useState(()=>safeStorage.getItem("ca_theme")||"dark");
   const [showBackup,setShowBackup]=useState(false);
   const [showWeeklyReview,setShowWeeklyReview]=useState(false);
   const [saveFlash,setSaveFlash]=useState(false);
 
   useEffect(()=>{
     document.body.className=theme==="light"?"theme-light":"";
-    localStorage.setItem("ca_theme",theme);
+    safeStorage.setItem("ca_theme",theme);
   },[theme]);
   useEffect(()=>{
     document.documentElement.style.setProperty("--font-size",fontSize+"px");
-    localStorage.setItem("ca_font_size",fontSize);
+    safeStorage.setItem("ca_font_size",fontSize);
   },[fontSize]);
   useEffect(()=>{
-    localStorage.setItem("ca_sub_colors",JSON.stringify(subColors));
+    safeStorage.setItem("ca_sub_colors",JSON.stringify(subColors));
     // Apply custom colors to SUBJECTS dynamically
     SUBJECTS.forEach(s=>{if(subColors[s.id])s.color=subColors[s.id];});
   },[subColors]);
   useEffect(()=>{
-    localStorage.setItem("ca_autosave",autoSaveInterval);
+    safeStorage.setItem("ca_autosave",autoSaveInterval);
     if(autoSaveInterval===0)return;
     const iv=setInterval(()=>{
       saveStore({revData,studyLog,tests,questionPractice,weeklyTarget,amendments,tasks,doubts,formulas,weeklyReviewDone,answerLog,chapterNotes,energyLog,preExamChecklist,patterns,rtpLog,journal,customLinks});
