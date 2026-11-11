@@ -5757,7 +5757,7 @@ function App(){
     {id:"icailinks",label:"ICAI Links",emoji:"🔗",color:"#818cf8"},
     {id:"settings",label:"Settings",emoji:"⚙️",color:"#94a3b8"},
   ];
-  const tabs=[...navOrder.map(id=>ALL_TABS.find(t=>t.id===id)).filter(Boolean),...ALL_TABS.filter(t=>!navOrder.includes(t.id))];
+  const tabs=[...navOrder.map(id=>ALL_TABS.find(t=>t.id===id)).filter(Boolean),...ALL_TABS.filter(t=>!navOrder.includes(t.id))].filter(t=>t.id!=="settings");
 
   if(!userProfile) return <OnboardingModal onSave={saveProfile}/>;
 
@@ -5793,6 +5793,7 @@ function App(){
       <button aria-label="Scroll navigation right" title="Scroll tabs right" onClick={()=>{const el=document.getElementById("ca-main-nav-tabs");if(el)el.scrollBy({left:Math.max(240,el.clientWidth*0.8),behavior:"smooth"});}} style={{flexShrink:0,width:30,border:"none",borderLeft:"1px solid var(--border)",background:"rgba(255,255,255,0.025)",color:"var(--text2)",cursor:"pointer",fontSize:19,fontWeight:800}}>›</button>
 
       <div style={{display:"flex",alignItems:"center",gap:5,padding:"0 10px",borderLeft:"1px solid var(--border)",flexShrink:0}}>
+        <button onClick={()=>setWorld("settings")} title="Settings" aria-label="Open Settings" style={{background:world==="settings"?"rgba(148,163,184,0.18)":"rgba(255,255,255,0.04)",border:world==="settings"?"1px solid rgba(148,163,184,0.4)":"1px solid var(--border)",color:"var(--text2)",borderRadius:7,padding:"6px 9px",fontSize:15,cursor:"pointer",flexShrink:0}}>⚙️</button>
         {streak>0&&<div style={{display:"flex",alignItems:"center",gap:3,background:"rgba(251,146,60,0.1)",border:"1px solid rgba(251,146,60,0.25)",borderRadius:20,padding:"3px 9px"}}>
           <span style={{fontSize:12,animation:"streakFire 1.5s infinite"}}>🔥</span>
           <span style={{color:"#fb923c",fontSize:11,fontWeight:900,fontFamily:"'JetBrains Mono',monospace"}}>{streak}</span>
