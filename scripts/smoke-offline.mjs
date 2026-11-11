@@ -9,7 +9,7 @@ const page = await context.newPage();
 const pageErrors = [];
 const networkRequests = [];
 
-page.on("pageerror", error => pageErrors.push(error.message));
+page.on("pageerror", error => pageErrors.push(error.stack || error.message));
 page.on("request", request => {
   if (/^https?:/i.test(request.url())) networkRequests.push(request.url());
 });
